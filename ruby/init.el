@@ -6,6 +6,9 @@
 (require-el-get 'textmate)
 (require-el-get 'yaml-mode)
 
+
+(global-set-key "\M-;" 'rinari-rgrep)
+
 (post-init (lambda()
   (autoload 'ruby-mode "ruby-mode" nil t)
   (add-to-list 'auto-mode-alist '("Capfile" . ruby-mode))

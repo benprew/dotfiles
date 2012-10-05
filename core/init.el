@@ -1,5 +1,6 @@
 (require-el-get 'undo-tree)
 (require-el-get 'evil)
+(require-el-get 'helm)
 
 (require 'cl)
 
@@ -42,6 +43,7 @@
   (require 'pcomplete)
   (require 'uniquify)
   (require 'ibuffer)
+  (require 'helm-config)
 
   (setq loaded-init-module t)
 
@@ -71,10 +73,10 @@
 
   (load "./emacs-lock+")
 
+  (global-set-key (kbd "C-;") 'helm-mini)
+
   (with-current-buffer "*scratch*"
     (setq emacs-lock-from-exiting 1)))
-
-
 
 (pre-init (lambda()
   (setq start-time (current-time)) ; for M-x uptime
