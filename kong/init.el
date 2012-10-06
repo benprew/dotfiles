@@ -58,7 +58,5 @@
   (setq smtpmail-auth-credentials "/Users/pkeen/.authinfo")
   (setq starttls-gnutls-program "/usr/local/bin/gnutls-cli")
 
-  (setq notmuch-show-all-multipart/alternative-parts nil)
-
   (color-theme-solarized-dark)
 ))

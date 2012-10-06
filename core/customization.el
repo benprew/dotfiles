@@ -34,7 +34,6 @@
  '(linum-format (quote "%6d "))
  '(make-backup-files nil)
  '(midnight-mode t nil (midnight))
- '(notmuch-search-oldest-first nil)
  '(ns-alternate-modifier nil)
  '(ns-command-modifier (quote meta))
  '(org-log-done (quote time))
