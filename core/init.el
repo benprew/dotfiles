@@ -7,6 +7,8 @@
 (defalias 'qrr 'query-replace-regexp)
 (defalias 'sir 'string-insert-rectangle)
 
+(recentf-mode 1)
+
 (defun duration (time)
   "Takes in a time-value and returns the number of seconds since
    the epoch that value represents."
