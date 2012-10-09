@@ -38,4 +38,12 @@
                               (setq css-indent-level 2)
                               (setq css-indent-offset 2)))
   (rvm-use-default)
+
+  (autoload 'run-ruby "inf-ruby"
+    "Run an inferior Ruby process")
+  (autoload 'inf-ruby-keys "inf-ruby"
+    "Set local key defs for inf-ruby in ruby-mode")
+  (add-hook 'ruby-mode-hook
+            '(lambda ()
+               (inf-ruby-keys)))
 ))
