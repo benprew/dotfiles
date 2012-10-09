@@ -33,7 +33,7 @@
 
 (defun growl (message)
   (interactive "M")
-  (shell-command (concat (getenv "HOME") "/bin/compile-notify.rb " message)))
+  (shell-command (concat (getenv "HOME") "/dotfiles/kong/bin/compile-notify.rb " message)))
 
 (defun growl-compilation-result(buffer msg)
   (growl msg))
