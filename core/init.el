@@ -68,6 +68,8 @@
 
   (put 'narrow-to-region 'disabled nil)
 
+  (windmove-default-keybindings 'meta)
+
   (global-set-key "\C-cfb" 'embiggen-font)
   (global-set-key "\C-cfr" 'recromulate-font)
   (global-set-key "\C-cfp" 'find-file-at-point)
