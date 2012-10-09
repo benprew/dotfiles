@@ -1,6 +1,6 @@
 [user]
-	name = Pete Keen
-	email = peter.keen@bugsplat.info
+	name = Ben Prew
+	email = ben.prew@gmail.com
 
 [alias]
     alias = "!sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -"
@@ -31,7 +31,7 @@
     sharedRepository = group
     compression = 9
     preloadindex = true
-	excludesfile = /Users/pkeen/.gitignore
+	excludesfile = /Users/benprew/.gitignore
 [gc]
     pruneExpire = 6 months ago
     aggressiveWindow = 20

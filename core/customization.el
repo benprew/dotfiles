@@ -53,7 +53,7 @@
  '(transient-mark-mode t)
  '(vc-diff-switches (quote ("-U500")))
  '(virtualenv-root "~/Envs")
- '(virtualenv-root-dir "/Users/pkeen/Envs/")
+ '(virtualenv-root-dir "/Users/benprew/Envs/")
  '(visible-bell t))
 
 

@@ -41,21 +41,21 @@
 (post-init (lambda ()
   (add-to-list 'compilation-finish-functions 'growl-compilation-result)
   (set-face-font 'default "Meslo LG L 14")
-  (setenv "KONGROOT" "/Users/pkeen/devel/kongregate")
+  (setenv "KONGROOT" "/Users/benprew/src/kongregate")
 
   (setq message-send-mail-function 'smtpmail-send-it
         smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
         smtpmail-default-smtp-server "smtp.gmail.com"
         smtpmail-smtp-server "smtp.gmail.com"
         smtpmail-smtp-service 587
-        mail-host-address "pkeen.kongregate.com"
+        mail-host-address "bprew.kongregate.com"
         smtpmail-local-domain "kongregate.com")
 
   (define-key rinari-minor-mode-map "\C-c." 'kong-run-test-at-point)
   (define-key rinari-minor-mode-map "\C-ct" 'kong-run-current-test-file)
   (define-key rinari-minor-mode-map "\C-cr" 'recompile)
 
-  (setq smtpmail-auth-credentials "/Users/pkeen/.authinfo")
+  (setq smtpmail-auth-credentials "/Users/benprew/.authinfo")
   (setq starttls-gnutls-program "/usr/local/bin/gnutls-cli")
 
   (color-theme-solarized-dark)
