@@ -47,6 +47,8 @@
             '(lambda ()
                (inf-ruby-keys)))
 
+  (require 'ruby-mode)
+  (require 'rhtml-mode)
   ;; Treat _ as a word character
   (modify-syntax-entry ?_ "w" ruby-mode-syntax-table)
   (modify-syntax-entry ?_ "w" rhtml-mode-syntax-table)
