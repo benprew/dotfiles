@@ -46,4 +46,9 @@
   (add-hook 'ruby-mode-hook
             '(lambda ()
                (inf-ruby-keys)))
+
+  ;; Treat _ as a word character
+  (modify-syntax-entry ?_ "w" ruby-mode-syntax-table)
+  (modify-syntax-entry ?_ "w" rhtml-mode-syntax-table)
+  ;; (modify-syntax-entry ?_ "w" js-mode-syntax-table) ;; Need to load js-mode first?
 ))
