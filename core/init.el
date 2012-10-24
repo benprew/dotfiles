@@ -1,6 +1,7 @@
 (require-el-get 'undo-tree)
 (require-el-get 'evil)
 (require-el-get 'helm)
+(require-el-get 'workgroups)
 
 (require 'cl)
 
@@ -43,6 +44,7 @@
   (require 'pcomplete)
   (require 'uniquify)
   (require 'ibuffer)
+  (require 'workgroups)
   (require 'helm-config)
   (recentf-mode 1) ;; to make helm-mini more useful
 
@@ -74,12 +76,7 @@
   (global-set-key "\C-cfr" 'recromulate-font)
   (global-set-key "\C-cfp" 'find-file-at-point)
 
-  (load "./emacs-lock+")
-
-  (global-set-key (kbd "C-;") 'helm-mini)
-
-  (with-current-buffer "*scratch*"
-    (setq emacs-lock-from-exiting 1)))
+  (global-set-key (kbd "C-;") 'helm-mini))
 
 (pre-init (lambda()
   (setq start-time (current-time)) ; for M-x uptime
