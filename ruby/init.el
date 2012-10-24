@@ -4,6 +4,7 @@
 (require-el-get 'rinari)
 (require-el-get 'rhtml-mode)
 (require-el-get 'yaml-mode)
+(require-el-get 'haml-mode)
 
 (global-set-key "\M-;" 'rinari-rgrep)
 
@@ -22,13 +23,15 @@
                                (setq ruby-deep-arglist t)
                                (setq ruby-deep-indent-paren nil)
                                (setq c-tab-always-indent nil)
+                               (modify-syntax-entry ?_ "w" ruby-mode-syntax-table)
                                (require 'inf-ruby)
                                (require 'ruby-compilation)
                                (define-key ruby-mode-map (kbd "M-r") 'run-rails-test-or-ruby-buffer)))
   (autoload 'rhtml-mode "rhtml-mode" nil t)
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . rhtml-mode))
   (add-to-list 'auto-mode-alist '("\\.rjs\\'" . rhtml-mode))
-  (add-hook 'rhtml-mode '(lambda ()
+  (add-hook 'rhtml-mode-hook '(lambda ()
+                           (modify-syntax-entry ?_ "w" rhtml-mode-syntax-table)
                            (define-key rhtml-mode-map (kbd "M-s") 'save-buffer)))
   (autoload 'yaml-mode "yaml-mode" nil t)
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -37,6 +40,10 @@
   (add-hook 'css-mode-hook '(lambda ()
                               (setq css-indent-level 2)
                               (setq css-indent-offset 2)))
+
+  (autoload 'haml-mode "haml-mode" nil t)
+  (add-to-list 'auto-mode-alist '("\\.haml\\'" . haml-mode))
+
   (rvm-use-default)
 
   (autoload 'run-ruby "inf-ruby"
@@ -47,10 +54,7 @@
             '(lambda ()
                (inf-ruby-keys)))
 
-  (require 'ruby-mode)
-  (require 'rhtml-mode)
-  ;; Treat _ as a word character
-  (modify-syntax-entry ?_ "w" ruby-mode-syntax-table)
-  (modify-syntax-entry ?_ "w" rhtml-mode-syntax-table)
-  ;; (modify-syntax-entry ?_ "w" js-mode-syntax-table) ;; Need to load js-mode first?
+  (add-hook 'js-mode-hook '(lambda ()
+                             (setq js-indent-level 2)
+                             (modify-syntax-entry ?_ "w" js-mode-syntax-table)))
 ))
