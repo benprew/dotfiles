@@ -27,7 +27,7 @@ umask 0002
 mesg n
 
 f () {
-  find . -name \*${*}\* -print | egrep -v '\bsvn\b'
+  find . -wholename \*${*}\* -print
 }
 
 function r() {
