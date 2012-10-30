@@ -1,3 +1,12 @@
+(require-el-get '(:name actionscript-mode
+                        :description "Major mode for editing ActionScript files"
+                        :type git
+                        :url "https://github.com/austinhaas/actionscript-mode.git"
+                        :after (progn
+                                 (autoload 'actionscript-mode "actionscript-mode" "Major mode for editing ActionScript files" t)
+                                 (add-to-list 'auto-mode-alist '("\\.as$" . actionscript-mode)))))
+
+
 (defun kong-test-server ()
   (interactive)
   (multi-term-shell-command
