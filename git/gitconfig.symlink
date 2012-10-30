@@ -31,7 +31,7 @@
     sharedRepository = group
     compression = 9
     preloadindex = true
-	excludesfile = /Users/benprew/.gitignore
+	excludesfile = $HOME/.gitignore
 [gc]
     pruneExpire = 6 months ago
     aggressiveWindow = 20
