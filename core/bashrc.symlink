@@ -7,18 +7,18 @@
 
 if [[ -f /etc/bashrc ]]; then
     . /etc/bashrc
-fi    
+fi
 
 if [[ -L $HOME/.bashrc.local ]] && [[ -f `readlink $HOME/.bashrc.local` ]]; then
     . $HOME/.bashrc.local
 fi
 
 for module in `cat ~/.modules`; do
-    module_init_path=$HOME/dotfiles/$module/init.sh
-    if [[ -e $module_init_path ]]; then
-	. $module_init_path
-    fi
-    PATH=$PATH:$HOME/dotfiles/$module/bin
+  module_init_path=$HOME/dotfiles/$module/init.sh
+  if [[ -e $module_init_path ]]; then
+    . $module_init_path
+  fi
+  PATH=$PATH:$HOME/dotfiles/$module/bin
 done
 
 export TERM=xterm-256color
@@ -26,3 +26,12 @@ export TERM=xterm-256color
 umask 0002
 mesg n
 
+f () {
+  find . -name \*${*}\* -print | egrep -v '\bsvn\b'
+}
+
+function r() {
+  grep -r "$*" *
+}
+
+alias backup='ssh -i ~/.ssh/benprew benprew@71.59.204.228'
