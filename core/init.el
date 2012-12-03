@@ -48,6 +48,10 @@
   (require 'helm-config)
   (recentf-mode 1) ;; to make helm-mini more useful
 
+  (setq helm-idle-delay 0.1)
+  (setq helm-input-idle-delay 0.1)
+  (setq helm-c-locate-command (concat (getenv "DOTFILESROOT") "/core/bin/locate-with-mdfind %.0s %s"))
+
   (setq loaded-init-module t)
 
   (ido-mode t)
@@ -76,12 +80,13 @@
   (global-set-key "\C-cfr" 'recromulate-font)
   (global-set-key "\C-cfp" 'find-file-at-point)
 
-  (global-set-key (kbd "C-;") 'helm-mini))
+  (global-set-key (kbd "C-;") 'helm-for-files))
 
 (pre-init (lambda()
   (setq start-time (current-time)) ; for M-x uptime
   (setq visual-bell t)
   (setq ns-command-modifier 'meta) ; this is *super important*
+  (setenv "DOTFILESROOT" (concat (getenv "HOME") "/dotfiles/"))
 ))
-  
+
 (post-init 'core-init)
