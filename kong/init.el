@@ -42,7 +42,7 @@
 
 (defun growl (message)
   (interactive "M")
-  (shell-command (concat (getenv "HOME") "/dotfiles/kong/bin/compile-notify.rb " (shell-quote-argument message))))
+  (shell-command (concat (getenv "DOTFILESROOT") "/kong/bin/compile-notify.rb " (shell-quote-argument message))))
 
 (defun growl-compilation-result(buffer msg)
   (growl (concat (buffer-name buffer) " " msg)))
