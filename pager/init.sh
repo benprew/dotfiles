@@ -1,1 +1,1 @@
-export PAGER='emacspager.pl'
+export PAGER=less
