@@ -5,3 +5,4 @@ if [[ -f $HOME/.kongpass ]]; then
 fi
 
 alias ku='ssh kongdev sudo /sbin/service unicorn stop; sleep 2; ssh kongdev sudo /sbin/service unicorn start'
+alias s="open-story"

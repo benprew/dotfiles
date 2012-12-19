@@ -1,6 +1,5 @@
 (require-el-get 'ruby-mode)
 (require-el-get 'inf-ruby)
-(require-el-get 'rvm)
 (require-el-get 'rinari)
 (require-el-get 'rhtml-mode)
 (require-el-get 'yaml-mode)
@@ -44,7 +43,8 @@
   (autoload 'haml-mode "haml-mode" nil t)
   (add-to-list 'auto-mode-alist '("\\.haml\\'" . haml-mode))
 
-  (rvm-use-default)
+  (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:" (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
+  (setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims") (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
 
   (autoload 'run-ruby "inf-ruby"
     "Run an inferior Ruby process")

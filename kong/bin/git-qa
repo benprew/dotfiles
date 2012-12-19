@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 set -x
@@ -12,15 +12,14 @@ if [[ $branch == "" || $server == "" ]]; then
 fi
 
 if [[ $branch == "HEAD" ]]; then
-    branch=`git symbolic-ref --short HEAD`
+    branch=`git name-rev --name-only HEAD`
 fi
 
-git checkout $branch
-git push -u
+git push origin $branch
 git checkout qa_review
 git fetch origin
 git reset --hard origin/qa_review
 git merge $branch
 git push origin qa_review
 cap -q ${server}_deploy
-
+git checkout $branch
