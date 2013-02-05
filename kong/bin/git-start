@@ -3,9 +3,13 @@
 set -e
 
 story_num=$1
+starting_branch=$2
+if [[ -z $starting_branch ]]; then
+    starting_branch='master'
+fi
 slug=`tracker $story_num slug`
 
 git stash
-git checkout master
-git fetch origin && git reset --hard origin/master
-git checkout -b $slug origin/master
+git checkout $starting_branch
+git fetch origin && git reset --hard origin/$starting_branch
+git checkout -b $slug origin/$starting_branch
