@@ -21,7 +21,7 @@
    "*console*"))
 
 (defun kong-run-test-file (file)
-  (interactive "MTest File: ")
+  (interactive "Test File: ")
   (compile (format "ssh kongdev 'export LC_ALL=en_US.UTF-8 && cd /k/kongregate/current && zeus test %s'" file)))
 
 (defun kong-run-current-test-file ()
