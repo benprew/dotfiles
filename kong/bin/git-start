@@ -13,3 +13,4 @@ git stash
 git checkout $starting_branch
 git fetch origin && git reset --hard origin/$starting_branch
 git checkout -b $slug origin/$starting_branch
+git push -u
