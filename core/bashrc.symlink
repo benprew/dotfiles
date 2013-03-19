@@ -38,3 +38,5 @@ alias backup='ssh -i ~/.ssh/benprew benprew@71.59.204.228'
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+
+shopt -s cdspell
