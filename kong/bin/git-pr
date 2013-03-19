@@ -11,6 +11,7 @@ if [[ $target == "" || $source = "" ]]; then
     exit 1
 fi
 
+git stash
 git fetch origin
 git checkout $target
 git reset --hard origin/$target
