@@ -2,6 +2,11 @@
 (require-el-get 'evil)
 (require-el-get 'helm)
 (require-el-get 'workgroups)
+(require-el-get '(:name git-gutter
+       :description "Emacs port of GitGutter Sublime Text 2 Plugin"
+       :website "https://github.com/syohex/emacs-git-gutter"
+       :type github
+       :pkgname "syohex/emacs-git-gutter"))
 
 (require 'cl)
 
@@ -46,11 +51,12 @@
   (require 'ibuffer)
   (require 'workgroups)
   (require 'helm-config)
+  (require 'git-gutter)
   (recentf-mode 1) ;; to make helm-mini more useful
 
   (setq helm-idle-delay 0.1)
   (setq helm-input-idle-delay 0.1)
-  (setq helm-c-locate-command (concat (getenv "DOTFILESROOT") "/core/bin/locate-with-mdfind %.0s %s"))
+  (setq helm-c-locate-command "locate -d ~/src/locate.db %.0s %s")
 
   (setq loaded-init-module t)
 
@@ -63,6 +69,7 @@
   (setq ibuffer-shrink-to-minimum-size t)
   (setq ibuffer-expert t)
 
+  (global-git-gutter-mode t)
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
   (display-time)
@@ -79,6 +86,7 @@
   (global-set-key "\C-cfb" 'embiggen-font)
   (global-set-key "\C-cfr" 'recromulate-font)
   (global-set-key "\C-cfp" 'find-file-at-point)
+  (global-set-key "\C-co" 'multi-occur)
 
   (global-set-key (kbd "C-;") 'helm-for-files))
 
