@@ -4,6 +4,7 @@
 (require-el-get 'rhtml-mode)
 (require-el-get 'yaml-mode)
 (require-el-get 'haml-mode)
+(require-el-get 'flymake-ruby)
 
 (global-set-key "\M-;" 'rinari-rgrep)
 

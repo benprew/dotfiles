@@ -2,6 +2,7 @@
 (require-el-get 'evil)
 (require-el-get 'helm)
 (require-el-get 'workgroups)
+(require-el-get 'flymake-cursor)
 (require-el-get '(:name git-gutter
        :description "Emacs port of GitGutter Sublime Text 2 Plugin"
        :website "https://github.com/syohex/emacs-git-gutter"
@@ -52,49 +53,80 @@
   (require 'workgroups)
   (require 'helm-config)
   (require 'git-gutter)
-  (recentf-mode 1) ;; to make helm-mini more useful
-
-  (setq helm-idle-delay 0.1)
-  (setq helm-input-idle-delay 0.1)
-  (setq helm-c-locate-command "locate -d ~/src/locate.db %.0s %s")
 
   (setq loaded-init-module t)
 
+  (put 'upcase-region 'disabled nil)
+  (setq x-select-enable-clipboard t)
+  (put 'narrow-to-region 'disabled nil)
+  (windmove-default-keybindings 'meta)
+
+  ;; ido mode
+  ;; http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/
   (ido-mode t)
-  (setq ido-enable-flex-matching t)
+  (setq ido-enable-prefix nil
+        ido-enable-flex-matching t
+        ido-auto-merge-work-directories-length nil
+        ido-create-new-buffer 'always
+        ido-max-prospects 10)
 
   (setq uniquify-buffer-name-style 'post-forward)
 
+  ;; ibuffer
+  ;; http://martinowen.net/blog/2010/02/tips-for-emacs-ibuffer.html
   (setq ibuffer-enable t)
   (setq ibuffer-shrink-to-minimum-size t)
   (setq ibuffer-expert t)
+  (global-set-key "\C-x\C-b" 'ibuffer)
+
+  ;; text mode editing
+  ;; aspell for ispell http://emacswiki.org/emacs/InteractiveSpell#toc5
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+  (setq ispell-program-name "/usr/local/bin/aspell")
+  (setq ispell-extra-args '("--sug-mode=ultra"))
+  (setq ispell-list-command "list")
+
+  (eval-after-load "ispell"
+    '(when (executable-find ispell-program-name)
+       (add-hook 'text-mode-hook 'turn-on-flyspell)))
+
+  ;; diff coloring
+  (eval-after-load 'diff-mode
+    '(progn
+       (set-face-foreground 'diff-added "green4")
+       (set-face-foreground 'diff-removed "red2")))
+
+  (eval-after-load 'magit
+    '(progn
+       (set-face-foreground 'magit-diff-add "green4")
+       (set-face-foreground 'magit-diff-del "red2")))
 
   (global-git-gutter-mode t)
-  (scroll-bar-mode -1)
-  (menu-bar-mode -1)
-  (display-time)
-  (tool-bar-mode -1)
-  (show-paren-mode 1)
-
-  (put 'upcase-region 'disabled nil)
-  (setq x-select-enable-clipboard t)
-
-  (put 'narrow-to-region 'disabled nil)
-
-  (windmove-default-keybindings 'meta)
 
   (global-set-key "\C-cfb" 'embiggen-font)
   (global-set-key "\C-cfr" 'recromulate-font)
   (global-set-key "\C-cfp" 'find-file-at-point)
   (global-set-key "\C-co" 'multi-occur)
+  (global-set-key "\M-/" 'hippie-expand)
 
-  (global-set-key (kbd "C-;") 'helm-for-files))
+  ;; flymake
+  (require 'flymake-cursor)
+  (global-set-key "\C-cfn" 'flymake-goto-next-error)
+  (global-set-key "\C-cfp" 'flymake-goto-prev-error)
+
+  ;; helm
+  (recentf-mode 1) ;; to make helm-mini more useful
+  (setq helm-idle-delay 0.1)
+  (setq helm-input-idle-delay 0.1)
+  (setq helm-c-locate-command "locate -d ~/src/locate.db %.0s %s")
+  (global-set-key "\C-ch" 'helm-for-files))
 
 (pre-init (lambda()
   (setq start-time (current-time)) ; for M-x uptime
   (setq visual-bell t)
   (setq ns-command-modifier 'meta) ; this is *super important*
   (setenv "DOTFILESROOT" (concat (getenv "HOME") "/dotfiles/"))
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
 ))
 
 (post-init 'core-init)
