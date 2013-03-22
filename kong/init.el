@@ -6,12 +6,16 @@
                                  (autoload 'actionscript-mode "actionscript-mode" "Major mode for editing ActionScript files" t)
                                  (add-to-list 'auto-mode-alist '("\\.as$" . actionscript-mode)))))
 
-
-(defun kong-test-server ()
+(defun kong-zeus-running ()
   (interactive)
-  (multi-term-shell-command
-   "ssh -t kongdev bash -c \"export LC_ALL='en_US.UTF-8' && cd /k/kongregate/current && zeus start\""
-   "*test-server*"))
+  (string-match "RUNNING"
+      (shell-command-to-string "ssh -t kongdev \"if [[ -e /k/kongregate/current/.zeus.sock ]]; then echo RUNNING; fi\"")))
+
+(defun kong-zeus-server ()
+  (interactive)
+  (ansi-term
+   (concat (getenv "DOTFILESROOT") "/kong/bin/start-zeus.sh")
+   "zeus"))
 
 (defun kong-console ()
   (interactive)
@@ -22,7 +26,11 @@
 
 (defun kong-run-test-file (file)
   (interactive "Test File: ")
-  (compile (format "ssh kongdev 'export LC_ALL=en_US.UTF-8 && cd /k/kongregate/current && zeus test %s'" file)))
+  (if (kong-zeus-running)
+      (compile (format "ssh kongdev 'export LC_ALL=en_US.UTF-8 && cd /k/kongregate/current && zeus test %s'" file))
+    (progn
+      (message "Zeus server not running, starting...")
+      (kong-zeus-server))))
 
 (defun kong-run-current-test-file ()
   (interactive)
