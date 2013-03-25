@@ -8,3 +8,5 @@ alias et='emacsclient-t.sh'
 alias ll='ls -l'
 alias vi='emacsclient-nt.sh'
 alias vim='emacsclient-nt.sh'
+
+alias flushcache='sudo killall -HUP mDNSResponder'

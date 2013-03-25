@@ -1,2 +1,3 @@
 # build src db every 15 minutes
 0/15 * * * * FCODES=~/src/locate.db SEARCHPATHS=~/src /usr/libexec/locate.updatedb
+

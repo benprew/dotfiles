@@ -8,6 +8,10 @@
        :website "https://github.com/syohex/emacs-git-gutter"
        :type github
        :pkgname "syohex/emacs-git-gutter"))
+(require-el-get '(:name ag
+       :description "Ag plugin for emacs"
+       :type github
+       :pkgname "Wilfred/ag.el"))
 
 (require 'cl)
 
@@ -103,23 +107,35 @@
 
   (global-git-gutter-mode t)
 
-  (global-set-key "\C-cfb" 'embiggen-font)
-  (global-set-key "\C-cfr" 'recromulate-font)
+;;  (global-set-key "\C-cfb" 'embiggen-font)
+;;  (global-set-key "\C-cfr" 'recromulate-font)
   (global-set-key "\C-cfp" 'find-file-at-point)
   (global-set-key "\C-co" 'multi-occur)
   (global-set-key "\M-/" 'hippie-expand)
 
   ;; flymake
   (require 'flymake-cursor)
-  (global-set-key "\C-cfn" 'flymake-goto-next-error)
-  (global-set-key "\C-cfp" 'flymake-goto-prev-error)
+  (global-set-key "\C-cen" 'flymake-goto-next-error)
+  (global-set-key "\C-cep" 'flymake-goto-prev-error)
 
-  ;; helm
-  (recentf-mode 1) ;; to make helm-mini more useful
+  ;; Search
+
+  ;;;; ctags
+  ;; generation of file is handled via githook: http://blog.tobiascrawley.net/2009/01/01/generating-a-tags-file-from-a-git-hook/
+  ;; setup default git template dir
+  ;; http://stackoverflow.com/questions/2293498/git-commit-hooks-global-settings
+
+  ;;;; helm
+  (recentf-mode 1)
   (setq helm-idle-delay 0.1)
   (setq helm-input-idle-delay 0.1)
   (setq helm-c-locate-command "locate -d ~/src/locate.db %.0s %s")
-  (global-set-key "\C-ch" 'helm-for-files))
+  (global-set-key "\C-ch" 'helm-for-files)
+
+  ;;;; Ag (like ack, but faster)
+  (require 'ag)
+  (global-set-key "\C-cg" 'ag-project-at-point)
+  (global-set-key "\C-cG" 'ag-project-regexp))
 
 (pre-init (lambda()
   (setq start-time (current-time)) ; for M-x uptime

@@ -61,3 +61,5 @@
 	keepBackup = false
 [mergetool "p4merge"]
 	path = /usr/local/bin/p4merge
+[init]
+	templatedir = ~/.git_template

@@ -45,7 +45,7 @@
  '(ps-printer-name "")
  '(ps-printer-name-option "-P")
  '(query-user-mail-address nil)
- '(scroll-bar-mode -1)
+ '(scroll-bar-mode nil)
  '(scroll-conservatively 100)
  '(scroll-margin 2)
  '(show-paren-mode t)
