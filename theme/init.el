@@ -9,7 +9,7 @@
   (color-theme-solarized-light))
 
 (defun theme-init ()
-  (night))
+  (day))
 
 
 (post-init 'theme-init)
