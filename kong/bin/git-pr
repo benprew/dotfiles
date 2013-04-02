@@ -21,6 +21,6 @@ git push origin $target
 if [[ $source =~ ^[0-9]+ ]]; then
     git push origin :$source
 else
-    echo ****NOT DELETING REMOTE $source**** (If you really meant to: "git push origin :$source")
+    echo ****NOT DELETING REMOTE $source**** \(If you really meant to: "git push origin :$source"\)
 fi
 
