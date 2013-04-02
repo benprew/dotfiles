@@ -54,7 +54,7 @@ directory. See `core/init.el` for specific settings.
 #### Method/Function definitions
 
 Tag expansion is built into emacs, but requires setting up ctags to
-use it.  I have a hook script to regnerate the TAGS
+use it.  I have a hook script to regenerate the TAGS
 file after doing a git operation (checkout, pull, etc)
 
     `<alt>-.` - function: `find-tag`
