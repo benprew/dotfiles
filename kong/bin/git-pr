@@ -16,5 +16,11 @@ git fetch origin
 git checkout $target
 git reset --hard origin/$target
 git merge origin/$source
+git push origin $target
 
-echo Next step: "git push origin $target && git push origin :$source"
+if [[ $source =~ ^[0-9]+ ]]; then
+    git push origin :$source
+else
+    echo ****NOT DELETING REMOTE $source**** (If you really meant to: "git push origin :$source")
+fi
+
