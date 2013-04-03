@@ -85,7 +85,6 @@
 
   ;; text mode editing
   ;; aspell for ispell http://emacswiki.org/emacs/InteractiveSpell#toc5
-  (add-hook 'text-mode-hook 'turn-on-auto-fill)
   (setq ispell-program-name "/usr/local/bin/aspell")
   (setq ispell-extra-args '("--sug-mode=ultra"))
   (setq ispell-list-command "list")
