@@ -7,9 +7,7 @@ fi
 
 # User specific environment and startup programs
 
-PATH=/usr/local/Cellar/ruby/1.9.3-p194/bin:$PATH:$HOME/bin
-
-export PATH
 unset USERNAME
 
-export PATH="/usr/local/heroku/bin:$PATH:/usr/local/share/npm/bin"
+export PATH="/usr/local/heroku/bin:$PATH:/usr/local/share/npm/bin:$HOME/bin:/usr/local/Cellar/ruby/2.0.0-p0/bin"
+"
