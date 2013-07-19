@@ -109,6 +109,9 @@
 
   (global-git-gutter-mode t)
 
+  (load "./emacs-lock+")
+  (with-current-buffer "*scratch*"
+    (setq emacs-lock-from-exiting 1))
 ;;  (global-set-key "\C-cfb" 'embiggen-font)
 ;;  (global-set-key "\C-cfr" 'recromulate-font)
   (global-set-key "\C-cfp" 'find-file-at-point)
