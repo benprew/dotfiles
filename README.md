@@ -139,7 +139,7 @@ that, so, when you're in a test file, you can say:
 
 ## Modules
 
-See ideas put forth by [Zach Holman](https://github.com/holman)'s
+This is a fork of [@peterkeen](http://github.com/peterkeen)'s
 [dotfiles](https://github.com/holman/dotfiles). The core idea is that
 these files are organized by *topic*, not *software*. That means, for
 example, that all of the ruby things, both bash and emacs, belong in
