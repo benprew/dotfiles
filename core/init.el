@@ -90,7 +90,7 @@
   (setq ispell-extra-args '("--sug-mode=ultra"))
   (setq ispell-list-command "list")
 
-  (setq initial-scratch-message ";Don't ignore your dreams; don't work too much; say what you think; cultivate friendships; be happy.")
+  (setq initial-scratch-message ";Don't ignore your dreams\n;Don't work too much\n;Say what you think\n;Cultivate friendships\n;Be happy.\n\n")
 
   (eval-after-load "ispell"
     '(when (executable-find ispell-program-name)
