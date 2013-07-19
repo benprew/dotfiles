@@ -1,3 +1,4 @@
+
 (require-el-get 'undo-tree)
 (require-el-get 'evil)
 (require-el-get 'helm)
@@ -88,6 +89,8 @@
   (setq ispell-program-name "/usr/local/bin/aspell")
   (setq ispell-extra-args '("--sug-mode=ultra"))
   (setq ispell-list-command "list")
+
+  (setq initial-scratch-message ";Don't ignore your dreams; don't work too much; say what you think; cultivate friendships; be happy.")
 
   (eval-after-load "ispell"
     '(when (executable-find ispell-program-name)
