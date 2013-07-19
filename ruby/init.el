@@ -46,6 +46,8 @@
   (add-to-list 'auto-mode-alist '("\\.haml\\'" . haml-mode))
 
   (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:" (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
+  (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH"))) ;for brew-installed ruby
+
   (setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims") (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
 
   (autoload 'run-ruby "inf-ruby"
