@@ -1,7 +1,7 @@
-(require-el-get '(:name puppet-mode-2
-       :description "A simple mode for editing puppet manifests"
-       :type http
-       :url "https://raw.github.com/puppetlabs/puppet/master/ext/emacs/puppet-mode.el"
-       :after (progn
-                (autoload 'puppet-mode "puppet-mode" "Major mode for editing puppet manifests" t)
-                (add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode)))))
+(require-el-get 'puppet-mode)
+(require-el-get '(:name flymake-puppet
+                        :description "Emacs flymake integration for puppet-lint"
+                        :type git
+                        :url "https://github.com/grimradical/puppet-flymake"
+                        :after (progn
+                                 (add-hook 'puppet-mode-hook 'flymake-puppet-load))))
