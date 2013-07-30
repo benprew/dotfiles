@@ -1,7 +1,5 @@
 (require-el-get 'puppet-mode)
-(require-el-get '(:name flymake-puppet
-                        :description "Emacs flymake integration for puppet-lint"
-                        :type git
-                        :url "https://github.com/grimradical/puppet-flymake"
-                        :after (progn
-                                 (add-hook 'puppet-mode-hook 'flymake-puppet-load))))
+(require-el-get 'flymake-puppet)
+
+(post-init (lambda()
+  (setq flymake-puppet-executable "/usr/local/bin/puppet-lint")))
