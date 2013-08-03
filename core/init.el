@@ -51,6 +51,10 @@
   (set-frame-width nil prev-frame-width)
   (set-frame-height nil prev-frame-height))
 
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+
 (defun core-init ()
   (require 'pcomplete)
   (require 'uniquify)
