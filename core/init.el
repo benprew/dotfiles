@@ -34,17 +34,6 @@
 
 (defvar prev-frame-height)
 (defvar prev-frame-width)
-(defun embiggen-font ()
-  (interactive)
-  (setq prev-frame-height (frame-height))
-  (setq prev-frame-width (frame-width))
-  (set-face-attribute 'default' nil :height 200))
-
-(defun recromulate-font ()
-  (interactive)
-  (set-face-attribute 'default' nil :height 140)
-  (set-frame-width nil prev-frame-width)
-  (set-frame-height nil prev-frame-height))
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
