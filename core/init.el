@@ -1,14 +1,9 @@
-
 (require-el-get 'undo-tree)
 (require-el-get 'evil)
 (require-el-get 'helm)
 (require-el-get 'workgroups)
-(require-el-get 'flymake-cursor)
-(require-el-get '(:name git-gutter
-       :description "Emacs port of GitGutter Sublime Text 2 Plugin"
-       :website "https://github.com/syohex/emacs-git-gutter"
-       :type github
-       :pkgname "syohex/emacs-git-gutter"))
+(require-el-get '(:name flycheck
+                         :type elpa))
 (require-el-get '(:name ag
        :description "Ag plugin for emacs"
        :type github
@@ -61,7 +56,6 @@
   (require 'ibuffer)
   (require 'workgroups)
   (require 'helm-config)
-  (require 'git-gutter)
 
   (setq loaded-init-module t)
 
@@ -111,21 +105,21 @@
        (set-face-foreground 'magit-diff-add "green4")
        (set-face-foreground 'magit-diff-del "red2")))
 
-  (global-git-gutter-mode t)
-
+  ;; emacs lock
   (load "./emacs-lock+")
   (with-current-buffer "*scratch*"
     (setq emacs-lock-from-exiting 1))
-;;  (global-set-key "\C-cfb" 'embiggen-font)
-;;  (global-set-key "\C-cfr" 'recromulate-font)
+  (global-set-key "\C-cu" 'toggle-emacs-lock)
+
+
   (global-set-key "\C-cfp" 'find-file-at-point)
   (global-set-key "\C-co" 'multi-occur)
   (global-set-key "\M-/" 'hippie-expand)
 
-  ;; flymake
-  (require 'flymake-cursor)
-  (global-set-key "\C-cen" 'flymake-goto-next-error)
-  (global-set-key "\C-cep" 'flymake-goto-prev-error)
+  ;; flycheck
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  (global-set-key "\C-cen" 'flycheck-next-error)
+  (global-set-key "\C-cep" 'flycheck-prev-error)
 
   ;; Search
 
