@@ -42,7 +42,7 @@ I spend almost all my time in emacs browsing/writing/editing code.  If
 that's not your thing, there are other good packages built for that,
 go look there.
 
-#### Finding Files in your projects
+#### Finding Files
 
 I use helm for finding files, it can be accessed by:
     `<ctrl>-c-h` - function: `helm-for-files`
@@ -51,7 +51,7 @@ I have helm setup to rember recently opened files, as well as setting
 up a small locate database for finding files in your home
 directory. See `core/init.el` for specific settings.
 
-#### Method/Function definitions
+#### Method/Function Navigation
 
 Tag expansion is built into emacs, but requires setting up ctags to
 use it.  I have a hook script to regenerate the TAGS
@@ -64,9 +64,9 @@ hooks repo
 
     `brew install ctags`
 
-#### Grep-ing files
+#### Grep-ing Files
 
-I use Ag, which is like ack, but faster:
+I use [Ag](https://github.com/ggreer/the_silver_searcher), which is like ack, but faster:
     `<ctrl>-c-g` - function: `ag-project-at-point`
 
 This will use your current repos root as a starting point and search
@@ -82,20 +82,17 @@ To use Ag, you'll need to install it:
 
 ### Nagivating Windows
 
-In addition to standard emacs buffer/frame navigation, you can also
-do:
+I use [Windmove](http://emacswiki.org/emacs/WindMove) for fast
+naviation:
     `<alt>-<left>` - function: windmove-left
     `<alt>-<right>` - function: windmove-right
     `<alt>-<down>` - function: windmove-down
     `<alt>-<up>` - function: windmove-up
 
-Windmove documentation: http://emacswiki.org/emacs/WindMove
-
-### Interacting with git
+### Git For Source Control
 
 Emacs has a lot of nice features for interacting with git currently,
-but I've also installed magit: http://www.emacswiki.org/emacs/Magit
-git git-gutter: https://github.com/syohex/emacs-git-gutter
+but I've also installed [magit](http://www.emacswiki.org/emacs/Magit)
 
 Common functions:
 
@@ -106,17 +103,17 @@ In a file:
     `<ctrl>-c-s` function: `magit-status`
     `<ctrl>-x-v-g` function: `vc-annotate` - git blame...
 
-### Writing code
+### Writing Code
 
-#### Flymake
+#### Automatic Syntax Check
 
-I use flymake to check my code on the fly, see flymake and
-flymake-ruby for more info.  When you see a red line in your code, it
-means flymake doesn't like something about it.  You can either hover
-over the error to see the error message, or you can navigate to error
-messages with:
-    `<ctrl>-e-n` - function: `flymake-goto-next-error`
-    `<ctrl>-e-p` - function: `flymake-goto-prev-error`
+I use [flycheck](https://github.com/lunaryorn/flycheck) to check my
+code on the fly, When you see a red exclamation point at the beginning
+of a line, it means flycheck found an error.  You can
+either hover over the error to see the error message, or you can
+navigate to error messages with:
+    `<alt>-g-n` - function: `next-error`
+    `<alt>-g-p` - function: `previous-error`
 
 You'll probably want to install a newer version of ruby locally
 (assuming you're using a newer version in a vagrant instance or
@@ -127,9 +124,8 @@ similar)
 ### Testing
 
 I admit it, I write tests, and I use
-rinari:http://rinari.rubyforge.org/ to help with that.  It doesn't
-find tests very well in my current codebase, but I haven't taken the
-time to fix it.
+[rinari](http://rinari.rubyforge.org/).  It doesn't find tests very
+well in my current codebase, but I haven't taken the time to fix it.
     `<ctrl>-c-;-f-t` - function: `rinari-find-test`
 
 We also use test through a vagrant instance, and use zeus to manage
