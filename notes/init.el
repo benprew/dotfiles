@@ -1,24 +1,13 @@
-(require 'json)
-(require 'url)
+;;; notes --- Note taking in emacs, with deft and sparkleshare
+;;; Commentary:
+;;;   deft is (http://jblevins.org/projects/deft/) and
+;;;   sparkleshare is (http://sparkleshare.org/)
 
-(defun get-json (url)
-  (let ((buffer (url-retrieve-synchronously url))
-        (json nil))
-    (save-excursion
-      (set-buffer buffer)
-      (goto-char (point-min))
-      (re-search-forward "^$" nil 'move)
-      (setq json (buffer-substring-no-properties (point) (point-max)))
-      (kill-buffer (current-buffer)))
-    json))
+(require-el-get 'deft)
 
-(defun get-and-parse-json (url)
-  (let ((json-object-type 'plist))
-    (json-read-from-string 
-     (get-json url))))
-
-(defun bhelp-listify (arg)
-  "Convert any remaining vector into a list"
-  (mapcar (lambda (x) (if (or (vectorp x) (listp x))
-                          (bhelp-listify x)
-                        x)) arg))
+(post-init (lambda()
+  (setq deft-extension "md")
+  (setq deft-directory "~/notes")
+  (setq deft-text-mode 'markdown-mode)
+  (setq deft-use-filename-as-title nil)
+))
