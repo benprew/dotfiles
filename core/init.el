@@ -138,3 +138,5 @@
 ))
 
 (post-init 'core-init)
+
+;;; init.el ends here
