@@ -10,4 +10,6 @@
   (setq deft-directory "~/notes")
   (setq deft-text-mode 'markdown-mode)
   (setq deft-use-filename-as-title nil)
+
+  (global-set-key "\C-cn" 'deft)
 ))
