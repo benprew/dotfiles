@@ -8,6 +8,7 @@
  '(c-basic-offset 2)
  '(case-fold-search t)
  '(column-number-mode t)
+ '(compilation-ask-about-save nil)
  '(cperl-auto-newline nil)
  '(cperl-brace-imaginary-offset 0)
  '(cperl-brace-offset 0)
