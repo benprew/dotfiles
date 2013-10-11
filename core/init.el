@@ -64,6 +64,8 @@
 
   (setq uniquify-buffer-name-style 'post-forward)
 
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
   ;; ibuffer
   ;; http://martinowen.net/blog/2010/02/tips-for-emacs-ibuffer.html
   (setq ibuffer-enable t)
