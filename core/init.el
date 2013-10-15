@@ -129,6 +129,7 @@
   ;;;; Ag (like ack, but faster)
   (require 'ag)
   (global-set-key "\C-cg" 'ag-project-at-point)
+  (global-set-key "\C-c\C-g" 'ag)
   (global-set-key "\C-cG" 'ag-project-regexp))
 
 (pre-init (lambda()
