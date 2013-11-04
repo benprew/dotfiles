@@ -46,6 +46,8 @@
  '(ps-printer-name "")
  '(ps-printer-name-option "-P")
  '(query-user-mail-address nil)
+ '(ruby-deep-arglist nil)
+ '(ruby-deep-indent-paren nil)
  '(scroll-bar-mode nil)
  '(scroll-conservatively 100)
  '(scroll-margin 2)
