@@ -51,6 +51,9 @@
   (growl (concat (buffer-name buffer) " " msg)))
 
 (post-init (lambda ()
+
+  (add-to-list 'auto-mode-alist '("\\.hbs$" . html-mode))
+
   (add-to-list 'compilation-finish-functions 'growl-compilation-result)
   (set-face-font 'default "Meslo LG L 14")
   (setenv "KONGROOT" "/Users/benprew/src/kongregate")
