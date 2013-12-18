@@ -23,4 +23,3 @@ if [[ $source =~ ^[0-9]+ ]]; then
 else
     echo ****NOT DELETING REMOTE $source**** \(If you really meant to: "git push origin :$source"\)
 fi
-

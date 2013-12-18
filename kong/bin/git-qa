@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -e
-set -x
 
 branch=$1
 server=$2
@@ -15,12 +14,11 @@ if [[ $branch == "HEAD" ]]; then
     branch=`git name-rev --name-only HEAD`
 fi
 
-git checkout $branch
-git push -u
-git checkout qa_review
-git fetch origin
-git reset --hard origin/qa_review
-git merge $branch
-git push origin qa_review
-cap -q ${server}_deploy
-git checkout $branch
+echo "Going to do the following:"
+echo "    deploy $branch to $server"
+echo "If this is ok, hit enter. Otherwise, ctrl-c"
+read
+
+git push origin $branch
+echo "$PWD $branch $server" | konglog DEPLOY
+cap ${server}_deploy

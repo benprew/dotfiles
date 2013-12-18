@@ -9,6 +9,12 @@
        :type github
        :pkgname "Wilfred/ag.el"))
 
+(require-el-get
+ '(:name ag-mode
+         :type git
+         :options ("xzf")
+         :url "https://github.com/Wilfred/ag.el.git"))
+
 (require 'cl)
 
 (defalias 'qrr 'query-replace-regexp)
@@ -39,12 +45,25 @@
                          ("marmalade" . "http://marmalade-repo.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 
+(defun set-exec-path-from-shell-PATH ()
+  "Set up Emacs' `exec-path' and PATH environment variable to match that used by the user's shell.
+
+This is particularly useful under Mac OSX, where GUI apps are not started from a shell."
+  (interactive)
+  (let ((path-from-shell (replace-regexp-in-string "[ \t\n]*$" "" (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+    (setenv "PATH" path-from-shell)
+    (setq exec-path (split-string path-from-shell path-separator))))
+
+
+
 (defun core-init ()
   (require 'pcomplete)
   (require 'uniquify)
   (require 'ibuffer)
   (require 'workgroups)
   (require 'helm-config)
+
+  (set-exec-path-from-shell-PATH)
 
   (setq loaded-init-module t)
 
@@ -134,7 +153,7 @@
 
 (pre-init (lambda()
   (setq start-time (current-time)) ; for M-x uptime
-  (setq visual-bell t)
+  (setq ring-bell-function (lambda () (message "*beep*")))
   (setq ns-command-modifier 'meta) ; this is *super important*
   (setenv "DOTFILESROOT" (concat (getenv "HOME") "/dotfiles/"))
   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))

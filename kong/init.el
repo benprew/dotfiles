@@ -6,31 +6,17 @@
                                  (autoload 'actionscript-mode "actionscript-mode" "Major mode for editing ActionScript files" t)
                                  (add-to-list 'auto-mode-alist '("\\.as$" . actionscript-mode)))))
 
-(defun kong-zeus-running ()
-  (interactive)
-  (string-match "RUNNING"
-      (shell-command-to-string "ssh -t kongdev \"if [[ -e /k/kongregate/current/.zeus.sock ]]; then echo RUNNING; fi\"")))
-
-(defun kong-zeus-server ()
-  (interactive)
-  (ansi-term
-   (concat (getenv "DOTFILESROOT") "/kong/bin/start-zeus.sh")
-   "zeus"))
 
 (defun kong-console ()
   (interactive)
   (remote-shell-command
    "kongdev"
-   "bash -c \"export LC_ALL='en_US.UTF-8' && cd /k/kongregate/current && zeus console\""
+   "bash -c \"export LC_ALL='en_US.UTF-8' && cd /k/kongregate/current && spring rails console\""
    "*console*"))
 
 (defun kong-run-test-file (file)
-  (interactive "Test File: ")
-  (if (kong-zeus-running)
-      (compile (format "ssh kongdev 'export LC_ALL=en_US.UTF-8 && cd /k/kongregate/current && zeus test %s'" file))
-    (progn
-      (message "Zeus server not running, starting...")
-      (kong-zeus-server))))
+  (interactive "MTest File: ")
+  (compile (format "ssh kongdev 'export LC_ALL=en_US.UTF-8 && cd /k/kongregate/current && exec bin/spring testunit %s'" file)))
 
 (defun kong-run-current-test-file ()
   (interactive)
@@ -38,7 +24,7 @@
 
 (defun kong-run-test-at-point ()
   (interactive)
-  (compile (format "ssh kongdev 'export LC_ALL=en_US.UTF-8 && cd /k/kongregate/current && zeus test %s -n %s'" (kong-current-relative-file-name) (rinari-test-function-name))))
+  (compile (format "ssh kongdev 'export LC_ALL=en_US.UTF-8 && cd /k/kongregate/current && exec bin/spring testunit %s -n %s'" (kong-current-relative-file-name) (rinari-test-function-name))))
 
 (defun kong-current-relative-file-name ()
   (file-relative-name (buffer-file-name) (getenv "KONGROOT")))
