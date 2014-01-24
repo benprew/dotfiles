@@ -7,7 +7,8 @@ fi
 alias ku='ssh kongdev sudo /sbin/service unicorn stop; sleep 5; ssh kongdev sudo /sbin/service unicorn start'
 alias s="open-story"
 
-export PATH="$PATH:/usr/local/Cellar/ruby/2.0.0-p247/bin"
+# Gem executables
+export PATH="$PATH:/usr/local/opt/ruby/bin"
 alias today="yesterday today"
 alias summary="kong-summary.rb"
 alias sc="skd 'cd /k/kongregate/current && zeus console'"
