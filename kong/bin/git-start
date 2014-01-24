@@ -43,4 +43,6 @@ if [[ ! -z $status ]]; then
     git stash pop
 fi
 
+git push -u
+
 echo "$PWD $slug" | konglog START
