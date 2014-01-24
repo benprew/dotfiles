@@ -18,6 +18,15 @@
   (interactive "MTest File: ")
   (compile (format "ssh kongdev 'export LC_ALL=en_US.UTF-8 && cd /k/kongregate/current && exec bin/spring testunit %s'" file)))
 
+(defun kong-run-archive-test-file (file)
+  (interactive "MTest File: ")
+  (compile (format "ssh dw01.kongregatedev.com 'export LC_ALL=en_US.UTF-8 && cd /k/archive_db/current && exec bundle exec ruby -Itest %s'" file)))
+
+(defun kong-run-current-archive-test-file ()
+  (interactive)
+  (kong-run-archive-test-file (kong-current-relative-file-name)))
+
+
 (defun kong-run-current-test-file ()
   (interactive)
   (kong-run-test-file (kong-current-relative-file-name)))
@@ -27,7 +36,18 @@
   (compile (format "ssh kongdev 'export LC_ALL=en_US.UTF-8 && cd /k/kongregate/current && exec bin/spring testunit %s -n %s'" (kong-current-relative-file-name) (rinari-test-function-name))))
 
 (defun kong-current-relative-file-name ()
-  (file-relative-name (buffer-file-name) (getenv "KONGROOT")))
+  (mapconcat
+   'identity
+   (delq nil (let ((test-p "false"))
+               (mapcar
+                (lambda (el)
+                  (if (equal el "test")
+                      (setf test-p "true"))
+                  (if (equal test-p "true")
+                      el
+                    nil))
+                (split-string (buffer-file-name) "/"))))
+   "/"))
 
 (defun growl (message)
   (interactive "M")
@@ -54,6 +74,7 @@
 
   (define-key rinari-minor-mode-map "\C-c." 'kong-run-test-at-point)
   (define-key rinari-minor-mode-map "\C-ct" 'kong-run-current-test-file)
+  (define-key rinari-minor-mode-map "\C-cp" 'kong-run-current-archive-test-file)
   (define-key rinari-minor-mode-map "\C-cr" 'recompile)
 
   (setq smtpmail-auth-credentials "/Users/benprew/.authinfo")
