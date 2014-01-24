@@ -124,7 +124,6 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 
   (global-set-key "\C-cfp" 'find-file-at-point)
   (global-set-key "\C-co" 'multi-occur)
-  (global-set-key "\M-/" 'hippie-expand)
 
   ;; flycheck
   (add-hook 'after-init-hook #'global-flycheck-mode)
