@@ -8,11 +8,9 @@ alias ku='ssh kongdev sudo /sbin/service unicorn stop; sleep 5; ssh kongdev sudo
 alias s="open-story"
 
 # Gem executables
-export PATH="$PATH:/usr/local/opt/ruby/bin"
+export PATH=$PATH:/usr/local/lib/ruby/gems/2.1.0/bin
 alias today="yesterday today"
 alias summary="kong-summary.rb"
-alias sc="skd 'cd /k/kongregate/current && zeus console'"
-alias sd="skd 'cd /k/kongregate/current && zeus dbconsole'"
 alias bounce="skd sudo monit restart"
 
 function y {
