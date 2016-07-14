@@ -30,14 +30,8 @@ f () {
   find . -wholename \*${*}\* -print
 }
 
-alias backup='ssh -i ~/.ssh/benprew benprew@71.59.204.228'
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/heroku/bin:$PATH"
-
 shopt -s cdspell
 set -o emacs
 set completion-ignore-case On
 set bell-style none
 
-export SSL_CERT_FILE=/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
