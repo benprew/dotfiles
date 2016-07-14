@@ -2,9 +2,7 @@ alias ea='$EDITOR ~/dotfiles/core/aliases.sh && . ~/dotfiles/core/aliases.sh && 
 
 alias ls='ls -lh'
 alias sl='ls -lh'
-alias e='emacsclient-nt.sh'
-alias es='emacsclient-nt-sudo.sh'
-alias et='emacsclient-t.sh'
+alias e='emacsclient -n'
 alias ll='ls -l'
 
 alias flushcache='sudo killall -HUP mDNSResponder'
