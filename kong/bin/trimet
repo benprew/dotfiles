@@ -39,5 +39,3 @@ arrivals.css('arrival').each do |arrival|
     puts "#{arrival['route'].rjust(2)} in #{diff_str} min at #{due_str} #{loc['desc']} #{loc['dir']}"
   end
 end
-
-
