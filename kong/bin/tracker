@@ -3,19 +3,19 @@
 require 'rubygems'
 require 'httparty'
 
+DATA_PROJ_ID = 1503382
+
 class Tracker
   include HTTParty
   base_uri "https://www.pivotaltracker.com/services/v3"
 
   def initialize
-    @token = File.open("#{ENV['HOME']}/.pt_token") do |f|
-      f.read
-    end
+    @token = File.read("#{ENV['HOME']}/.pt_token").chomp
   end
 
   def story(story_id)
     options = { :headers => {'X-TrackerToken' => @token} }
-    self.class.get("/projects/1058/stories/#{story_id}", options).parsed_response
+    self.class.get("/projects/#{DATA_PROJ_ID}/stories/#{story_id}", options).parsed_response
   end
 
   def slug(story_id)
