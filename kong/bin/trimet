@@ -3,8 +3,8 @@
 require 'nokogiri'
 require 'open-uri'
 
-STOPS = %w{ 1606 7631 9301 }
-ROUTES = %w{ 17 19 31 32 33 }
+STOPS = %w{ 7763 }
+ROUTES = %w{ 190 }
 
 def humanize(secs)
   [[60, :seconds], [60, :minutes], [24, :hours], [1000, :days]].map{ |count, name|
@@ -39,5 +39,3 @@ arrivals.css('arrival').each do |arrival|
     puts "#{arrival['route'].rjust(2)} in #{diff_str} min at #{due_str} #{loc['desc']} #{loc['dir']}"
   end
 end
-
-

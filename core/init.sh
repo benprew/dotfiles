@@ -1,5 +1,5 @@
 unset PROMPT_COMMAND
-export EDITOR='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient'
+export EDITOR='emacsclient'
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 
 
