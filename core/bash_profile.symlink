@@ -10,3 +10,5 @@ fi
 unset USERNAME
 
 export PATH="/usr/local/heroku/bin:$PATH:/usr/local/share/npm/bin:$HOME/bin:/usr/local/Cellar/ruby/2.0.0-p247/bin"
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
