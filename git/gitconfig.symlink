@@ -24,10 +24,6 @@
     color = auto
 [rerere]
 	enabled = true
-[merge]
-	summary = true
-	log = false
-	tool = p4merge
 [core]
     sharedRepository = group
     compression = 9
@@ -50,16 +46,15 @@
 	personal = origin
 [push]
 	default = current
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+[init]
+#	templatedir = ~/.git_template
+[difftool "p4merge"]
+	path = /Applications/p4merge.app/Contents/Resources/launchp4merge
+	prompt = false
+[mergetool "p4merge"]
+	path = /Applications/p4merge.app/Contents/Resources/launchp4merge
+[merge]
+	tool = p4merge
 [mergetool]
 	prompt = false
 	keepBackup = false
-[mergetool "p4merge"]
-	path = /usr/local/bin/p4merge
-[init]
-	templatedir = ~/.git_template
