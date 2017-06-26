@@ -69,7 +69,7 @@ task :install => :setup_modules do
   modules = File.read("#{ENV['HOME']}/.modules").split("\n")
   linkables = []
   modules.each do |m|
-    linkables += Dir.glob(File.join(m, "*.symlink"))
+    linkables += Dir.glob(File.join(m, "/**/*.symlink"))
   end
 
   skip_all = false
@@ -80,12 +80,10 @@ task :install => :setup_modules do
     overwrite = false
     backup = false
 
-    file = linkable.split('/').last.split('.symlink').last
+    file = linkable.split('/')[1..-1].join('/').gsub('.symlink', '')
     target = "#{ENV["HOME"]}/.#{file}"
-
-    if file == 'config.fish'
-      target = "#{ENV["HOME"]}/.config/fish/#{file}"
-    end
+    
+    puts "installing #{linkable} to #{target}"
 
     if File.exists?(target) || File.symlink?(target)
       unless skip_all || overwrite_all || backup_all
