@@ -5,7 +5,7 @@ require 'httparty'
 
 class Tracker
   include HTTParty
-  base_uri "https://www.pivotaltracker.com/services/v3"
+  base_uri 'https://www.pivotaltracker.com/services/v3'
 
   def initialize
     @token = File.read("#{ENV['HOME']}/.pt_token").chomp
@@ -22,14 +22,13 @@ class Tracker
 
   def slug(story_id)
     story_info = story(story_id)
-    title = story_info["story"]["name"].
-      gsub(/\bthe\b/, '').
-      gsub(/\s+/, '-').
-      downcase.
-      gsub(/[^a-z0-9-]/, '')[0,60]
+    title = story_info['story']['name']
+            .gsub(/\bthe\b/, '')
+            .gsub(/\s+/, '-')
+            .downcase
+            .gsub(/[^a-z0-9-]/, '')[0, 60]
     "#{story_info['story']['id']}-#{title}"
   end
-
 end
 
 story_id = ARGV[0]
@@ -39,5 +38,5 @@ tracker = Tracker.new
 if tracker.respond_to?(method.to_sym)
   print tracker.send(method.to_sym, story_id)
 else
-  print tracker.story(story_id)["story"][method]
+  print tracker.story(story_id)['story'][method]
 end
