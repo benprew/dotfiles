@@ -1,1 +1,5 @@
+tap 'caskroom/cask'
+tap 'caskroom/fonts'
+
 cask 'emacs'
+cask 'font-source-code-pro'
