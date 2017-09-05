@@ -1,5 +1,20 @@
 tap 'caskroom/cask'
 tap 'caskroom/fonts'
 
+# brew 'm-cli' # https://github.com/rgcr/m-cli/blob/master/Readme.md
+brew 'ag'
+brew 'diffuse' # for diffing 3+ files
+brew 'fish'
+brew 'git'
+brew 'htop'
+brew 'markdown'
+brew 'mtr'
+brew 'nmap'
+brew 'w3m'
 cask 'emacs'
+cask 'evernote'
+cask 'firefox'
+cask 'flux'
 cask 'font-source-code-pro'
+cask 'iterm2'
+cask 'libreoffice'
