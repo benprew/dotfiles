@@ -1,0 +1,43 @@
+#To use this file, you'll need to install homebrew
+#
+# 1. /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+#
+# Now, to setup homebrew to use this Brewfile
+#
+# 1. brew tap homebrew/bundle
+# 2. brew bundle
+
+###################
+# Kong packages
+###################
+brew 'git'
+cask "vagrant"
+cask "virtualbox"
+cask "slack"
+
+# The version of ruby we use
+# you'll need to `brew link --force ruby@2.1` after this to install symlinks
+tap 'homebrew/versions'
+brew 'ruby@2.1'
+brew 'v8-315'
+
+# for sharing screen grabs
+# See https://sites.google.com/a/kongregate.com/wiki/skitch-setup for setup instructions
+cask 'skitch'
+
+# Optional packages
+cask 'p4merge'
+brew 'awscli'
+brew 's3cmd'
+brew 'qcachegrind'
+brew 'pandoc'  # for previewing markup (aka github markdown)
+cask 'mactex' # for saving to pdf from pandoc
+brew 'openvpn'
+
+### ETL packages
+brew 'postgresql' # for connecting to redshift
+brew 'jq'
+
+### Kongregate repo requirements
+brew 'mysql' # for the mysql2 gem
+brew 'gpgme' # for the ruby-gpgme gem
