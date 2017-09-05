@@ -16,7 +16,7 @@
 ; Runs a test
 (defun kong-run-test-file (file)
   (interactive "Test File: ")
-  (compile (format "ssh etldev 'export LC_ALL=en_US.UTF-8 && cd /k/analytics_pipeline && TEST=%s bundle exec rake'"
+  (compile (format "ssh etldev 'export LC_ALL=en_US.UTF-8 && cd /k/analytics_pipeline && TEST=%s bundle exec rake test INTEGRATION=1'"
 file)))
 
 (defun kong-run-current-test-file ()
