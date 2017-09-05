@@ -1,0 +1,39 @@
+Host benprew-development.etl.kongregate.com 54.211.186.136
+  ForwardAgent yes
+  User ec2-user
+  IdentityFile ~/.ssh/BenPrew.pem
+
+Host etl-dev etldev
+  ForwardAgent yes
+  User kong
+  HostName 192.168.61.166
+  IdentityFile ~/.ssh/BenPrew.pem
+
+Host *.etl-production-nodes.etl.kongregate.com
+  ForwardAgent yes
+  User bprew
+  ProxyCommand ssh -q -W %h:%p etl.kongregate.com
+
+Host *.etl-staging-nodes.etl.kongregate.com
+  ForwardAgent yes
+  User bprew
+  ProxyCommand ssh -q -W %h:%p etl-staging.etl.kongregate.com
+
+Host etl.kongregate.com etl-staging.etl.kongregate.com diva *.etl.kongregate.com utility 54.210.1.206
+  ForwardAgent yes
+  User bprew
+  IdentityFile ~/.ssh/BenPrew.pem
+
+Host 10.2.*
+  ForwardAgent yes
+  User ec2-user
+  ProxyCommand ssh -q -W %h:%p etl-staging.etl.kongregate.com
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host 10.3.* ip-10-3*
+  ForwardAgent yes
+  User ec2-user
+  ProxyCommand ssh -q -W %h:%p etl.kongregate.com
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
