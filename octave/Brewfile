@@ -1,0 +1,5 @@
+tap 'homebrew/science'
+
+cask 'mactex'
+brew 'gnuplot', args: ['with-qt']
+brew 'octave'
