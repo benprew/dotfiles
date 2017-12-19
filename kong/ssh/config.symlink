@@ -26,14 +26,16 @@ Host etl.kongregate.com etl-staging.etl.kongregate.com diva *.etl.kongregate.com
 
 Host 10.2.*
   ForwardAgent yes
-  User ec2-user
+  User bprew
   ProxyCommand ssh -q -W %h:%p etl-staging.etl.kongregate.com
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
+  IdentityFile ~/.ssh/Production.pem
 
 Host 10.3.* ip-10-3*
   ForwardAgent yes
-  User ec2-user
+  User bprew
   ProxyCommand ssh -q -W %h:%p etl.kongregate.com
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
+  IdentityFile ~/.ssh/Production.pem
