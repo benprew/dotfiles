@@ -13,7 +13,8 @@ for module in (cat ~/.modules)
         set -x PATH $PATH $HOME/dotfiles/$module/bin
     end
 end
-set -g fish_user_paths "/usr/local/sbin" $fish_user_paths
+set -x PATH $PATH "/usr/local/sbin" 
+set -x PATH ~/.rbenv/shims $PATH
 
 function git_branch
     set -g git_branch (git rev-parse --abbrev-ref HEAD ^ /dev/null)
