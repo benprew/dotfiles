@@ -4,7 +4,7 @@ Dir.glob('*/*.rake').each { |r| import r }
 
 task :setup_modules do
   modules_path = File.join(ENV['HOME'], ".modules")
-  if ! File.exists?(modules_path)
+  unless File.exist?(modules_path)
     `cp core/modules_template #{modules_path}`
     puts "Minimal modules template has been copied to #{modules_path}."
   end
@@ -63,13 +63,29 @@ task :show_differences_stat do
   end
 end
 
-desc "Hook our dotfiles into system-standard positions."
-task :install => :setup_modules do
-
+desc 'Hook our dotfiles into system-standard positions.'
+task install: :setup_modules do
   modules = File.read("#{ENV['HOME']}/.modules").split("\n")
   linkables = []
   modules.each do |m|
-    linkables += Dir.glob(File.join(m, "/**/*.symlink"))
+    linkables += Dir.glob(File.join(m, '/**/*.symlink'))
+  end
+
+  emacs_modules = modules.map do |m|
+    src = File.join(m, 'init.el')
+
+    next unless File.exist?(src)
+
+    target = "#{ENV['HOME']}/.emacs.d/personal/#{m}.el"
+
+    [src, target]
+  end.compact
+
+  emacs_modules.each do |link_info|
+    src, target = link_info
+    cmd = "ln -sf $PWD/#{src} #{target}"
+    puts "installing #{src} to #{target}"
+    `#{cmd}`
   end
 
   skip_all = false
@@ -82,7 +98,7 @@ task :install => :setup_modules do
 
     file = linkable.split('/')[1..-1].join('/').gsub('.symlink', '')
     target = "#{ENV["HOME"]}/.#{file}"
-    
+
     puts "installing #{linkable} to #{target}"
 
     if File.exists?(target) || File.symlink?(target)
@@ -121,10 +137,10 @@ task :uninstall do
     if File.symlink?(target)
       FileUtils.rm(target)
     end
-    
+
     # Replace any backups made during installation
     if File.exists?("#{ENV["HOME"]}/.#{file}.backup")
-      `mv "$HOME/.#{file}.backup" "$HOME/.#{file}"` 
+      `mv "$HOME/.#{file}.backup" "$HOME/.#{file}"`
     end
 
   end
