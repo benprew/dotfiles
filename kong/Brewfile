@@ -32,11 +32,11 @@ brew 's3cmd'
 brew 'qcachegrind'
 brew 'pandoc'  # for previewing markup (aka github markdown)
 cask 'mactex' # for saving to pdf from pandoc
-brew 'openvpn'
 
 ### ETL packages
 brew 'postgresql' # for connecting to redshift
 brew 'jq'
+brew 'python3'
 
 ### Kongregate repo requirements
 brew 'mysql' # for the mysql2 gem
