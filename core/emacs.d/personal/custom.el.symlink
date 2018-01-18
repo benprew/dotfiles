@@ -5,16 +5,17 @@
  ;; If there is more than one, they won't work right.
  '(global-flycheck-mode t)
  '(js-indent-level 2)
+ '(markdown-css-paths (quote ("../style.css")))
  '(org-agenda-files
    (quote
-    ("/Users/benprew/notes/Getting Started with Orgzly.org" "/Users/benprew/notes/consulting.org" "/Users/benprew/notes/digestion.org" "/Users/benprew/notes/dinner.org" "/Users/benprew/notes/gtd.org")))
+    ("/Users/benprew/notes/consulting.org" "/Users/benprew/notes/digestion.org" "/Users/benprew/notes/dinner.org" "/Users/benprew/notes/gtd.org")) t)
  '(org-agenda-span (quote fortnight))
  '(org-todo-keywords
    (quote
     ((sequence "INBOX" "TODAY" "TOMORROW" "SOMEDAY" "WAITING" "DONE"))))
  '(package-selected-packages
    (quote
-    (go-mode graphviz-dot-mode rspec-mode jq-mode fw3m helm-w3m helm slim-mode zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights vkill undo-tree solarized-theme smartrep smartparens smart-mode-line scss-mode puppet-mode ov operate-on-number move-text markdown-mode magit json-mode imenu-anywhere helm-projectile helm-descbinds helm-ag guru-mode grizzl god-mode gitignore-mode gitconfig-mode git-timemachine gist flycheck fish-mode expand-region exec-path-from-shell easy-kill discover-my-major diminish diff-hl dash-at-point csv-mode crux color-theme-solarized browse-kill-ring beacon anzu ace-window)))
+    (:name go-mode graphviz-dot-mode rspec-mode jq-mode fw3m helm-w3m helm slim-mode zop-to-char zenburn-theme yaml-mode which-key web-mode volatile-highlights vkill undo-tree solarized-theme smartrep smartparens smart-mode-line scss-mode puppet-mode ov operate-on-number move-text markdown-mode magit json-mode imenu-anywhere helm-projectile helm-descbinds helm-ag guru-mode grizzl god-mode gitignore-mode gitconfig-mode git-timemachine gist flycheck fish-mode expand-region exec-path-from-shell easy-kill discover-my-major diminish diff-hl dash-at-point csv-mode crux color-theme-solarized browse-kill-ring beacon anzu ace-window)))
  '(prelude-clean-whitespace-on-save t)
  '(prelude-whitespace t)
  '(rspec-use-vagrant-when-possible t)
