@@ -6,7 +6,7 @@ brew 'ag'
 brew 'diffuse' # for diffing 3+ files
 brew 'fish'
 brew 'git'
-brew 'graphviz', args: ['with-app']
+brew 'graphviz'
 brew 'htop'
 brew 'markdown'
 brew 'mtr'
