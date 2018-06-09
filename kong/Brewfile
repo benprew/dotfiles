@@ -28,6 +28,7 @@ cask 'skitch'
 # Optional packages
 cask 'p4merge'
 brew 'awscli'
+brew 'aws-shell'
 brew 's3cmd'
 brew 'qcachegrind'
 brew 'pandoc'  # for previewing markup (aka github markdown)
@@ -37,6 +38,8 @@ cask 'mactex' # for saving to pdf from pandoc
 brew 'postgresql' # for connecting to redshift
 brew 'jq'
 brew 'python3'
+cask 'docker'
+cask 'snowflake-snowsql'
 
 ### Kongregate repo requirements
 brew 'mysql' # for the mysql2 gem
