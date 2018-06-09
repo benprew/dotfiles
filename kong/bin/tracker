@@ -10,13 +10,15 @@ class Tracker
   def initialize
     @token = File.read("#{ENV['HOME']}/.pt_token").chomp
     @projects = {
-     'data' => 1503382,
-     'devops' => 947778
+      'data'   => 1_503_382,
+      'devops' => 947_778,
+      'pints'  => 2_141_994
     }
+    ENV['PROJECT'] ||= 'pints'
   end
 
   def story(story_id)
-    options = { :headers => {'X-TrackerToken' => @token} }
+    options = { headers: { 'X-TrackerToken' => @token } }
     self.class.get("/projects/#{@projects[ENV['PROJECT'].downcase]}/stories/#{story_id}", options).parsed_response
   end
 
