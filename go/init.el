@@ -1,4 +1,4 @@
-(prelude-require-packages '(go-mode))
+(prelude-require-packages '(go-mode go-playground))
 
 ;; Company Mode Notes
 ;; http://company-mode.github.io/
@@ -14,7 +14,8 @@
 ;; this command to a key combination of your choice.
 
 (add-hook 'go-mode-hook 'go-eldoc-setup)
+(add-hook 'go-mode-hook (lambda () (whitespace-mode -1)))
 
 (add-hook 'before-save-hook 'gofmt-before-save)
 (add-to-list 'interpreter-mode-alist
-                '("gorun" . go-mode))
+             '("gorun" . go-mode))
