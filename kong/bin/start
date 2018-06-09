@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -ex
+
+STORY=$1
+
+SLUG=$(tracker "$STORY" slug)
+
+BRANCH="${SLUG:0:32}"
+BRANCH="${BRANCH%-*}"
+
+echo "$BRANCH"
+
+cd master
+git stash
+git remote update
+git reset --hard origin/master
+git worktree add "../$BRANCH"
+cd "../$BRANCH"
+yarn
+scripts/new-branch.sh "$BRANCH" &

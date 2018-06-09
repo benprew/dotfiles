@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -x
+
+BRANCH=$1
+
+if [[ $BRANCH = "master" ]]; then
+   echo "not deleting master"
+   exit 1
+fi
+
+cd "$BRANCH" || cd master || exit 1
+scripts/delete-branch.sh "$BRANCH"
+cd ..
+if [[ -d "$BRANCH" ]]; then rm -rf "$BRANCH"; fi
+cd master || exit 1
+git worktree prune
