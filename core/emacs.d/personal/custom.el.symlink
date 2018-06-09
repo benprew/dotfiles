@@ -5,6 +5,8 @@
  ;; If there is more than one, they won't work right.
  '(global-flycheck-mode t)
  '(js-indent-level 2)
+ '(minitest-default-command (quote ("docker-compose" "run" "rails" "rails" "test")))
+ '(minitest-use-bundler nil)
  '(markdown-css-paths (quote ("../style.css")))
  '(org-agenda-files
    (quote
@@ -19,7 +21,10 @@
  '(prelude-clean-whitespace-on-save t)
  '(prelude-whitespace t)
  '(rspec-use-vagrant-when-possible t)
- '(rspec-vagrant-cwd "/home/38z/app/"))
+ '(rspec-vagrant-cwd "/home/38z/app/")
+ '(sh-basic-offset 2)
+ '(sh-indentation 2)
+ '(web-mode-markup-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
