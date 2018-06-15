@@ -1,4 +1,4 @@
-(prelude-require-packages '(solarized-theme dash-at-point web-mode helm-w3m jq-mode rspec-mode puppet-mode fish-mode graphviz-dot-mode))
+(prelude-require-packages '(solarized-theme dash-at-point web-mode helm-w3m jq-mode fish-mode graphviz-dot-mode))
 
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier 'super)
