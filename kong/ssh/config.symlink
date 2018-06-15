@@ -1,12 +1,7 @@
-Host benprew-development.etl.kongregate.com 54.211.186.136
-  ForwardAgent yes
-  User ec2-user
-  IdentityFile ~/.ssh/BenPrew.pem
-
-Host etl-dev etldev
+Host etl-dev etldev etl.kongregatedev.com
   ForwardAgent yes
   User kong
-  HostName 192.168.61.166
+  HostName etl.kongregatedev.com
   IdentityFile ~/.ssh/BenPrew.pem
 
 Host *.etl-production-nodes.etl.kongregate.com

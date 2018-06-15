@@ -4,6 +4,15 @@
 
 ;;; Code:
 
+(prelude-require-package 'minitest)
+(prelude-require-package 'yasnippet)
+(require 'yasnippet)
+(yas-global-mode 1)
+(setq yas-snippet-dirs (append yas-snippet-dirs
+                               '("~/Downloads/cloudformation-yasnippet/snippets")))
+
+
+(add-hook 'ruby-mode-hook 'minitest-mode)
 
 ; Starts a rails console
 ;; (defun kong-console ()
@@ -65,3 +74,29 @@ file)))
   (local-set-key "\C-ckt" 'kong-run-current-test-file))
 
 (add-hook 'ruby-mode-hook 'kong-ruby-mode-config)
+
+(projectile-register-project-type 'docker-rails-test '("Gemfile" "app" "lib" "db" "config" "test")
+                                  :compile "docker-compose up"
+                                  :test-suffix "_test"
+                                  :test-dir "test"
+                                  :test "docker-compose run rails rails test")
+
+;;; javascript
+(require 'prelude-js)
+(prelude-require-package 'add-node-modules-path)
+(prelude-require-package 'mocha)
+(add-hook 'js-mode-hook 'add-node-modules-path)
+(projectile-register-project-type 'npm '("package.json")
+                                  :compile "npm install"
+                                  :test-suffix "_test"
+                                  :test-dir "test"
+                                  :test "npm test")
+(setq-default js2-strict-trailing-comma-warning nil)
+
+(defun mocha-test-config ()
+  "For use in jsmode."
+  (local-set-key "\C-c,a" 'mocha-test-project)
+  (local-set-key "\C-c,v" 'mocha-test-file)
+  (local-set-key "\C-c,s" 'mocha-test-at-point))
+
+(add-hook 'js-mode-hook 'mocha-test-config)
