@@ -55,19 +55,23 @@ task :show_differences_stat do
   elsif left != 0 && right != 0
     stat = "#{left},#{right}"
   end
-  if dirty != 0
-    stat = "**#{stat}"
-  end
-  if stat != ""
-    puts "[#{stat}] "
-  end
+
+  stat = "**#{stat}" if dirty != 0
+
+  puts "[#{stat}] " if stat != ""
 end
 
 desc 'Hook our dotfiles into system-standard positions.'
 task install: :setup_modules do
+
   modules = File.read("#{ENV['HOME']}/.modules").split("\n")
   linkables = []
   modules.each do |m|
+    install_script = "#{m}/install.sh"
+    if File.exist?(install_script)
+      puts "Running #{install_script}"
+      `#{install_script}`
+    end
     linkables += Dir.glob(File.join(m, '/**/*.symlink'))
   end
 
@@ -101,9 +105,10 @@ task install: :setup_modules do
 
     puts "installing #{linkable} to #{target}"
 
-    if File.exists?(target) || File.symlink?(target)
+    if File.exist?(target) || File.symlink?(target)
       unless skip_all || overwrite_all || backup_all
-        puts "File already exists: #{target}, what do you want to do? [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all"
+        puts "File already exists: #{target}, what do you want to do? " \
+             "[s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all"
         case STDIN.gets.chomp
         when 'o' then overwrite = true
         when 'b' then backup = true
@@ -112,6 +117,10 @@ task install: :setup_modules do
         when 'S' then skip_all = true
         when 's' then next
         end
+      end
+      if skip_all
+        puts 'Skipping...'
+        next
       end
       FileUtils.rm_rf(target) if overwrite || overwrite_all
       `mv "$HOME/.#{file}" "$HOME/.#{file}.backup"` if backup || backup_all
