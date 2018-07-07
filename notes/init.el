@@ -8,8 +8,7 @@
       '((nil :maxlevel . 3)
         (org-agenda-files :maxlevel . 3)))
 (setq org-startup-indented t)
-                                        ; I prefer return to activate a link
-(setq org-return-follows-link t)
+(setq org-return-follows-link t) ; I prefer return to activate a link
 
 (setq org-agenda-custom-commands
       '(("w" todo "WAITING" nil)
