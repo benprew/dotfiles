@@ -1,10 +1,9 @@
 #!/bin/bash
 
-set -ex
+set -x
 
-STORY=$1
-
-SLUG=$(tracker "$STORY" slug)
+STORY_ID=$1
+SLUG=$(tracker "$STORY_ID" slug)
 
 BRANCH="${SLUG:0:32}"
 BRANCH="${BRANCH%-*}"
@@ -18,4 +17,16 @@ git reset --hard origin/master
 git worktree add "../$BRANCH"
 cd "../$BRANCH"
 yarn
-scripts/new-branch.sh "$BRANCH" &
+
+if [[ -f docker-compose.yml ]]; then
+  scripts/new-branch.sh "$BRANCH" && docker-compose build && docker-compose run rails rails db:setup RAILS_ENV=development &
+else
+  scripts/new-branch.sh "$BRANCH"
+fi
+
+if [[ -f ../master/.elasticbeanstalk/config.yml ]]; then
+   mkdir .elasticbeanstalk
+   cp ../master/.elasticbeanstalk/config.yml .elasticbeanstalk/
+   sed -ie "s/master:/$BRANCH:/" .elasticbeanstalk/config.yml
+   sed -ie "s/master/'$STORY_ID'/" .elasticbeanstalk/config.yml
+fi
