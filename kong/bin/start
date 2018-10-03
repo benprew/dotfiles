@@ -2,6 +2,10 @@
 
 set -x
 
+##############################
+# Start work on a new branch #
+##############################
+
 STORY_ID=$1
 SLUG=$(tracker "$STORY_ID" slug)
 
@@ -24,9 +28,5 @@ else
   scripts/new-branch.sh "$BRANCH"
 fi
 
-if [[ -f ../master/.elasticbeanstalk/config.yml ]]; then
-   mkdir .elasticbeanstalk
-   cp ../master/.elasticbeanstalk/config.yml .elasticbeanstalk/
-   sed -ie "s/master:/$BRANCH:/" .elasticbeanstalk/config.yml
-   sed -ie "s/master/'$STORY_ID'/" .elasticbeanstalk/config.yml
-fi
+DIR=$(dirname "$0")
+$DIR/copy-beanstalk-config.sh "$BRANCH"

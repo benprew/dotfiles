@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -x
+
+BRANCH=$1
+STORY_ID=$(expr "$BRANCH" : '\([0-9]*\)' )
+
+echo "$STORY_ID"
+echo "$BRANCH"
+
+if [[ -f ../master/.elasticbeanstalk/config.yml ]]; then
+   mkdir .elasticbeanstalk
+   cp ../master/.elasticbeanstalk/config.yml .elasticbeanstalk/
+   sed -i~ -e "s/master:/'$STORY_ID':/" .elasticbeanstalk/config.yml
+   sed -i~ -e "s/environment: master/environment: '$STORY_ID'/" .elasticbeanstalk/config.yml
+   sed -i~ -e "s/application_name: pints-master-beanstalk/application_name: pints-$BRANCH-beanstalk/" .elasticbeanstalk/config.yml
+fi

@@ -72,7 +72,6 @@ file)))
   (global-unset-key "\C-ck")
   (local-set-key "\C-ck." 'kong-run-test-at-point)
   (local-set-key "\C-ckt" 'kong-run-current-test-file))
-
 (add-hook 'ruby-mode-hook 'kong-ruby-mode-config)
 
 (projectile-register-project-type 'docker-rails-test '("Gemfile" "app" "lib" "db" "config" "test")
@@ -85,6 +84,7 @@ file)))
 (require 'prelude-js)
 (prelude-require-package 'add-node-modules-path)
 (prelude-require-package 'mocha)
+(require 'add-node-modules-path)
 (add-hook 'js-mode-hook 'add-node-modules-path)
 (projectile-register-project-type 'npm '("package.json")
                                   :compile "npm install"

@@ -1,0 +1,27 @@
+1#!/bin/bash
+
+##############################
+# Work on an existing branch #
+##############################
+
+set -x
+
+BRANCH=$1
+
+if [[ -d $BRANCH ]]; then
+  cd "$BRANCH"
+else
+  cd master
+  git worktree add "../$BRANCH" "$BRANCH"
+  cd "../$BRANCH"
+fi
+yarn
+
+if [[ -f docker-compose.yml ]]; then
+  scripts/create-env-file.sh && docker-compose build && docker-compose run rails rails db:setup RAILS_ENV=development &
+else
+  scripts/new-branch.sh "$BRANCH"
+fi
+
+DIR=$(dirname "$0")
+$DIR/copy-beanstalk-config.sh "$BRANCH"
