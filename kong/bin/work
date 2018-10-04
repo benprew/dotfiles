@@ -1,10 +1,10 @@
-1#!/bin/bash
+#!/bin/bash
 
 ##############################
 # Work on an existing branch #
 ##############################
 
-set -x
+set -ex
 
 BRANCH=$1
 
@@ -13,7 +13,7 @@ if [[ -d $BRANCH ]]; then
 else
   cd master
   git worktree add "../$BRANCH" "$BRANCH"
-  cd "../$BRANCH"
+  cd "../$BRANCH" || exit 1
 fi
 yarn
 

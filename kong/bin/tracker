@@ -5,31 +5,63 @@ require 'httparty'
 
 class Tracker
   include HTTParty
-  base_uri 'https://www.pivotaltracker.com/services/v3'
+  base_uri 'https://www.pivotaltracker.com/services/v5'
 
   def initialize
-    @token = File.read("#{ENV['HOME']}/.pt_token").chomp
-    @projects = {
+    token = File.read("#{ENV['HOME']}/.pt_token").chomp
+    self.class.headers('X-TrackerToken' => token)
+
+    projects = {
       'data'   => 1_503_382,
       'devops' => 947_778,
       'pints'  => 2_141_994
     }
     ENV['PROJECT'] ||= 'pints'
+    @project_id = projects[ENV['PROJECT'].downcase]
   end
 
   def story(story_id)
-    options = { headers: { 'X-TrackerToken' => @token } }
-    self.class.get("/projects/#{@projects[ENV['PROJECT'].downcase]}/stories/#{story_id}", options).parsed_response
+    self.class.get(
+      "/projects/#{@project_id}/stories/#{story_id}"
+    ).parsed_response
+  end
+
+  def tasks(story_id)
+    self.class.get(
+      "/projects/#{@project_id}/stories/#{story_id}/tasks"
+    ).parsed_response
+  end
+
+  def todo
+    my_stories.each do |story|
+      puts "#{story['id']} - #{story['name']}"
+      tasks = tasks(story['id']) || []
+      tasks.each do |t|
+        state = t['complete'] ? '[x]' : '[ ]'
+        puts "  #{state} #{t['description']}"
+      end
+      puts
+    end
+    nil
+  end
+
+  def my_stories
+    name = self.class.get('/me', query: { fields: 'name' })
+               .parsed_response['name']
+    self.class.get(
+      "/projects/#{@project_id}/stories/",
+      query: { filter: "mywork:#{name}" }
+    ).parsed_response
   end
 
   def slug(story_id)
     story_info = story(story_id)
-    title = story_info['story']['name']
+    title = story_info['name']
             .gsub(/\bthe\b/, '')
             .gsub(/\s+/, '-')
             .downcase
             .gsub(/[^a-z0-9-]/, '')[0, 60]
-    "#{story_info['story']['id']}-#{title}"
+    "#{story_info['id']}-#{title}"
   end
 end
 
@@ -37,8 +69,30 @@ story_id = ARGV[0]
 method = ARGV[1]
 
 tracker = Tracker.new
+
+unless story_id
+  usage = <<~USAGE
+    tracker todo - prints your open stories, with tasks
+    tracker <story_id> slug - prints a slug for a story (used for git branches)
+    tracker <story_id> story - the raw story
+    ex: tracker 160898796 slug
+  USAGE
+  puts usage
+  exit 1
+end
+
+if story_id == 'todo'
+  tracker.todo
+  exit 0
+end
+
 if tracker.respond_to?(method.to_sym)
-  print tracker.send(method.to_sym, story_id)
+  resp = tracker.send(method.to_sym, story_id)
+  if resp.is_a?(String)
+    print resp
+  else
+    print resp.to_json
+  end
 else
-  print tracker.story(story_id)['story'][method]
+  print tracker.story(story_id)[method]
 end
