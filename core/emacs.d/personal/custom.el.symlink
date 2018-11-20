@@ -17,8 +17,9 @@
     ((sequence "INBOX" "TODAY" "TOMORROW" "SOMEDAY" "WAITING" "DONE"))) t)
  '(package-selected-packages
    (quote
-    (:name ace-window add-node-modules-path anzu beacon browse-kill-ring cask-mode coffee-mode color-theme-solarized company counsel crux csv-mode dash-at-point diff-hl diminish discover-my-major dockerfile-mode dumb-jump easy-kill elisp-slime-nav exec-path-from-shell expand-region fish-mode flycheck fw3m geiser gist git-timemachine gitconfig-mode gitignore-mode go-mode go-playground god-mode graphviz-dot-mode grizzl guru-mode haml-mode helm helm-ag helm-descbinds helm-projectile helm-w3m imenu-anywhere ivy jq-mode js2-mode json-mode magit markdown-mode minitest mocha move-text operate-on-number ov puppet-mode rainbow-delimiters rainbow-mode rspec-mode scss-mode slim-mode smart-mode-line smartrep solarized-theme swiper undo-tree vkill volatile-highlights web-mode which-key yaml-mode yasnippet zenburn-theme zop-to-char)))
+    (with-editor projectile :name ace-window add-node-modules-path anzu beacon browse-kill-ring cask-mode coffee-mode color-theme-solarized company counsel crux csv-mode dash-at-point diff-hl diminish discover-my-major dockerfile-mode dumb-jump easy-kill elisp-slime-nav exec-path-from-shell expand-region fish-mode flycheck fw3m geiser gist git-timemachine gitconfig-mode gitignore-mode go-mode go-playground god-mode graphviz-dot-mode grizzl guru-mode haml-mode helm helm-ag helm-descbinds helm-projectile helm-w3m imenu-anywhere ivy jq-mode js2-mode json-mode magit markdown-mode minitest mocha move-text operate-on-number ov puppet-mode rainbow-delimiters rainbow-mode rspec-mode scss-mode slim-mode smart-mode-line smartrep solarized-theme swiper undo-tree vkill volatile-highlights web-mode which-key yaml-mode yasnippet zenburn-theme zop-to-char)))
  '(prelude-clean-whitespace-on-save t)
+ '(prelude-guru nil)
  '(prelude-whitespace t)
  '(rspec-use-vagrant-when-possible t)
  '(rspec-vagrant-cwd "/home/38z/app/")
