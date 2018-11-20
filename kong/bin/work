@@ -24,4 +24,4 @@ else
 fi
 
 DIR=$(dirname "$0")
-$DIR/copy-beanstalk-config.sh "$BRANCH"
+$DIR/copy-beanstalk-config "$BRANCH"

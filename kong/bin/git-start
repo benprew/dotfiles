@@ -22,9 +22,9 @@ if [[ $review_branch == "" ]]; then
     fi
 fi
 
-slug=`tracker $story_num slug`
+slug=$(tracker slug "$story_num")
 status=""
-if [[ ! -z `git diff-index HEAD` ]]; then
+if [[ ! -z $(git diff-index HEAD) ]]; then
     echo DIRTY TREE
     git diff-index HEAD
     status="dirty"

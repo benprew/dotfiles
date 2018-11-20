@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'httparty'
 
@@ -20,10 +22,20 @@ class Tracker
     @project_id = projects[ENV['PROJECT'].downcase]
   end
 
-  def story(story_id)
-    self.class.get(
+  def me(query = {})
+    self.class.get('/me', query: query).parsed_response
+  end
+
+  def story(story_id, *fields)
+    resp = self.class.get(
       "/projects/#{@project_id}/stories/#{story_id}"
     ).parsed_response
+
+    if fields.empty?
+      resp
+    else
+      resp.select { |k, _v| fields.include?(k) }
+    end
   end
 
   def tasks(story_id)
@@ -33,16 +45,30 @@ class Tracker
   end
 
   def todo
+    resp = StringIO.new
     my_stories.each do |story|
-      puts "#{story['id']} - #{story['name']}"
+      resp.write "#{story['id']} - #{story['name']}\n"
       tasks = tasks(story['id']) || []
       tasks.each do |t|
         state = t['complete'] ? '[x]' : '[ ]'
-        puts "  #{state} #{t['description']}"
+        resp.write "  #{state} #{t['description']}\n"
       end
-      puts
+      resp.write "\n"
     end
-    nil
+    resp.string
+  end
+
+  def oncall(story_title)
+    query = {
+      story_type: :chore,
+      name: story_title,
+      current_state: :started,
+      owner_ids: [me(fields: 'id')['id']]
+    }
+    self.class.post(
+      "/projects/#{@project_id}/stories",
+      body: query
+    ).parsed_response
   end
 
   def my_stories
@@ -65,34 +91,27 @@ class Tracker
   end
 end
 
-story_id = ARGV[0]
-method = ARGV[1]
+method = ARGV[0]
+args = ARGV[1..-1]
 
 tracker = Tracker.new
 
-unless story_id
+unless method
   usage = <<~USAGE
     tracker todo - prints your open stories, with tasks
-    tracker <story_id> slug - prints a slug for a story (used for git branches)
-    tracker <story_id> story - the raw story
-    ex: tracker 160898796 slug
+    tracker slug <story_id>  - prints a slug for a story (used for git branches)
+    tracker story <story_id>  - the raw story
+    ex: tracker slug 160898796
   USAGE
   puts usage
   exit 1
 end
 
-if story_id == 'todo'
-  tracker.todo
-  exit 0
-end
-
 if tracker.respond_to?(method.to_sym)
-  resp = tracker.send(method.to_sym, story_id)
+  resp = tracker.send(method.to_sym, *args)
   if resp.is_a?(String)
     print resp
   else
     print resp.to_json
   end
-else
-  print tracker.story(story_id)[method]
 end

@@ -7,7 +7,7 @@ set -x
 ##############################
 
 STORY_ID=$1
-SLUG=$(tracker "$STORY_ID" slug)
+SLUG=$(tracker slug "$STORY_ID")
 
 BRANCH="${SLUG:0:32}"
 BRANCH="${BRANCH%-*}"
@@ -29,4 +29,4 @@ else
 fi
 
 DIR=$(dirname "$0")
-$DIR/copy-beanstalk-config.sh "$BRANCH"
+$DIR/copy-beanstalk-config "$BRANCH"

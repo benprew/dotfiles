@@ -13,10 +13,10 @@ cd "$BRANCH" || cd master || exit 1
 scripts/delete-branch.sh "$BRANCH"
 if [[ -f docker-compose.yml ]]; then
   docker-compose down
+  docker container ls -a |grep "$BRANCH" | awk '{print $1}' |xargs docker rm
+  docker rmi "${BRANCH%/}_rails" "${BRANCH%/}_sidekiq"
 fi
 cd ..
 if [[ -d "$BRANCH" ]]; then rm -rf "$BRANCH"; fi
 cd master || exit 1
 git worktree prune
-docker container ls -a |grep "$BRANCH" | awk '{print $1}' |xargs docker rm
-docker rmi "${BRANCH%/}_rails" "${BRANCH%/}_sidekiq"
