@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo gem install rubocop bundler pry puppet puppet-lint
+gem install rubocop pry
