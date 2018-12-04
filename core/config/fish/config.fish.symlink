@@ -4,7 +4,7 @@ alias gd 'git diff'
 alias gco 'git checkout'
 
 for module in (cat ~/.modules)
-    set module_init_path $HOME/dotfiles/$module/init.fish
+    set module_init_path $HOME/src/dotfiles/$module/init.fish
     if test -e $module_init_path
         . $module_init_path
     end
@@ -14,7 +14,6 @@ for module in (cat ~/.modules)
     end
 end
 set -x PATH $PATH "/usr/local/sbin" 
-set -x PATH ~/.rbenv/shims $PATH
 set -x PATH $PATH (python -m site --user-base)/bin
 
 function git_branch
