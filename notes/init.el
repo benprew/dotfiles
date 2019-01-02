@@ -3,6 +3,8 @@
 ;;;   This contains all my org-mode settings
 
 ;;; Code:
+(require 'prelude-org)
+
 (setq org-agenda-files '("~/notes/"))
 (setq org-refile-targets
       '((nil :maxlevel . 3)
