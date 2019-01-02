@@ -67,6 +67,11 @@ task install: :setup_modules do
   modules = File.read("#{ENV['HOME']}/.modules").split("\n")
   linkables = []
   modules.each do |m|
+    brewfile = "#{m}/Brewfile"
+    if File.exist?(brewfile)
+      puts "Running #{brewfile}"
+      puts `brew bundle --file=#{brewfile}`
+    end
     install_script = "#{m}/install.sh"
     if File.exist?(install_script)
       puts "Running #{install_script}"
