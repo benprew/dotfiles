@@ -1,5 +1,5 @@
 tap 'caskroom/cask'
-tap 'caskroom/fonts'
+tap 'homebrew/cask-fonts'
 tap 'd12frosted/emacs-plus'
 
 # brew 'm-cli' # https://github.com/rgcr/m-cli/blob/master/Readme.md
@@ -9,11 +9,12 @@ brew 'fish'
 brew 'git'
 brew 'graphviz'
 brew 'htop'
-brew 'markdown'
+brew 'discount' # markdown
 brew 'mtr'
 brew 'nmap'
 brew 'w3m'
 brew 'emacs-plus'
+brew 'shellcheck'
 cask 'evernote'
 cask 'firefox'
 cask 'font-source-code-pro'
