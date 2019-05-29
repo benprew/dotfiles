@@ -33,4 +33,6 @@
   (interactive)
   (find-file "~/notes/gtd.org"))
 
+;; bigger latex fragment -- needs to be run once org is loaded?
+;; (plist-put org-format-latex-options :scale 1.5)
 ;;; org.el ends here
