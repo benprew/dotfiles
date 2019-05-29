@@ -11,3 +11,6 @@ fi
 if [[ $SHELL != "/usr/local/bin/fish" ]]; then
     chsh -s /usr/local/bin/fish
 fi
+
+# change location for screenshot downloads
+defaults write com.apple.screencapture location ~/Downloads/
