@@ -41,3 +41,12 @@
 (smartparens-mode -1)
 (electric-pair-mode -1)
 (electric-quote-mode -1)
+
+;; stop making files with #! executable
+(remove-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+
+;; for git in /usr/local/bin
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+(setq tramp-default-method "ssh")
+
+(setq undo-tree-auto-save-history nil)
