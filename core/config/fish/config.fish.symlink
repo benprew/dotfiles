@@ -15,6 +15,11 @@ for module in (cat ~/.modules)
 end
 set -x PATH $PATH "/usr/local/sbin" 
 set -x PATH $PATH (python -m site --user-base)/bin
+set -x EDITOR emacsclient
+
+if which -s pyenv
+   set -x PATH (pyenv root)/shims $PATH
+end 
 
 function git_branch
     set -g git_branch (git rev-parse --abbrev-ref HEAD ^ /dev/null)
