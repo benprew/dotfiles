@@ -23,6 +23,7 @@
 (add-hook 'prog-mode-hook (lambda () (smartparens-mode -1)))
 
 (setq global-flycheck-mode t)
+(global-flycheck-mode)
 
 (windmove-default-keybindings 'super)
 
