@@ -6,8 +6,8 @@
 (setq projectile-project-search-path '("~/src/"))
 (projectile-cleanup-known-projects)
 
-(setq mac-option-modifier 'meta)
-(setq mac-command-modifier 'super)
+(setq mac-option-modifier 'super)
+(setq mac-command-modifier 'meta)
 
 (setq browse-url-browser-function 'w3m-browse-url)
 (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
