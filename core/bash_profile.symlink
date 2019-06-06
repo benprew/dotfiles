@@ -2,7 +2,7 @@
 
 # Get the aliases and functions
 if [ -f ~/.bashrc ]; then
-	. ~/.bashrc
+    . ~/.bashrc
 fi
 
 # User specific environment and startup programs
@@ -11,7 +11,7 @@ unset USERNAME
 
 export PATH="/usr/local/heroku/bin:$PATH:/usr/local/share/npm/bin:$HOME/bin"
 
-if [[ -f `which brew` ]]; then
+if which brew 2>/dev/null; then
    export PATH=$PATH:$(brew --prefix ruby)/bin;
 fi
 
