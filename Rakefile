@@ -68,12 +68,12 @@ task install: :setup_modules do
   linkables = []
   modules.each do |m|
     brewfile = "#{m}/Brewfile"
-    if File.exist?(brewfile)
+    if File.exist?(brewfile) && RUBY_PLATFORM.match('darwin')
       puts "Running #{brewfile}"
       puts `brew bundle --file=#{brewfile}`
     end
     install_script = "#{m}/install.sh"
-    if File.exist?(install_script)
+    if File.exist?(install_script) && RUBY_PLATFORM.match('darwin')
       puts "Running #{install_script}"
       `#{install_script}`
     end
