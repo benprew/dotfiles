@@ -1,10 +1,5 @@
 # export PROMPT_COMMAND="$HOME/dotfiles/check_for_update"
 
-# pushd ~/dotfiles > /dev/null
-# git pull --quiet origin master
-# ./build.pl
-# popd > /dev/null
-
 if [[ -f /etc/bashrc ]]; then
     . /etc/bashrc
 fi
@@ -34,4 +29,3 @@ shopt -s cdspell
 set -o emacs
 set completion-ignore-case On
 set bell-style none
-
