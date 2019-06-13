@@ -25,11 +25,12 @@
 (setq global-flycheck-mode t)
 (global-flycheck-mode)
 
-(windmove-default-keybindings 'meta)
-(global-set-key (kbd "C-c <left>")  'windmove-left)
-(global-set-key (kbd "C-c <right>") 'windmove-right)
-(global-set-key (kbd "C-c <up>")    'windmove-up)
-(global-set-key (kbd "C-c <down>")  'windmove-down)
+(windmove-default-keybindings "<ESC>")
+
+(global-set-key (kbd "<ESC> <left>")  'windmove-left)
+(global-set-key (kbd "<ESC> <right>") 'windmove-right)
+(global-set-key (kbd "<ESC> <up>")    'windmove-up)
+(global-set-key (kbd "<ESC> <down>")  'windmove-down)
 
 (setq initial-scratch-message ";Don't ignore your dreams\n;Don't work too much\n;Say what you think\n;Cultivate friendships\n;Be happy.\n\n")
 
