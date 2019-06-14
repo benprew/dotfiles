@@ -67,6 +67,7 @@ task install: :setup_modules do
   modules = File.read("#{ENV['HOME']}/.modules").split("\n")
   linkables = []
   modules.each do |m|
+    puts "==> Installing module: #{m}"
     brewfile = "#{m}/Brewfile"
     if File.exist?(brewfile) && RUBY_PLATFORM.match('darwin')
       puts "Running #{brewfile}"
@@ -78,23 +79,15 @@ task install: :setup_modules do
       `#{install_script}`
     end
     linkables += Dir.glob(File.join(m, '/**/*.symlink'))
-  end
 
-  emacs_modules = modules.map do |m|
-    src = File.join(m, 'init.el')
-
-    next unless File.exist?(src)
-
-    target = "#{ENV['HOME']}/.emacs.d/personal/#{m}.el"
-
-    [src, target]
-  end.compact
-
-  emacs_modules.each do |link_info|
-    src, target = link_info
-    cmd = "ln -sf $PWD/#{src} #{target}"
-    puts "installing #{src} to #{target}"
-    `#{cmd}`
+    emacs_init = File.join(m, 'init.el')
+    if File.exist?(emacs_init)
+      src = emacs_init
+      target = "#{ENV['HOME']}/.emacs.d/personal/#{m}.el"
+      cmd = "ln -sf $PWD/#{src} #{target}"
+      puts "installing #{src} to #{target}"
+      `#{cmd}`
+    end
   end
 
   skip_all = false
