@@ -25,7 +25,7 @@
 (setq global-flycheck-mode t)
 (global-flycheck-mode)
 
-(windmove-default-keybindings "<ESC>")
+(windmove-default-keybindings 'meta)
 
 (global-set-key (kbd "<ESC> <left>")  'windmove-left)
 (global-set-key (kbd "<ESC> <right>") 'windmove-right)
