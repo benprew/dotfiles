@@ -85,7 +85,7 @@ file)))
 (prelude-require-package 'add-node-modules-path)
 (prelude-require-package 'mocha)
 (require 'add-node-modules-path)
-(add-hook 'js-mode-hook 'add-node-modules-path)
+(add-hook 'js2-mode-hook 'add-node-modules-path)
 (projectile-register-project-type 'npm '("package.json")
                                   :compile "npm install"
                                   :test-suffix "_test"
@@ -99,4 +99,4 @@ file)))
   (local-set-key "\C-c,v" 'mocha-test-file)
   (local-set-key "\C-c,s" 'mocha-test-at-point))
 
-(add-hook 'js-mode-hook 'mocha-test-config)
+(add-hook 'js2-mode-hook 'mocha-test-config)
