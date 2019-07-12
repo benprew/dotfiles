@@ -23,3 +23,9 @@ log () {
         echo "$(date +'%F %H:%M:%S') [$$] - $LINE"
     done
 }
+
+if [[ $SSH_AUTH_SOCK != "/nfs/old_home/bprew/.ssh_agent_socket" ]]; then
+        echo creating auth_sock link
+        ln -sf $SSH_AUTH_SOCK ~/.ssh_agent_socket
+        export SSH_AUTH_SOCK=~/.ssh_agent_socket
+fi
