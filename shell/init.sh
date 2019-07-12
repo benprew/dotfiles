@@ -1,1 +1,3 @@
-export PS1=export PS1='\033]0;${USER}@${HOSTNAME}: ${PWD}\007$(__git_ps1 "(%s) ")\[\e[0;32m\]\u@\h\[\e[m\] \w\n\$ '
+GREEN='\[\e[0;32m\]'
+DEFAULT_COLOR='\[\e[0m\]'
+export PS1="${GREEN}\u@\h${DEFAULT_COLOR} \w\n\$ "
