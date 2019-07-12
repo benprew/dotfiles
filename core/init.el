@@ -21,6 +21,7 @@
 
 (add-hook 'prog-mode-hook 'prelude-enable-whitespace)
 (add-hook 'prog-mode-hook (lambda () (smartparens-mode -1)))
+(setq whitespace-line-column 88)
 
 (setq global-flycheck-mode t)
 (global-flycheck-mode)
