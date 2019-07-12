@@ -15,3 +15,11 @@ daterange () {
         curr=$( date +%Y-%m-%d --date "$curr +1 day" )
     done
 }
+
+log () {
+    # It's not easy to get the PID of the child process, so for now we
+    # log the current process PID.
+    while read LINE; do
+        echo "$(date +'%F %H:%M:%S') [$$] - $LINE"
+    done
+}
