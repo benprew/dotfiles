@@ -3,6 +3,8 @@
 ;;;   This contains all my org-mode settings
 
 ;;; Code:
+(prelude-require-packages '(visual-fill-column))
+
 (require 'prelude-org)
 
 (setq org-agenda-files '("~/notes/"))
@@ -11,6 +13,9 @@
         (org-agenda-files :maxlevel . 3)))
 (setq org-startup-indented t)
 (setq org-return-follows-link t) ; I prefer return to activate a link
+(add-hook 'org-mode-hook (lambda () (whitespace-mode -1)))
+(add-hook 'org-mode-hook #'visual-line-mode)
+(add-hook 'org-mode-hook #'visual-fill-column-mode)
 
 (setq org-todo-keywords
       '((sequence "INBOX(i)"
