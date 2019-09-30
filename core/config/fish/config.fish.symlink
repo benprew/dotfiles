@@ -13,12 +13,11 @@ for module in (cat ~/.modules)
         set -x PATH $PATH $HOME/dotfiles/$module/bin
     end
 end
-set -x PATH $PATH "/usr/local/sbin"
-set -x PATH "/usr/local/bin" $PATH
-set -x PATH $PATH (python -m site --user-base)/bin
+set -x PATH "/usr/local/bin" $PATH "/usr/local/sbin"
+set -x PATH $PATH (python3 -m site --user-base)/bin
 set -x EDITOR emacsclient
 
-if which -s pyenv
+if which pyenv >/dev/null 2>&1
     status --is-interactive; and source (pyenv init -|psub)
     set -x PATH (pyenv root)/shims $PATH
 end
