@@ -1,0 +1,12 @@
+#!/bin/bash
+
+BRANCH_NAME=personal/$USER/$1
+WORK_DIR=../$1
+
+git checkout master
+git pull --ff-only
+git checkout -b $BRANCH_NAME
+git push -u origin $BRANCH_NAME
+git checkout master
+
+git worktree add $WORK_DIR $BRANCH_NAME
