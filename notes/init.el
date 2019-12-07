@@ -15,7 +15,9 @@
 (setq org-return-follows-link t) ; I prefer return to activate a link
 (add-hook 'org-mode-hook (lambda () (whitespace-mode -1)))
 (add-hook 'org-mode-hook #'visual-line-mode)
-(add-hook 'org-mode-hook #'visual-fill-column-mode)
+;; unset because it gets into a loop on linliveanalytics1
+(if (and(> emacs-major-version 25) (not (display-graphic-p)))
+  (add-hook 'org-mode-hook #'visual-fill-column-mode))
 
 (setq org-todo-keywords
       '((sequence "INBOX(i)"
@@ -32,11 +34,6 @@
         ("o" todo "TOMORROW" nil)
         ("s" todo "SOMEDAY" nil)
         ("d" "Agenda + Next Actions" ((agenda) (todo "INBOX") (todo "TODAY")))))
-
-; Jump to gtd file
-(defun gtd ()
-  (interactive)
-  (find-file "~/notes/gtd.org"))
 
 ;; bigger latex fragment -- needs to be run once org is loaded?
 ;; (plist-put org-format-latex-options :scale 1.5)
