@@ -57,3 +57,5 @@
 (setq tramp-default-method "ssh")
 
 (setq undo-tree-auto-save-history nil)
+(if (display-graphic-p)
+    (setq browse-url-browser-function 'browse-url-default-browser))
