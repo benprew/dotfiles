@@ -1,4 +1,4 @@
-(prelude-require-packages '(go-mode go-playground))
+(prelude-require-packages '(go-mode go-playground go-projectile))
 
 ;; Company Mode Notes
 ;; http://company-mode.github.io/
