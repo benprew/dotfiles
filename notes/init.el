@@ -16,7 +16,7 @@
 (add-hook 'org-mode-hook (lambda () (whitespace-mode -1)))
 (add-hook 'org-mode-hook #'visual-line-mode)
 ;; unset because it gets into a loop on linliveanalytics1
-(if (and(> emacs-major-version 25) (not (display-graphic-p)))
+(if (and (> emacs-major-version 25) (display-graphic-p))
   (add-hook 'org-mode-hook #'visual-fill-column-mode))
 
 (setq org-todo-keywords
