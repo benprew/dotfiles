@@ -35,6 +35,8 @@
         ("s" todo "SOMEDAY" nil)
         ("d" "Agenda + Next Actions" ((agenda) (todo "INBOX") (todo "TODAY")))))
 
+(setq markdown-gfm-use-electric-backquote nil)
+
 ;; bigger latex fragment -- needs to be run once org is loaded?
 ;; (plist-put org-format-latex-options :scale 1.5)
 ;;; org.el ends here
