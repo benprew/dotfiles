@@ -8,6 +8,10 @@ git remote prune origin
 
 git checkout master
 git pull --ff-only
+# to checkout an existing branch:
+# git worktree add $WORK_DIR origin/$BRANCH_NAME
+# ex
+# git worktree add ../deeproot-automation origin/personal/cgoughnour/deeproot-automation
 git worktree add -b $BRANCH_NAME $WORK_DIR
 
 # move to newly created work directory
