@@ -1,8 +1,10 @@
 # use git 2.9 on linliveanalytics
-
-if [[ -f /opt/rh/rh-git29/enable ]]; then  
+if [[ -f /opt/rh/rh-git29/enable ]]; then
     source /opt/rh/rh-git29/enable
 fi
+
+# for prstat.pl
+export PATH=$PATH:/usr/local/linear/scripts
 
 if [ -f /home/as_worker/as_work/analytical-solutions/etc/bashrc ]; then
     . /home/as_worker/as_work/analytical-solutions/etc/bashrc
