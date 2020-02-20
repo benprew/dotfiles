@@ -10,16 +10,16 @@ for module in (cat ~/.modules)
     end
 
     if test -e $HOME/dotfiles/$module/bin
-        set -x PATH $PATH $HOME/dotfiles/$module/bin
+        set -g fish_user_paths $fish_user_paths $HOME/dotfiles/$module/bin
     end
 end
-set -x PATH "/usr/local/bin" $PATH "/usr/local/sbin"
-set -x PATH $PATH (python3 -m site --user-base)/bin
+set -g fish_user_paths "/usr/local/bin" $fish_user_paths "/usr/local/sbin"
+set -g fish_user_paths $fish_user_paths (python3 -m site --user-base)/bin
 set -x EDITOR emacsclient
 
 if which pyenv >/dev/null 2>&1
     status --is-interactive; and source (pyenv init -|psub)
-    set -x PATH (pyenv root)/shims $PATH
+    set -g fish_user_paths (pyenv root)/shims $fish_user_paths
 end
 
 function git_branch
