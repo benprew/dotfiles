@@ -6,6 +6,3 @@ alias e='emacsclient -n'
 alias ll='ls -l'
 
 alias flushcache='sudo killall -HUP mDNSResponder'
-if [[ `which ag` != "" ]]; then
-    alias ack=ag
-fi
