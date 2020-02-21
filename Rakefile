@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require 'rake'
+require 'pathname'
 
 Dir.glob('*/*.rake').each { |r| import r }
 
@@ -67,33 +70,11 @@ task install: :setup_modules do
   modules = File.read("#{ENV['HOME']}/.modules").split("\n")
   linkables = []
   modules.each do |m|
-    puts "==> Installing module: #{m}"
-    brewfile = "#{m}/Brewfile"
-    if File.exist?(brewfile) && RUBY_PLATFORM.match('darwin')
-      puts "Running #{brewfile}"
-      puts `brew bundle --file=#{brewfile}`
-    end
-    install_script = "#{m}/install.sh"
-    if File.exist?(install_script) && RUBY_PLATFORM.match('darwin')
-      puts "Running #{install_script}"
-      `#{install_script}`
-    end
-    linkables += Dir.glob(File.join(m, '/**/*.symlink'))
-
-    emacs_init = File.join(m, 'init.el')
-    if File.exist?(emacs_init)
-      src = emacs_init
-      target = "#{ENV['HOME']}/.emacs.d/personal/#{m}.el"
-      cmd = "ln -sf $PWD/#{src} #{target}"
-      puts "installing #{src} to #{target}"
-      `#{cmd}`
-    end
+    linkables += Dir.glob(File.join(m, "*.symlink"))
   end
-
   skip_all = false
   overwrite_all = false
   backup_all = false
-
   linkables.each do |linkable|
     overwrite = false
     backup = false
@@ -102,8 +83,15 @@ task install: :setup_modules do
     target = "#{ENV["HOME"]}/.#{file}"
 
     puts "installing #{linkable} to #{target}"
+    tgt_realpath = Pathname.new(target).realpath
+    lnk_realpth = Pathname.new("#{Dir.pwd}/#{linkable}").realpath
 
-    if File.exist?(target) || File.symlink?(target)
+    if File.symlink?(target) && tgt_realpath == lnk_realpth
+      puts "Skipping #{target}, it is already linked to #{linkable}"
+      next
+    end
+
+    if File.exist?(target)
       unless skip_all || overwrite_all || backup_all
         puts "File already exists: #{target}, what do you want to do? " \
              "[s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all"
@@ -125,10 +113,35 @@ task install: :setup_modules do
     end
     `ln -s "$PWD/#{linkable}" "#{target}"`
   end
+
+  modules.each do |m|
+    puts "==> Installing module: #{m}"
+
+    if RUBY_PLATFORM.match('darwin')
+      brewfile = "#{m}/Brewfile"
+      if File.exist?(brewfile)
+        puts "Running #{brewfile}"
+        puts `brew bundle --file=#{brewfile}`
+      end
+      install_script = "#{m}/install.sh"
+      if File.exist?(install_script)
+        puts "Running #{install_script}"
+        `#{install_script}`
+      end
+    end
+
+    emacs_init = File.join(m, 'init.el')
+    next unless File.exist?(emacs_init)
+
+    src = emacs_init
+    target = "#{ENV['HOME']}/.emacs.d/personal/#{m}.el"
+    cmd = "ln -sf $PWD/#{src} #{target}"
+    puts "installing #{src} to #{target}"
+    `#{cmd}`
+  end
 end
 
 task :uninstall do
-
   modules = File.read("#{ENV['HOME']}/.modules").split("\n")
   linkables = []
   modules.each do |m|
