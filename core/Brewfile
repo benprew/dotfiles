@@ -5,7 +5,6 @@ tap 'd12frosted/emacs-plus'
 # brew 'm-cli' # https://github.com/rgcr/m-cli/blob/master/Readme.md
 brew 'ag'
 # brew 'diffuse' # for diffing 3+ files
-brew 'discount' # markdown
 brew 'emacs-plus'
 brew 'fish'
 brew 'git'
@@ -14,8 +13,8 @@ brew 'htop'
 brew 'mtr'
 brew 'nmap'
 brew 'shellcheck'
+brew 'tmux'
 brew 'w3m'
-cask 'evernote'
 cask 'firefox'
 cask 'font-source-code-pro'
 cask 'iterm2'

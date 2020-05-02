@@ -1,2 +1,5 @@
 cask 'sparkleshare'
 cask 'macdown'
+brew 'discount' # markdown
+
+cask 'evernote'
