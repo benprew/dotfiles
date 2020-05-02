@@ -1,4 +1,3 @@
 #!/bin/bash
 
-sudo gem install rubocop bundler pry httparty
-
+gem install --user rubocop bundler pry httparty
