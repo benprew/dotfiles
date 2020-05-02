@@ -127,7 +127,7 @@ task install: :setup_modules do
       brewfile = "#{m}/Brewfile"
       if File.exist?(brewfile)
         puts "Running #{brewfile}"
-        puts `brew bundle --file=#{brewfile}`
+        puts `brew bundle --file=#{brewfile} --no-lock`
       end
       install_script = "#{m}/install.sh"
       if File.exist?(install_script)
