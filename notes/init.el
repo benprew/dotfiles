@@ -3,7 +3,7 @@
 ;;;   This contains all my org-mode settings
 
 ;;; Code:
-(prelude-require-packages '(visual-fill-column))
+(prelude-require-packages '(visual-fill-column markdown-mode))
 
 (require 'prelude-org)
 
