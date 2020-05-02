@@ -42,10 +42,6 @@
     "Major mode for editing jq files" t)
 (add-to-list 'auto-mode-alist '("\\.jq$" . jq-mode))
 
-;; for nand2tetris
-(add-to-list 'auto-mode-alist '("\\.hdl$" . vhdl-mode))
-(add-hook 'asm-mode-hook (lambda () (whitespace-mode -1)))
-
 (abbrev-mode -1)
 (global-auto-composition-mode -1)
 (smartparens-global-mode -1)
