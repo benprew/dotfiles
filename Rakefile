@@ -64,13 +64,19 @@ task :show_differences_stat do
   puts "[#{stat}] " if stat != ""
 end
 
+def realpath(path)
+  Pathname.new(path).realpath
+rescue Errno::ENOENT
+  nil
+end
+
 desc 'Hook our dotfiles into system-standard positions.'
 task install: :setup_modules do
 
   modules = File.read("#{ENV['HOME']}/.modules").split("\n")
   linkables = []
   modules.each do |m|
-    linkables += Dir.glob(File.join(m, "*.symlink"))
+    linkables += Dir.glob(File.join(m, '/**/*.symlink'))
   end
   skip_all = false
   overwrite_all = false
@@ -83,8 +89,8 @@ task install: :setup_modules do
     target = "#{ENV["HOME"]}/.#{file}"
 
     puts "installing #{linkable} to #{target}"
-    tgt_realpath = Pathname.new(target).realpath
-    lnk_realpth = Pathname.new("#{Dir.pwd}/#{linkable}").realpath
+    tgt_realpath = realpath(target)
+    lnk_realpth = realpath("#{Dir.pwd}/#{linkable}")
 
     if File.symlink?(target) && tgt_realpath == lnk_realpth
       puts "Skipping #{target}, it is already linked to #{linkable}"
