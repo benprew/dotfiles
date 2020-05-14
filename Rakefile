@@ -129,11 +129,16 @@ task install: :setup_modules do
         puts "Running #{brewfile}"
         puts `brew bundle --file=#{brewfile} --no-lock`
       end
-      install_script = "#{m}/install.sh"
+      install_script = "#{m}/install_darwin.sh"
       if File.exist?(install_script)
         puts "Running #{install_script}"
         `#{install_script}`
       end
+    end
+    install_script = "#{m}/install.sh"
+    if File.exist?(install_script)
+      puts "Running #{install_script}"
+      `#{install_script}`
     end
 
     emacs_init = File.join(m, 'init.el')
