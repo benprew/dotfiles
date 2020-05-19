@@ -19,8 +19,10 @@
 (if (and (> emacs-major-version 25) (display-graphic-p))
   (add-hook 'org-mode-hook #'visual-fill-column-mode))
 
+;; Markdown formatting
 (add-hook 'markdown-mode-hook (lambda () (whitespace-mode -1)))
 (add-hook 'markdown-mode-hook #'visual-line-mode)
+(setq markdown-gfm-use-electric-backquote nil)
 ;; unset because it gets into a loop on linliveanalytics1
 (if (and (> emacs-major-version 25) (display-graphic-p))
     (add-hook 'markdown-mode-hook #'visual-fill-column-mode))
@@ -41,7 +43,8 @@
         ("s" todo "SOMEDAY" nil)
         ("d" "Agenda + Next Actions" ((agenda) (todo "INBOX") (todo "TODAY")))))
 
-(setq markdown-gfm-use-electric-backquote nil)
+;; Use eww for browsing
+(setq browse-url-browser-function 'eww-browse-url)
 
 ;; bigger latex fragment -- needs to be run once org is loaded?
 ;; (plist-put org-format-latex-options :scale 1.5)

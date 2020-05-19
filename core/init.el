@@ -1,5 +1,4 @@
-(prelude-require-packages '(solarized-theme dash-at-point web-mode helm-w3m jq-mode fish-mode graphviz-dot-mode dumb-jump))
-
+(prelude-require-packages '(solarized-theme dash-at-point web-mode jq-mode fish-mode graphviz-dot-mode dumb-jump))
 
 (dumb-jump-mode)
 
@@ -8,12 +7,6 @@
 
 (setq mac-option-modifier 'super)
 (setq mac-command-modifier 'meta)
-
-(setq browse-url-browser-function 'w3m-browse-url)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
-(setq w3m-use-cookies t)
-;; optional keyboard short-cut
-;;(global-set-key "\C-xm" 'browse-url-at-point)
 
 (require 'prelude-helm-everywhere)
 (require 'prelude-org)
