@@ -70,9 +70,15 @@ rescue Errno::ENOENT
   nil
 end
 
+def install_script(install_script)
+  return unless File.exist?(install_script)
+
+  puts "\tRunning #{install_script}"
+  `"#{install_script}"`
+end
+
 desc 'Hook our dotfiles into system-standard positions.'
 task install: :setup_modules do
-
   modules = File.read("#{ENV['HOME']}/.modules").split("\n")
   linkables = []
   modules.each do |m|
@@ -93,7 +99,7 @@ task install: :setup_modules do
     lnk_realpth = realpath("#{Dir.pwd}/#{linkable}")
 
     if File.symlink?(target) && tgt_realpath == lnk_realpth
-      puts "Skipping #{target}, it is already linked to #{linkable}"
+      puts "Skipping #{target}, already linked to #{linkable}"
       next
     end
 
@@ -127,19 +133,18 @@ task install: :setup_modules do
       brewfile = "#{m}/Brewfile"
       if File.exist?(brewfile)
         puts "Running #{brewfile}"
-        puts `brew bundle --file=#{brewfile} --no-lock`
+        puts `brew bundle --file="#{brewfile}" --no-lock`
       end
-      install_script = "#{m}/install_darwin.sh"
-      if File.exist?(install_script)
-        puts "Running #{install_script}"
-        `#{install_script}`
+    elsif RUBY_PLATFORM.match('linux')
+      pkg_file = "#{m}/apt-packages.txt"
+      if File.exist?(pkg_file)
+        puts "\tInstalling packages in #{pkg_file}"
+        `cat "#{pkg_file}" | xargs sudo apt-get install -y`
       end
     end
-    install_script = "#{m}/install.sh"
-    if File.exist?(install_script)
-      puts "Running #{install_script}"
-      `#{install_script}`
-    end
+
+    install_scripts = %W[install.sh install_#{RUBY_PLATFORM.match('darwin')}.sh install_#{RUBY_PLATFORM.match('linux')}.sh]
+    install_scripts.each { |s| install_script("#{m}/#{s}") }
 
     emacs_init = File.join(m, 'init.el')
     next unless File.exist?(emacs_init)
@@ -147,7 +152,7 @@ task install: :setup_modules do
     src = emacs_init
     target = "#{ENV['HOME']}/.emacs.d/personal/#{m}.el"
     cmd = "ln -sf $PWD/#{src} #{target}"
-    puts "installing #{src} to #{target}"
+    puts "\tinstalling #{src} to #{target}"
     `#{cmd}`
   end
 end

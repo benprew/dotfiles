@@ -1,4 +1,3 @@
 #!/bin/bash
 
-pip3 install --user black
-pip3 install --user flake8
+pip3 install --user black flake8

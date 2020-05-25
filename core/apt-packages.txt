@@ -1,2 +1,6 @@
 graphviz
 shellcheck
+vim
+fish
+texlive-fonts-extra
+silversearcher-ag

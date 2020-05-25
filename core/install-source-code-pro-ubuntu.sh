@@ -1,11 +1,13 @@
 #!/bin/bash
 set  -euo pipefail
-I1FS=$'\n\t'
+
+FONT_HOME=~/.local/share/fonts
+
 mkdir -p /tmp/adodefont
 cd /tmp/adodefont
 wget -q --show-progress -O source-code-pro.zip https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
 unzip -q source-code-pro.zip -d source-code-pro
-mkdir -p ~/.fonts
-cp -v source-code-pro/*/OTF/*.otf ~/.fonts/
+mkdir -p $FONT_HOME
+cp -v source-code-pro/*/OTF/*.otf $FONT_HOME
 fc-cache -f
 rm -rf source-code-pro{,.zip}
