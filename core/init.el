@@ -27,6 +27,8 @@
 (global-set-key (kbd "<ESC> <up>")    'windmove-up)
 (global-set-key (kbd "<ESC> <down>")  'windmove-down)
 
+(setq confirm-kill-emacs 'yes-or-no-p)
+
 (setq initial-scratch-message ";Don't ignore your dreams\n;Don't work too much\n;Say what you think\n;Cultivate friendships\n;Be happy.\n\n")
 
 (server-start)
