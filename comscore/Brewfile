@@ -1,2 +1,5 @@
 brew 'awscli'
 brew 'aws-shell'
+
+tap 'versent/homebrew-taps'
+brew 'saml2aws'
