@@ -1,6 +1,8 @@
-(prelude-require-packages '(solarized-theme dash-at-point web-mode jq-mode fish-mode graphviz-dot-mode dumb-jump))
+(prelude-require-packages '(web-mode jq-mode fish-mode graphviz-dot-mode dumb-jump helm-ag))
 
+;; dump-jump now integrates with xref-backend, so you can use M-. and M-, to search and return
 (dumb-jump-mode)
+(add-to-list 'xref-backend-functions #'dumb-jump-xref-activate)
 
 (setq projectile-project-search-path '("~/src/"))
 (projectile-cleanup-known-projects)
@@ -18,7 +20,6 @@
 (setq-default fill-column 88)
 
 (setq global-flycheck-mode t)
-(global-flycheck-mode)
 
 (windmove-default-keybindings 'meta)
 
@@ -31,8 +32,6 @@
 
 (setq initial-scratch-message ";Don't ignore your dreams\n;Don't work too much\n;Say what you think\n;Cultivate friendships\n;Be happy.\n\n")
 
-(server-start)
-
 (autoload 'jq-mode "jq-mode.el"
     "Major mode for editing jq files" t)
 (add-to-list 'auto-mode-alist '("\\.jq$" . jq-mode))
@@ -44,13 +43,9 @@
 (electric-pair-mode -1)
 (electric-quote-mode -1)
 
-;; stop making files with #! executable
-(remove-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-
-;; for git in /usr/local/bin
-(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-(setq tramp-default-method "ssh")
-
 (setq undo-tree-auto-save-history nil)
 (if (display-graphic-p)
     (setq browse-url-browser-function 'browse-url-default-browser))
+
+
+(server-start)
