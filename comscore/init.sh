@@ -13,11 +13,16 @@ fi
 daterange () {
     startdate=$1
     enddate=$2
+    if [[ $(uname) = 'Darwin' ]]; then
+        DATE_CMD="gdate"
+    else
+        DATE_CMD="date"
+    fi
 
     curr="$startdate"
     while [[ ! "$curr" > "$enddate" ]]; do
         echo "$curr"
-        curr=$( date +%Y-%m-%d --date "$curr +1 day" )
+        curr=$( $DATE_CMD +%Y-%m-%d --date "$curr +1 day" )
     done
 }
 
