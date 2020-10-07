@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# sums a column of integers
+
+# read from $1 (filename) or stdin
+awk '{ sum += $1 } END { print sum }' < "${1:-/dev/stdin}"
