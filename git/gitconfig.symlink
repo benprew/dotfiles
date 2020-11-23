@@ -1,6 +1,9 @@
 [user]
 	name = Ben Prew
-	email = ben@throwingbones.com
+        email = ben@throwingbones.com
+        signingkey = FEEB1B3FD867173D8BCCD26C7E66F5759AFC82E0
+#	email = bprew@comscore.com
+#	signingkey = 5A9B4F86DE482CC0
 
 [alias]
     alias = "!sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -"
@@ -58,3 +61,5 @@
 [mergetool]
 	prompt = false
 	keepBackup = false
+[commit]
+	gpgsign = true
