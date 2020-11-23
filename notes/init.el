@@ -8,6 +8,7 @@
 (require 'prelude-org)
 
 (setq org-agenda-files '("~/notes/"))
+(setq org-reverse-note-order t)
 (setq org-refile-targets
       '((nil :maxlevel . 3)
         (org-agenda-files :maxlevel . 3)))
