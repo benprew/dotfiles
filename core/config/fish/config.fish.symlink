@@ -13,7 +13,7 @@ for module in (cat ~/.modules)
         set -g fish_user_paths $fish_user_paths $HOME/dotfiles/$module/bin
     end
 end
-set -g fish_user_paths "/usr/local/bin" $fish_user_paths "/usr/local/sbin"
+set -g fish_user_paths "/usr/local/bin" $fish_user_paths "/usr/local/sbin" "$HOME/bin"
 set -g fish_user_paths $fish_user_paths (python3 -m site --user-base)/bin
 set -x EDITOR emacsclient
 
