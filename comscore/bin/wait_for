@@ -1,0 +1,16 @@
+#!/bin/bash
+
+STR=$1
+shift
+
+while [[ 1 -eq 1 ]]; do
+    echo "waiting for '$@' to match '$STR'"
+    if "$@" | grep "$STR"; then
+        echo -e "\a"
+        echo "Found $STR"
+    fi
+    sleep 5
+done
+
+
+# env AWS_PROFILE=csas aws redshift describe-cluster-snapshots --query "Snapshots[*].{Id:SnapshotIdentifier,status:Status}"|grep dmap-restore2 -a1
