@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+CURR_BRANCH=$(git branch --show-current)
+BRANCH_NAME=personal/$USER/$1
+
+# cleanup old remote branches
+git remote prune origin
+
+git pull --ff-only
+git checkout -b "$BRANCH_NAME"
+git push -u origin "$BRANCH_NAME"
+git commit
+PR_URL=$(git push -u 2>&1 |grep -wo 'https://bitbucket.org.*')
+echo "Creating PR at $PR_URL"
+sleep 3
+open "$PR_URL"
+git checkout "$CURR_BRANCH"
