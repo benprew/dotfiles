@@ -53,3 +53,19 @@
     (setq browse-url-browser-function 'browse-url-default-browser))
 
 (server-start)
+
+(defun bprew-projectile-mode-line ()
+  (if (file-remote-p default-directory)
+      " Pr"
+    (format " Pr[%s]" (projectile-project-name))))
+(setq projectile-mode-line-function 'bprew-projectile-mode-line)
+
+
+
+(autoload 'ssh-config-mode "ssh-config-mode" t)
+(add-to-list 'auto-mode-alist '("/\\.ssh/config\\'"     . ssh-config-mode))
+(add-to-list 'auto-mode-alist '("/rap_ssh_configconfig\\'"     . ssh-config-mode))
+(add-to-list 'auto-mode-alist '("/sshd?_config\\'"      . ssh-config-mode))
+(add-to-list 'auto-mode-alist '("/knownhosts\\'"       . ssh-known-hosts-mode))
+(add-to-list 'auto-mode-alist '("/authorized_keys2?\\'" . ssh-authorized-keys-mode))
+(add-hook 'ssh-config-mode-hook 'turn-on-font-lock)
