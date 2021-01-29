@@ -1,4 +1,13 @@
-(set-face-font 'default "Source Code Pro 14")
+(set-face-font 'default "Source Code Pro 10")
+
+(package-initialize)
+(require 'package)
+;; This is only needed once, near the top of the file
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/") t)
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
 
 (set-frame-parameter (selected-frame) 'alpha '(85 85))
 (add-to-list 'default-frame-alist '(alpha 85 85))
@@ -13,3 +22,5 @@
                              (float-time
                               (time-subtract after-init-time before-init-time)))
                      gcs-done)))
+
+(server-start)

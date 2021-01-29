@@ -1,9 +1,7 @@
-(prelude-require-packages '(crontab-mode ansible ansible-doc ansible-vault))
+;; this breaks when I'm editing files in other people's directories on linliveanalytics1
+(if (<= emacs-major-version 25)
+    (setq undo-tree-auto-save-history nil))
 
-;; https://github.com/k1LoW/emacs-ansible
-(add-hook 'yaml-mode-hook '(lambda () (ansible 1)))
+(require 'use-package)
 
-;; https://github.com/emacsorphanage/ansible-doc
-(add-hook 'yaml-mode-hook #'ansible-doc-mode)
-
-(add-to-list 'auto-mode-alist '("\\.cron$" . crontab-mode))
+(setq ansible-vault-password-file "/home/ben/.ansible-vault-password-as")

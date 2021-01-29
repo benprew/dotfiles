@@ -1,16 +1,21 @@
-(require 'prelude-js)
-(require 'prelude-web)
+(require 'use-package)
 
 (setq js2-basic-offset 2)
 (local-set-key (kbd "RET") 'newline-and-indent)
 
+(use-package prelude-web
+  :defer 3)
+
+(use-package prelude-js
+  :defer 3)
+
 (use-package web-mode
+  :defer 3
+  :ensure t
   :mode ("\\.phtml\\'" "\\.tpl\\.php\\'" "\\.blade\\.php\\'"
          "\\.jsp\\'"  "\\.as[cp]x\\'"  "\\.erb\\'"  "\\.html?\\'"
          "/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'")
-  :init  (setq web-mode-markup-indent-offset 2)
+  :config  (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
-  (setq web-mode-disable-autocompletion t)
-  ; Disable whitespace-mode when using web-mode
-  (add-hook 'web-mode-hook (lambda () (whitespace-mode -1))))
+  (setq web-mode-disable-autocompletion t))

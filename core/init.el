@@ -1,71 +1,99 @@
-;; This is only needed once, near the top of the file
-(eval-when-compile
-  ;; Following line is not needed if use-package.el is in ~/.emacs.d
-  (add-to-list 'load-path "<path where use-package is installed>")
-  (require 'use-package))
+(setq inhibit-startup-screen t)
+(setq initial-scratch-message ";Don't ignore your dreams\n;Don't work too much\n;Say what you think\n;Cultivate friendships\n;Be happy.\n\n")
+
+(setq mac-option-modifier 'super)
+(setq mac-command-modifier 'meta)
+(setq confirm-kill-emacs 'yes-or-no-p)
+(setq-default fill-column 88)
+(setq-default whitespace-line-column 88)
+(setq custom-file "~/.emacs.d/custom.el")
+(setq load-prefer-newer 't)
+(setq whitespace-mode 1)
+(setq prelude-whitespace 't)
+(setq prelude-clean-whitespace-on-save nil)
+(setq global-flycheck-mode t)
+
+(if (display-graphic-p)
+    (setq browse-url-browser-function 'browse-url-default-browser)
+  (setq browse-url-browser-function 'eww-browse-url))
+
+(require 'use-package)
+(require 'prelude-helm-everywhere)
 
 (use-package graphviz-dot-mode
+  :defer t
   :ensure t)
 
 (use-package jq-mode
+  :defer t
   :ensure t
   :mode "\\.jq'")
 
 (use-package fish-mode
+  :defer t
   :ensure t
   :mode "\\.fish'")
 
 (use-package dumb-jump
+  :defer t
   :ensure t
-  :init (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
-
-
-(setq projectile-project-search-path '("~/src/"))
-(projectile-cleanup-known-projects)
-
-(setq mac-option-modifier 'super)
-(setq mac-command-modifier 'meta)
-
-(require 'prelude-helm-everywhere)
-
-(add-hook 'prog-mode-hook 'prelude-enable-whitespace)
-(add-hook 'prog-mode-hook (lambda () (smartparens-mode -1)))
-(setq-default whitespace-line-column 88)
-(setq-default fill-column 88)
-
-(setq global-flycheck-mode t)
-
-(windmove-default-keybindings 'shift)
-
-(setq confirm-kill-emacs 'yes-or-no-p)
-
-(setq initial-scratch-message ";Don't ignore your dreams\n;Don't work too much\n;Say what you think\n;Cultivate friendships\n;Be happy.\n\n")
-
-(abbrev-mode -1)
-(global-auto-composition-mode -1)
-(smartparens-global-mode -1)
-(smartparens-mode -1)
-(electric-pair-mode -1)
-(electric-quote-mode -1)
-
-(setq undo-tree-auto-save-history nil)
-(if (display-graphic-p)
-    (setq browse-url-browser-function 'browse-url-default-browser))
-
-(server-start)
+  :config (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (defun bprew-projectile-mode-line ()
+  "Customize projecile mode line."
   (if (file-remote-p default-directory)
       " Pr"
     (format " Pr[%s]" (projectile-project-name))))
-(setq projectile-mode-line-function 'bprew-projectile-mode-line)
+(use-package projectile
+  :defer 3
+  :ensure t
+  :config
+  (setq projectile-project-search-path '("~/src/"))
+  (setq projectile-mode-line-function 'bprew-projectile-mode-line)
+  (projectile-cleanup-known-projects)
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
+(use-package ag
+  :defer t
+  :ensure t)
 
+;; https://github.com/lewang/ws-butler
+(use-package ws-butler
+  :defer 2
+  :ensure t
+  :config (ws-butler-global-mode 1))
 
-(autoload 'ssh-config-mode "ssh-config-mode" t)
-(add-to-list 'auto-mode-alist '("/\\.ssh/config\\'"     . ssh-config-mode))
-(add-to-list 'auto-mode-alist '("/rap_ssh_configconfig\\'"     . ssh-config-mode))
-(add-to-list 'auto-mode-alist '("/sshd?_config\\'"      . ssh-config-mode))
-(add-to-list 'auto-mode-alist '("/knownhosts\\'"       . ssh-known-hosts-mode))
-(add-to-list 'auto-mode-alist '("/authorized_keys2?\\'" . ssh-authorized-keys-mode))
-(add-hook 'ssh-config-mode-hook 'turn-on-font-lock)
+(use-package ssh-config-mode
+  :defer t
+  :ensure t
+  :config
+  (autoload 'ssh-config-mode "ssh-config-mode" t)
+  :mode ("/\\.ssh/config\\'" "/rap_ssh_configconfig\\'" "/sshd?_config\\'"
+   "/knownhosts\\'" "/authorized_keys2?\\'")
+  :hook turn-on-font-lock)
+
+(use-package crontab-mode
+  :ensure t
+  :defer t
+  :mode "\\.cron'")
+
+;; https://github.com/k1LoW/emacs-ansible
+(use-package ansible
+  :ensure t
+  :defer t
+  :hook
+  (ansible . ansible-auto-decrypt-encrypt)
+  (yaml-mode . ansible)
+  :config
+  ;;(global-set-key (kbd "C-c b") 'ansible-decrypt-buffer)
+  ;;(global-set-key (kbd "C-c g") 'ansible-encrypt-buffer)
+  ;;(add-hook 'ansible-hook 'ansible-auto-decrypt-encrypt)
+  (setq ansible-vault-password-file "~/.ansible-vault-password"))
+
+;; https://github.com/emacsorphanage/ansible-doc
+(use-package ansible-doc
+  :ensure t
+  :defer t
+  :hook (yaml-mode . ansible-doc-mode))

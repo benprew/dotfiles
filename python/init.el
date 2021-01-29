@@ -1,9 +1,17 @@
-(require 'prelude-python)
-(prelude-require-packages '(blacken jinja2-mode))
-(add-hook 'python-mode-hook 'blacken-mode)
 (setq flycheck-python-pycompile-executable "python3")
 (setq flycheck-python-flake8-executable "python3")
 
-(autoload 'jinja2-mode "jinja2-mode.el"
-  "Major mode for editing jq files" t)
-(add-to-list 'auto-mode-alist '("\\.jt$" . jinja2-mode))
+(require 'use-package)
+
+(use-package prelude-python
+  :defer 5)
+
+(use-package blacken
+  :defer t
+  :ensure t
+  :hook (python-mode . blacken-mode))
+
+(use-package jinja2-mode
+  :defer t
+  :ensure t
+  :mode "\\.jt'")

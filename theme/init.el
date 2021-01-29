@@ -1,3 +1,4 @@
-(prelude-require-packages '(color-theme-modern color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized))
-
-(setq custom-enabled-themes '(sanityinc-tomorrow-eighties))
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  :init
+  (load-theme 'sanityinc-tomorrow-eighties t))

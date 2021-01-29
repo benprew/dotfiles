@@ -1,4 +1,6 @@
-(prelude-require-packages '(ledger-mode flycheck-ledger))
+(require 'use-package)
 
-;; Disable whitespace-mode when using ledger
-(add-hook 'ledger-mode-hook (lambda () (whitespace-mode -1)))
+(use-package ledger-mode
+  :ensure t
+  :defer t
+  :config (add-hook 'ledger-mode (lambda () (setq-local prelude-clean-whitespace-on-save 1))))

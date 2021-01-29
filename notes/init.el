@@ -3,30 +3,16 @@
 ;;;   This contains all my org-mode settings
 
 ;;; Code:
-(prelude-require-packages '(visual-fill-column markdown-mode))
-
-(require 'prelude-org)
+(require 'use-package)
 
 (setq org-agenda-files '("~/notes/"))
 (setq org-reverse-note-order t)
-(setq org-refile-targets
-      '((nil :maxlevel . 3)
-        (org-agenda-files :maxlevel . 3)))
+(setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
 (setq org-startup-indented t)
-(setq org-return-follows-link t) ; I prefer return to activate a link
 (add-hook 'org-mode-hook (lambda () (whitespace-mode -1)))
 (add-hook 'org-mode-hook #'visual-line-mode)
-;; unset because it gets into a loop on linliveanalytics1
-(if (and (> emacs-major-version 25) (display-graphic-p))
-  (add-hook 'org-mode-hook #'visual-fill-column-mode))
-
-;; Markdown formatting
-(add-hook 'markdown-mode-hook (lambda () (whitespace-mode -1)))
-(add-hook 'markdown-mode-hook #'visual-line-mode)
-(setq markdown-gfm-use-electric-backquote nil)
-;; unset because it gets into a loop on linliveanalytics1
-(if (and (> emacs-major-version 25) (display-graphic-p))
-    (add-hook 'markdown-mode-hook #'visual-fill-column-mode))
+;; bigger latex fragment -- needs to be run once org is loaded?
+;; (plist-put org-format-latex-options :scale 1.5)
 
 (setq org-todo-keywords
       '((sequence "INBOX(i)"
@@ -44,9 +30,26 @@
         ("s" todo "SOMEDAY" nil)
         ("d" "Agenda + Next Actions" ((agenda) (todo "INBOX") (todo "TODAY")))))
 
-;; Use eww for browsing
-(setq browse-url-browser-function 'eww-browse-url)
+(use-package visual-fill-column
+  :ensure t
+  :defer t
+  :config
+  ;; unset because it gets into a loop on linliveanalytics1
+  (if (and (> emacs-major-version 25) (display-graphic-p))
+      (add-hook 'org-mode-hook #'visual-fill-column-mode)))
 
-;; bigger latex fragment -- needs to be run once org is loaded?
-;; (plist-put org-format-latex-options :scale 1.5)
+(use-package markdown-mode
+  :ensure t
+  :defer t
+  :hook (markdown-mode . visual-line-mode)
+  :config
+  ;; Markdown formatting
+  (setq markdown-gfm-use-electric-backquote nil)
+  ;; unset because it gets into a loop on linliveanalytics1
+  (if (and (> emacs-major-version 25) (display-graphic-p))
+      (add-hook 'markdown-mode-hook #'visual-fill-column-mode)))
+
+(use-package prelude-org
+  :defer 5)
+
 ;;; org.el ends here
