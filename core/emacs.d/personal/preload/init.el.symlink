@@ -1,6 +1,5 @@
 (set-face-font 'default "Source Code Pro 10")
 
-(package-initialize)
 (require 'package)
 ;; This is only needed once, near the top of the file
 (add-to-list 'package-archives
