@@ -21,7 +21,7 @@
 (require 'prelude-helm-everywhere)
 
 (use-package graphviz-dot-mode
-  :defer t
+  :defer 1
   :ensure t)
 
 (use-package jq-mode
@@ -35,7 +35,7 @@
   :mode "\\.fish'")
 
 (use-package dumb-jump
-  :defer t
+  :defer 1
   :ensure t
   :config (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
