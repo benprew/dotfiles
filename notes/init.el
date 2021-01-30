@@ -32,7 +32,7 @@
 
 (use-package visual-fill-column
   :ensure t
-  :defer t
+  :defer 1
   :config
   ;; unset because it gets into a loop on linliveanalytics1
   (if (and (> emacs-major-version 25) (display-graphic-p))
@@ -40,7 +40,7 @@
 
 (use-package markdown-mode
   :ensure t
-  :defer t
+  :defer 1
   :hook (markdown-mode . visual-line-mode)
   :config
   ;; Markdown formatting

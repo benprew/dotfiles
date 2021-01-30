@@ -27,12 +27,12 @@
 (use-package jq-mode
   :defer t
   :ensure t
-  :mode "\\.jq'")
+  :mode "\\.jq\\'")
 
 (use-package fish-mode
   :defer t
   :ensure t
-  :mode "\\.fish'")
+  :mode ("\\.fish\\'" "\\.fish\\.symlink\\'"))
 
 (use-package dumb-jump
   :defer 1
@@ -97,3 +97,9 @@
   :ensure t
   :defer t
   :hook (yaml-mode . ansible-doc-mode))
+
+(use-package gitconfig-mode
+  :mode "gitconfig\\.symlink\\'")
+
+(use-package emacs-lisp-mode
+  :mode "\\.el\\.symlink\\'")

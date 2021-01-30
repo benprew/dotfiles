@@ -12,6 +12,6 @@
   :hook (python-mode . blacken-mode))
 
 (use-package jinja2-mode
-  :defer t
+  :defer 2
   :ensure t
   :mode "\\.jt'")

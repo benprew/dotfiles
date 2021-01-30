@@ -7,4 +7,4 @@
 
 (use-package go-playground
   :ensure t
-  :defer t)
+  :defer 3)
