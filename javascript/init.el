@@ -1,6 +1,6 @@
 (require 'use-package)
 
-(setq js2-basic-offset 2)
+(setq js-indent-level 2)
 (local-set-key (kbd "RET") 'newline-and-indent)
 
 (use-package prelude-web
