@@ -4,8 +4,8 @@ set-option -g prefix C-o
 bind-key C-o send-prefix
 
 # emacs key bindings for each in copy-mode
-bind -Tcopy-mode C-s search-forward
-bind -Tcopy-mode C-r search-backward
+# bind -Tcopy-mode C-s search-forward
+# bind -Tcopy-mode C-r search-backward
 
 set -ga terminal-overrides ",xterm-256color:Tc"
 
