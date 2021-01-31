@@ -7,6 +7,8 @@ bind-key C-o send-prefix
 bind -Tcopy-mode C-s search-forward
 bind -Tcopy-mode C-r search-backward
 
+set -ga terminal-overrides ",xterm-256color:Tc"
+
 # THEME
 set -g status-bg black
 set -g status-fg white
