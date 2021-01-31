@@ -41,7 +41,9 @@
 (use-package markdown-mode
   :ensure t
   :defer 1
-  :hook (markdown-mode . visual-line-mode)
+  :hook
+  (markdown-mode . visual-line-mode)
+  (markdown-mode . (lambda () (whitespace-mode -1)))
   :config
   ;; Markdown formatting
   (setq markdown-gfm-use-electric-backquote nil)
