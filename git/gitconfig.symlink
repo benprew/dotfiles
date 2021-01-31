@@ -1,61 +1,47 @@
 [user]
 	name = Ben Prew
-        email = ben@throwingbones.com
-        signingkey = FEEB1B3FD867173D8BCCD26C7E66F5759AFC82E0
+	email = ben@throwingbones.com
+	signingkey = FEEB1B3FD867173D8BCCD26C7E66F5759AFC82E0
 #	email = bprew@comscore.com
 #	signingkey = 5A9B4F86DE482CC0
 
 [alias]
-    alias = "!sh -c '[ $# = 2 ] && git config --global alias.\"$1\" \"$2\" && exit 0 || echo \"usage: git alias <new alias> <original command>\" >&2 && exit 1' -"
-    ci = commit -a
-    co = checkout
-    stat = status
-	new = !git checkout master && git checkout -b $1
-    cur = !git current
-    bstat = !git branch-status
-    lg = "log --pretty=format:'%C(yellow)%h%Creset %s %Cblue%d%Creset' --graph"
-    review = "log --stat -p -w --patience --reverse -M -C -C --cc"
-    mfc = "merge --no-ff --no-commit"
+	lg = "log --pretty=format:'%C(yellow)%h%Creset %s %Cblue%d%Creset' --graph"
 
-[diff]
-    color = auto
-
-[pager]
-    color = true
-
-[Status]
-    color = auto
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+	ui = true
+	pager = true
+[delta]
+	syntax-theme = zenburn
+[interactive]
+	diffFilter = delta
 [rerere]
 	enabled = true
 [core]
-    sharedRepository = group
-    compression = 9
-    preloadindex = true
+	pager = delta
+	sharedRepository = group
+	compression = 9
+	preloadindex = true
 	excludesfile = ~/.gitignore_global
 [gc]
-    pruneExpire = 6 months ago
-    aggressiveWindow = 20
+	pruneExpire = 6 months ago
+	aggressiveWindow = 20
 [pack]
-    window = 20
-    compression = 9
-    threads = 0
+	window = 20
+	compression = 9
+	threads = 0
 [status]
 	submodulesummary = true
-[color]
-	ui = auto
-[pullme]
-	upstream = upstream
-	open = true
-	personal = origin
 [push]
 	default = current
 [init]
 #	templatedir = ~/.git_template
-[difftool "p4merge"]
-	path = /Applications/p4merge.app/Contents/Resources/launchp4merge
-	prompt = false
 [mergetool "p4merge"]
-	path = /Applications/p4merge.app/Contents/Resources/launchp4merge
+	path = p4merge
 [merge]
 	tool = p4merge
 [mergetool]
