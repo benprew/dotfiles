@@ -1,9 +1,9 @@
-(set-face-font 'default "Source Code Pro 10")
+(set-face-font 'default "JetBrains Mono 13")
 
 (require 'package)
 ;; This is only needed once, near the top of the file
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
