@@ -1,4 +1,4 @@
-(set-face-font 'default "JetBrains Mono 13")
+(set-face-attribute 'default nil :weight 'bold :font "JetBrainsMono-12")
 
 (require 'package)
 ;; This is only needed once, near the top of the file
