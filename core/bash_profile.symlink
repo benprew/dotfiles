@@ -11,7 +11,7 @@ unset USERNAME
 
 export PATH="/usr/local/heroku/bin:$PATH:/usr/local/share/npm/bin:$HOME/bin"
 
-if command -v brew; then
+if command -vq brew; then
    export PATH=$PATH:$(brew --prefix ruby)/bin;
 fi
 
