@@ -14,6 +14,12 @@
 ;; bigger latex fragment -- needs to be run once org is loaded?
 ;; (plist-put org-format-latex-options :scale 1.5)
 
+(require 'org-tempo)
+
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+
 (setq org-todo-keywords
       '((sequence "INBOX(i)"
                   "TODAY(t)"
