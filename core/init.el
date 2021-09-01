@@ -10,8 +10,8 @@
 (setq load-prefer-newer 't)
 (setq whitespace-mode 1)
 (setq prelude-whitespace 't)
-(setq prelude-clean-whitespace-on-save nil)
-(setq global-flycheck-mode t)
+(setq prelude-clean-whitespace-on-save 1)
+(setq global-flycheck-mode 'f)
 
 (if (display-graphic-p)
     (setq browse-url-browser-function 'browse-url-default-browser)
@@ -21,16 +21,16 @@
 (require 'prelude-helm-everywhere)
 
 (use-package graphviz-dot-mode
-  :defer 1
+  :defer 3
   :ensure t)
 
 (use-package jq-mode
-  :defer t
+  :defer 3
   :ensure t
   :mode "\\.jq\\'")
 
 (use-package fish-mode
-  :defer t
+  :defer 3
   :ensure t
   :mode ("\\.fish\\'" "\\.fish\\.symlink\\'"))
 
@@ -56,7 +56,7 @@
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package ag
-  :defer t
+  :defer 3
   :ensure t)
 
 ;; https://github.com/lewang/ws-butler
@@ -70,19 +70,19 @@
   :ensure t
   :config
   (autoload 'ssh-config-mode "ssh-config-mode" t)
-  :mode ("/\\.ssh/config\\'" "/rap_ssh_configconfig\\'" "/sshd?_config\\'"
-   "/knownhosts\\'" "/authorized_keys2?\\'")
+  :mode ("/\\.ssh/config\\'" "/rap_ssh_config\\'" "/sshd?_config\\'"
+   "/knownhosts\\'" "/authorized_keys2?\\'" "_ssh_config\\'")
   :hook turn-on-font-lock)
 
 (use-package crontab-mode
   :ensure t
   :defer t
-  :mode "\\.cron'")
+  :mode "\\.cron\\'")
 
 ;; https://github.com/k1LoW/emacs-ansible
 (use-package ansible
   :ensure t
-  :defer t
+  :defer 3
   :hook
   (ansible . ansible-auto-decrypt-encrypt)
   (yaml-mode . ansible)
@@ -95,7 +95,7 @@
 ;; https://github.com/emacsorphanage/ansible-doc
 (use-package ansible-doc
   :ensure t
-  :defer t
+  :defer 3
   :hook (yaml-mode . ansible-doc-mode))
 
 (use-package gitconfig-mode
