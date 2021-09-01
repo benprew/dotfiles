@@ -103,3 +103,8 @@
 
 (use-package emacs-lisp-mode
   :mode "\\.el\\.symlink\\'")
+
+(use-package eglot
+  :ensure t
+  :defer 2
+  :hook (python-mode . eglot-ensure))
