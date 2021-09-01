@@ -6,6 +6,7 @@ UNITS=$2
 # convert from unit $UNITS to most reasonable human readable unit
 
 if [[ $UNITS == 'bytes' || $UNITS == 'b' ]]; then
+    echo "converting from bytes"
     sizes="B /kB/MB/GB/TB/PB/EB/ZB/YB"
     x=$VALUE
     s=-1

@@ -24,10 +24,17 @@ usage: $SCRIPT [-s] [-m] [-w m] [-b m] [-h]
 END
 }
 
-play_notification() {
+play_work_notification() {
     for f in {1..3}; do
-        echo "$f"
-        afplay "/System/Library/Sounds/Submarine.aiff"
+        say take a break
+        # afplay "/System/Library/Sounds/Submarine.aiff" -v 50 -q 1
+    done
+}
+
+play_rest_notification() {
+    for f in {1..3}; do
+        say back to work
+        # afplay "/System/Library/Sounds/Submarine.aiff" -v 50 -q 1
     done
 }
 
@@ -62,32 +69,30 @@ fi
 
 while true
 do
+    say time to rock and roll
     for ((i=$WORK; i>0; i--))
     do
         printf "$time_left" $i "work"
         sleep 60
     done
 
-    ! $MUTE && play_notification
+    ! $MUTE && play_work_notification
     if $INTERACTIVE; then
         read -r -d '' -t 1
         echo -e "\a"
         echo "Work over"
-        read -r
     fi
 
     for ((i=$PAUSE; i>0; i--))
     do
         printf "$time_left" $i "pause"
-
         sleep 60
     done
 
-    ! $MUTE && play_notification
+    ! $MUTE && play_rest_notification
     if $INTERACTIVE; then
-        read -r -d '' -t 0.001
+        read -r -d '' -t 1
         echo -e "\a"
         echo "Pause over"
-        read -r
     fi
 done
