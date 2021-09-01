@@ -1,6 +1,14 @@
 #!/bin/bash
 
-BRANCH_NAME=personal/$USER/$1
+STORY_ID_OR_BRANCH_NAME=$1
+
+is_number_re='^[0-9]+$'
+if [[ $STORY_ID_OR_BRANCH_NAME =~ $is_number_re ]] ; then
+    BRANCH_NAME=personal/$USER/$STORY_ID_OR_BRANCH_NAME-$(pt_slug "$STORY_ID_OR_BRANCH_NAME")
+else
+    BRANCH_NAME=personal/$USER/$STORY_ID_OR_BRANCH_NAME
+fi
+
 WORK_DIR=../$1
 
 # cleanup old remote branches
@@ -12,10 +20,10 @@ git pull --ff-only
 # git worktree add $WORK_DIR origin/$BRANCH_NAME
 # ex
 # git worktree add ../deeproot-automation origin/personal/cgoughnour/deeproot-automation
-git worktree add -b $BRANCH_NAME $WORK_DIR
+git worktree add -b "$BRANCH_NAME" "$WORK_DIR"
 
 # move to newly created work directory
-cd $WORK_DIR
+cd "$WORK_DIR"
 
 # push and set upstream
-git push -u origin $BRANCH_NAME
+git push -u origin "$BRANCH_NAME"

@@ -13,4 +13,12 @@ git pull --ff-only
 # git worktree add -b "$BRANCH_NAME" "$WORK_DIR" "origin/$BRANCH_NAME"
 # ex
 # git worktree add -b personal/cgoughnour/deeproot-automation  ../deeproot-automation origin/personal/cgoughnour/deeproot-automation
-git worktree add -b "$BRANCH_NAME" "$WORK_DIR" "origin/$BRANCH_NAME"
+if git branch |grep "$BRANCH_NAME"; then
+    git worktree add "$WORK_DIR" "$BRANCH_NAME"
+else
+    git worktree add -b "$BRANCH_NAME" "$WORK_DIR" "origin/$BRANCH_NAME"
+fi
+
+
+# Adding a branch that exists locally
+# git worktree add "$WORK_DIR" "$BRANCH_NAME"
