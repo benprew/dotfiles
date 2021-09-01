@@ -14,6 +14,9 @@
 ;; bigger latex fragment -- needs to be run once org is loaded?
 ;; (plist-put org-format-latex-options :scale 1.5)
 
+(setq org-export-backends '(ascii html icalendar latex md odt))
+
+
 (require 'org-tempo)
 
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
