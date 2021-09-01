@@ -6,3 +6,9 @@ brew 'saml2aws'
 
 tap 'aws/tap'
 brew 'aws-sam-cli'
+
+# for rap development
+cask 'virtualbox'
+cask 'vagrant'
+cask 'keepassx'
+brew 'ansible'
