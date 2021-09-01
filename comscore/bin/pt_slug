@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -x
+
+STORY_ID=$1
+TOKEN=$(cat "$HOME/.pt_token")
+
+STORY_SLUG=$( curl --silent -X GET -H "X-TrackerToken: $TOKEN" \
+     "https://www.pivotaltracker.com/services/v5/stories/$STORY_ID" \
+            | jq -r '.name' \
+            | tr '[:upper:]' '[:lower:]' \
+            | perl -pe 's/[^a-z0-9]+/-/g; s/-+$//' )
+
+echo "${STORY_SLUG:0:45}"

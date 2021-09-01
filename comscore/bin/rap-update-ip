@@ -1,0 +1,26 @@
+#!/bin/bash
+
+RAP_DEV_1_SG=sg-c41facb9
+IP=$(curl -s https://myexternalip.com/raw)
+# export IP=97.120.245.222
+
+
+# Remove existing CIDR
+# https://docs.aws.amazon.com/cli/latest/reference/ec2/revoke-security-group-ingress.html
+CIDR=$(aws ec2 describe-security-groups \
+           --group-ids $RAP_DEV_1_SG |grep -B1 "$USER home ip" |head -n1|cut -f2 -d:|tr -d '", ')
+
+aws ec2 revoke-security-group-ingress \
+    --group-id $RAP_DEV_1_SG \
+    --ip-permissions "IpProtocol=tcp,FromPort=443,ToPort=443,IpRanges=[{CidrIp=$CIDR,Description=\"$USER home ip\"}]"
+
+
+
+# Add new CIDR
+aws ec2 authorize-security-group-ingress \
+    --group-id $RAP_DEV_1_SG \
+    --ip-permissions "IpProtocol=tcp,FromPort=443,ToPort=443,IpRanges=[{CidrIp=$IP/32,Description=\"$USER home ip\"}]"
+
+
+aws ec2 describe-security-groups \
+    --group-ids $RAP_DEV_1_SG |grep -B1 home
