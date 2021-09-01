@@ -53,3 +53,6 @@ function fish_prompt
 
     printf "\n$c4><> "
 end
+
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+
