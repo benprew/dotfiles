@@ -65,4 +65,12 @@
 (use-package prelude-org
   :defer 5)
 
+
+;; active Babel languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sql . t)
+   (python . t)
+   (shell . t)))
+
 ;;; org.el ends here
