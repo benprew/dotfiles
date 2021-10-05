@@ -1,3 +1,2 @@
-if test -d $HOME/go/bin
-    set -g fish_user_paths $fish_user_paths $HOME/go/bin
-end
+add_path $HOME/go/bin
+add_path /usr/local/go/bin

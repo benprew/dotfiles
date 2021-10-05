@@ -10,7 +10,7 @@ for module in (cat ~/.modules)
     end
 
     if test -e $HOME/dotfiles/$module/bin
-        set -g fish_user_paths $HOME/dotfiles/$module/bin $fish_user_paths 
+        set -g fish_user_paths $HOME/dotfiles/$module/bin $fish_user_paths
     end
 end
 set -g fish_user_paths "/usr/local/bin" $fish_user_paths "/usr/local/sbin" "$HOME/bin"
@@ -56,3 +56,9 @@ end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
+function add_path
+    set -l new_path $argv[1]
+    if test -d $new_path
+        set -g fish_user_paths $fish_user_paths $new_path
+    end
+end
