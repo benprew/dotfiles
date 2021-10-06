@@ -10,9 +10,8 @@ git remote prune origin
 
 git pull --ff-only
 git checkout -b "$BRANCH_NAME"
-git push -u origin "$BRANCH_NAME"
 git commit
-PR_URL=$(git push -u 2>&1 |grep -wo 'https://bitbucket.org.*')
+PR_URL=$(git push -u origin "$BRANCH_NAME" 2>&1 |grep -wo 'https://bitbucket.org.*')
 echo "Creating PR at $PR_URL"
 sleep 3
 open "$PR_URL"
