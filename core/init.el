@@ -13,9 +13,16 @@
 (setq prelude-clean-whitespace-on-save 1)
 (setq global-flycheck-mode 'f)
 
-(if (display-graphic-p)
-    (setq browse-url-browser-function 'browse-url-default-browser)
-  (setq browse-url-browser-function 'eww-browse-url))
+;; this stops tramp from making an ssh connection to autosave
+;; this doesn't seem to actually work...
+;; (add-to-list 'backup-directory-alist
+;;              (cons "." "~/.emacs.d/tramp-autosave/"))
+;; (customize-set-variable
+;;  'tramp-backup-directory-alist backup-directory-alist)
+
+;; (if (display-graphic-p)
+;;     (setq browse-url-browser-function 'browse-url-default-browser)
+;;   (setq browse-url-browser-function 'eww-browse-url))
 
 (require 'use-package)
 (require 'prelude-helm-everywhere)
