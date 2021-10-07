@@ -3,6 +3,14 @@ alias gs 'git status'
 alias gd 'git diff'
 alias gco 'git checkout'
 
+function add_path
+    set -l new_path $argv[1]
+    if test -d $new_path
+        set -g fish_user_paths $fish_user_paths $new_path
+    end
+end
+
+
 for module in (cat ~/.modules)
     set module_init_path $HOME/src/dotfiles/$module/init.fish
     if test -e $module_init_path
@@ -55,10 +63,3 @@ function fish_prompt
 end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
-
-function add_path
-    set -l new_path $argv[1]
-    if test -d $new_path
-        set -g fish_user_paths $fish_user_paths $new_path
-    end
-end
