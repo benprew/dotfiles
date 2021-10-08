@@ -4,3 +4,5 @@ vim
 fish
 texlive-fonts-extra
 silversearcher-ag
+redshift
+redshift-gtk
