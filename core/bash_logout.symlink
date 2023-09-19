@@ -1,3 +1,4 @@
+## -*- mode: shell-script; sh-shell: bash; sh-basic-offset: 2; sh-indentation: 2; coding: utf-8 -*-
 # ~/.bash_logout
 
 clear

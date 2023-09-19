@@ -1,31 +1,41 @@
+#!/bin/bash
+## -*- mode: shell-script; sh-shell: bash; sh-basic-offset: 2; sh-indentation: 2; coding: utf-8 -*-
+
 # export PROMPT_COMMAND="$HOME/dotfiles/check_for_update"
 
 if [[ -f /etc/bashrc ]]; then
-    . /etc/bashrc
+  . /etc/bashrc
 fi
 
-if [[ -L $HOME/.bashrc.local ]] && [[ -f `readlink $HOME/.bashrc.local` ]]; then
-    . $HOME/.bashrc.local
+if [[ -L $HOME/.bashrc.local ]] && [[ -f $(readlink $HOME/.bashrc.local) ]]; then
+  . $HOME/.bashrc.local
 fi
-
-for module in `cat ~/.modules`; do
-  module_init_path=$HOME/dotfiles/$module/init.sh
-  if [[ -e $module_init_path ]]; then
-    . $module_init_path
-  fi
-  PATH=$PATH:$HOME/dotfiles/$module/bin
-done
 
 export TERM=xterm-256color
 
 umask 0002
 mesg n
 
-f () {
-  find . -wholename \*${*}\* -print
+function f () {
+  find . -wholename \*"${*}"\* -print
+}
+
+function add_path () {
+  if [ -d "$1" ]; then
+    export PATH=$PATH:$1
+  fi
 }
 
 shopt -s cdspell
 set -o emacs
 set completion-ignore-case On
 set bell-style none
+
+# Run this after everything else (so add_path is defined)
+for module in $(cat ~/.modules); do
+  module_init_path=$HOME/dotfiles/$module/init.sh
+  if [[ -e $module_init_path ]]; then
+    . $module_init_path
+  fi
+  PATH=$PATH:$HOME/dotfiles/$module/bin
+done

@@ -1,3 +1,4 @@
+## -*- mode: shell-script; sh-shell: bash; sh-basic-offset: 2; sh-indentation: 2; coding: utf-8 -*-
 # .bash_profile
 
 # Get the aliases and functions
@@ -11,7 +12,7 @@ unset USERNAME
 
 export PATH="/usr/local/heroku/bin:$PATH:/usr/local/share/npm/bin:$HOME/bin"
 
-if command -vq brew; then
+if command -v brew &>/dev/null; then
    export PATH=$PATH:$(brew --prefix ruby)/bin;
 fi
 

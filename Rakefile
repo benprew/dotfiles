@@ -81,39 +81,42 @@ def install_script(install_script)
   end
 end
 
+# linkable: full path to source file
+# target: full back to target file
 def mk_link(linkable, target)
-    overwrite = false
-    backup = false
+  overwrite = false
+  backup = false
 
-    puts "\tinstalling #{linkable} to #{target}"
-    tgt_realpath = realpath(target)
-    lnk_realpth = realpath("#{Dir.pwd}/#{linkable}")
+  puts "\tinstalling #{linkable} to #{target}"
+  tgt_realpath = realpath(target)
+  lnk_realpth = realpath(linkable)
 
-    if File.symlink?(target) && tgt_realpath == lnk_realpth
+  if File.symlink?(target) && tgt_realpath == lnk_realpth
+    return
+  end
+
+  if File.exist?(target) || File.symlink?(target)
+    unless @skip_all || @overwrite_all || @backup_all
+      puts "File already exists: #{target}, what do you want to do? " \
+           "[s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all"
+      case STDIN.gets.chomp
+      when 'o' then overwrite = true
+      when 'b' then backup = true
+      when 'O' then @overwrite_all = true
+      when 'B' then @backup_all = true
+      when 'S' then @skip_all = true
+      when 's' then return
+      end
+    end
+    if @skip_all
+      puts 'Skipping...'
       return
     end
-
-    if File.exist?(target)
-      unless @skip_all || @overwrite_all || @backup_all
-        puts "File already exists: #{target}, what do you want to do? " \
-             "[s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all"
-        case STDIN.gets.chomp
-        when 'o' then overwrite = true
-        when 'b' then backup = true
-        when 'O' then @overwrite_all = true
-        when 'B' then @backup_all = true
-        when 'S' then @skip_all = true
-        when 's' then return
-        end
-      end
-      if @skip_all
-        puts 'Skipping...'
-        return
-      end
-      FileUtils.rm_rf(target) if overwrite || @overwrite_all
-      `mv "$HOME/.#{file}" "$HOME/.#{file}.backup"` if backup || @backup_all
-    end
-    `ln -s "$PWD/#{linkable}" "#{target}"`
+    FileUtils.rm_rf(target) if overwrite || @overwrite_all
+    File.rename(target, "#{target}.backup") if File.exist?(target) && (backup || @backup_all)
+  end
+  FileUtils.mkdir_p(File.dirname(target))
+  File.symlink(linkable, target)
 end
 
 desc 'Hook our dotfiles into system-standard positions.'
@@ -126,12 +129,14 @@ task :install, [:symlinks_only] => :setup_modules do |t, args|
   modules.each do |m|
     puts "==> Installing module: #{m}"
 
+    raise("unknown module #{m}") unless Dir.exist?(m)
+
     linkables = Dir.glob(File.join(m, '/**/*.symlink'))
     linkables.each do |linkable|
       file = linkable.split('/')[1..-1].join('/').gsub('.symlink', '')
       target = "#{ENV["HOME"]}/.#{file}"
 
-      mk_link(linkable, target)
+      mk_link(File.join(Dir.pwd, linkable), target)
     end
 
     emacs_init = File.join(m, 'init.el')
@@ -140,7 +145,7 @@ task :install, [:symlinks_only] => :setup_modules do |t, args|
       target_dir = "#{ENV['HOME']}/.emacs.d/personal/"
       FileUtils.mkdir_p target_dir
       target = "#{target_dir}/#{m}.el"
-      mk_link(src, target)
+      mk_link(File.join(Dir.pwd, src), target)
     end
 
     next if args[:symlinks_only]
@@ -152,15 +157,34 @@ task :install, [:symlinks_only] => :setup_modules do |t, args|
         puts `brew bundle --file="#{brewfile}" --no-lock`
       end
     elsif RUBY_PLATFORM.match('linux')
-      pkg_file = "#{m}/apt-packages.txt"
-      if File.exist?(pkg_file)
-        puts "\tInstalling packages in #{pkg_file}"
-        `cat "#{pkg_file}" | xargs sudo apt-get install -y`
+      package_providers = {
+        apt: {
+          install_cmd: "sudo apt install -y",
+          packages_file: 'apt-packages.txt'
+        },
+        pkcon: {
+          install_cmd: "pkcon install -y",
+          packages_file: 'fedora-packages.txt'
+        }
+      }
+
+      pkg_provider = nil
+      pkg_provider = :apt if system("command -v apt >/dev/null 2>&1")
+      pkg_provider = :pkcon if system("command -v pkcon >/dev/null 2>&1")
+
+      break unless pkg_provider
+
+      pkg_info = package_providers[pkg_provider]
+      pkg_file = "#{m}/#{pkg_info[:packages_file]}"
+
+      if pkg_provider && File.exist?(pkg_file)
+        puts "\tInstalling packages in #{pkg_file} with #{pkg_provider}"
+        puts "Failed to install packages" unless system("cat \"#{pkg_file}\" | xargs #{pkg_info[:install_cmd]}")
       end
     end
 
     install_scripts = Dir.glob("#{m}/install*.sh")
-    install_scripts.each { |s| install_script s  }
+    install_scripts.each { |s| install_script s }
   end
 end
 
@@ -172,21 +196,17 @@ task :uninstall do
   end
 
   linkables.each do |linkable|
-
     file = linkable.split('/').last.split('.symlink').last
-    target = "#{ENV["HOME"]}/.#{file}"
+    target = "#{ENV['HOME']}/.#{file}"
 
     # Remove all symlinks created during installation
-    if File.symlink?(target)
-      FileUtils.rm(target)
-    end
+    FileUtils.rm(target) if File.symlink?(target)
 
     # Replace any backups made during installation
-    if File.exists?("#{ENV["HOME"]}/.#{file}.backup")
+    if File.exist?("#{ENV['HOME']}/.#{file}.backup")
       `mv "$HOME/.#{file}.backup" "$HOME/.#{file}"`
     end
-
   end
 end
 
-task :default => 'install'
+task default: 'install'
