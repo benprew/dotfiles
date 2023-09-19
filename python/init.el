@@ -7,7 +7,6 @@
   :ensure t
   :bind ("C-c C-a" . btp/py-auto-eglot))
 
-
 (use-package pyvenv
   :ensure t
   :init
