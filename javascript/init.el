@@ -14,8 +14,10 @@
   :ensure t
   :mode ("\\.phtml\\'" "\\.tpl\\.php\\'" "\\.blade\\.php\\'"
          "\\.jsp\\'"  "\\.as[cp]x\\'"  "\\.erb\\'"  "\\.html?\\'"
-         "/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'")
+         "/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'" "\\.tmpl\\'")
   :config  (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
-  (setq web-mode-disable-autocompletion t))
+  (setq web-mode-disable-autocompletion t)
+  (setq web-mode-engines-alist
+        '(("go"    . "\\.tmpl\\'"))))
