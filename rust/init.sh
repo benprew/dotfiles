@@ -1,1 +1,1 @@
-. "$HOME/.cargo/env"
+test -f "$HOME/.cargo/env" && source "$HOME/.cargo/env"
