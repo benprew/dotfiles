@@ -1,0 +1,43 @@
+;; Welcome message (optional)
+(let ((inhibit-message t))
+  (message (format "Initialization time: %s" (emacs-init-time))))
+
+(require 'package)
+;; This is only needed once, near the top of the file
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(require 'use-package)
+
+;; install straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+
+;; semi-transparent emacs window
+;; (set-frame-parameter (selected-frame) 'alpha '(85 85))
+;; (add-to-list 'default-frame-alist '(alpha 85 85))
+
+;; (setq prelude-minimalistic-ui 't)
+
+;;; Code:
+
+(defvar personal-dir (expand-file-name ".emacs.d/personal"))
+
+;; load the personal settings (this includes `custom-file')
+(when (file-exists-p personal-dir)
+  (mapc 'load (directory-files personal-dir 't "^[^#\.].*\\.el$")))
+  
+
+(server-start)
