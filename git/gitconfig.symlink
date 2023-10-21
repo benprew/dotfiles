@@ -2,8 +2,6 @@
 	name = Ben Prew
 	email = ben@throwingbones.com
 	signingkey = FEEB1B3FD867173D8BCCD26C7E66F5759AFC82E0
-#	email = bprew@comscore.com
-#	signingkey = 5A9B4F86DE482CC0
 
 [alias]
 	lg = "log --pretty=format:'%C(yellow)%h%Creset %s %Cblue%d%Creset' --graph"
@@ -15,14 +13,9 @@
 	interactive = auto
 	ui = true
 	pager = true
-[delta]
-	syntax-theme = zenburn
-[interactive]
-	diffFilter = delta
 [rerere]
 	enabled = true
 [core]
-	pager = delta
 	sharedRepository = group
 	compression = 9
 	preloadindex = true
@@ -39,15 +32,15 @@
 [push]
 	default = current
 [init]
-#	templatedir = ~/.git_template
+	defaultBranch = main
 [mergetool "p4merge"]
 	path = p4merge
 [merge]
 	tool = p4merge
-[mergetool]
-	prompt = false
-	keepBackup = false
 [commit]
 	gpgsign = true
 [pull]
 	rebase = false
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
