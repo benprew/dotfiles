@@ -1,28 +1,12 @@
 function add_path
     set -l new_path $argv[1]
     if test -d $new_path
-        set -g fish_user_paths $fish_user_paths $new_path
+        # Don't use $fish_user_path variable, it will create duplicates PATH entries
+        # https://stackoverflow.com/questions/26208231/modifying-path-with-fish-shell
+        #
+        # push path to front if it already exists
+        fish_add_path --move $new_path
     end
-end
-
-
-for module in (cat ~/.modules)
-    set module_init_path $HOME/src/dotfiles/$module/init.fish
-    if test -e $module_init_path
-        . $module_init_path
-    end
-
-    if test -e $HOME/dotfiles/$module/bin
-        set -g fish_user_paths $HOME/dotfiles/$module/bin $fish_user_paths
-    end
-end
-set -g fish_user_paths "/usr/local/bin" $fish_user_paths "/usr/local/sbin" "$HOME/bin"
-set -g fish_user_paths $fish_user_paths (python3 -m site --user-base)/bin
-set -x EDITOR emacsclient
-
-if command -vq pyenv
-    status --is-interactive; and source (pyenv init -|psub)
-    set -g fish_user_paths (pyenv root)/shims $fish_user_paths
 end
 
 function git_branch
@@ -57,4 +41,20 @@ function fish_prompt
     printf "\n$c4><> "
 end
 
+set -x EDITOR emacsclient
+
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+
+for module in (cat ~/.modules)
+    set module_init_path $HOME/dotfiles/$module/init.fish
+    if test -e $module_init_path
+        . $module_init_path
+    end
+
+    if test -e $HOME/dotfiles/$module/bin
+        fish_add_path $HOME/dotfiles/$module/bin
+    end
+end
+
+fish_add_path "/usr/local/bin"
+fish_add_path --append "/usr/local/sbin" "$HOME/bin"
