@@ -6,7 +6,6 @@
 (require 'use-package)
 
 ;; (setq org-agenda-files '("~/notes/"))
-
 ;; Too many org files can cause slowdown in agenda building
 ;; see https://d12frosted.io/posts/2021-01-16-task-management-with-roam-vol5.html for a way to limit files
 (setq org-agenda-files (directory-files-recursively "~/notes/" "\\`[^.].*\\.org\\'"))
@@ -21,6 +20,8 @@
 
 (setq org-export-backends '(ascii html icalendar latex md odt))
 
+(setq org-log-done t)  ; add timestamp when completing a todo item
+
 (require 'org-tempo)
 
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
@@ -30,20 +31,16 @@
 (add-to-list 'org-structure-template-alist '("as-sql" . "src sql :engine postgres :dbhost as-linear.db.csas.csa.comscore.com :dbport 5439 :dbuser bprew :database live"))
 
 (setq org-todo-keywords
-      '((sequence "INBOX(i)"
-                  "TODAY(t)"
-                  "TOMORROW(o)"
-                  "SOMEDAY(s)"
-                  "WAITING(w)"
-                  "DONE(d)")))
+      '((sequence "TODO(t)" "IN PROGRESS(i)" "|" "DONE(d)")
+        (sequence "LATER(l)" "|" "NEVER")))
+
 
 (setq org-agenda-custom-commands
-      '(("w" todo "WAITING" nil)
-        ("i" todo "INBOX" nil)
-        ("t" todo "TODAY" nil)
-        ("o" todo "TOMORROW" nil)
-        ("s" todo "SOMEDAY" nil)
-        ("d" "Agenda + Next Actions" ((agenda) (todo "INBOX") (todo "TODAY")))))
+      '(("t" todo "TODO" nil)
+        ("i" todo "IN PROGRESS" nil)
+        ("l" todo "LATER" nil)
+        ("d" todo "DONE" nil)
+        ("n" todo "NEVER" nil)))
 
 (use-package visual-fill-column
   :ensure t
