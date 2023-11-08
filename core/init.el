@@ -7,6 +7,10 @@
 (global-set-key (kbd "C-c e n") 'flymake-goto-next-error)
 (global-set-key (kbd "C-c e p") 'flymake-goto-prev-error)
 
+;; automatically save buffers when focus is lost
+(add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
+
+
 
 (setq initial-scratch-message ";Don't ignore your dreams\n;Don't work too much\n;Say what you think\n;Cultivate friendships\n;Be happy.\n\n")
 
@@ -15,6 +19,7 @@
 (setq confirm-kill-emacs 'y-or-n-p)
 (setq-default fill-column 82)
 (setq-default whitespace-line-column 82)
+(setq custom-file "~/.emacs.d/custom.el")
 (setq load-prefer-newer 't)
 (setq whitespace-mode 1)
 (setq column-number-mode t)
@@ -25,16 +30,15 @@
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
-;; this stops tramp from making an ssh connection to autosave
-;; this doesn't seem to actually work...
-;; (add-to-list 'backup-directory-alist
-;;              (cons "." "~/.emacs.d/tramp-autosave/"))
-;; (customize-set-variable
-;;  'tramp-backup-directory-alist backup-directory-alist)
+;; save backup files into a single directory
+(make-directory "~/.emacs_backups/" t)
+(make-directory "~/.emacs_autosave/" t)
+(setq auto-save-file-name-transforms '((".*" "~/.emacs_autosave/" t)))
+(setq backup-directory-alist '(("." . "~/.emacs_backups/")))
+(setq create-lockfiles nil)
 
-;; (if (display-graphic-p)
-;;     (setq browse-url-browser-function 'browse-url-default-browser)
-;;   (setq browse-url-browser-function 'eww-browse-url))
+;; emacs 28.2 bug on mac https://emacs.stackexchange.com/questions/74289/emacs-28-2-error-in-macos-ventura-image-type-invalid-image-type-svg
+(setq image-types (cons 'svg image-types))
 
 (use-package magit
   :defer 3

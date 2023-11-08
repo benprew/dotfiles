@@ -83,7 +83,7 @@
 ;; Auto-saving does not cooperate with org-crypt.el: so you need to
 ;; turn it off if you plan to use org-crypt.el quite often.  Otherwise,
 ;; you'll get an (annoying) message each time you start Org.
-(setq auto-save-default nil)
+;; (setq auto-save-default nil)
 
 (require 'epa-file)
 (epa-file-enable)
