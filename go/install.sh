@@ -2,11 +2,11 @@
 
 set -e
 
-GOVERSION="1.21.3"
+GOVERSION="1.21.6"
 
-if ! command -v go &>/dev/null; then
+if ! (command -v go &>/dev/null && go version |grep $GOVERSION); then
     echo "Installing go$GOVERSION"
-    cd $(mktemp -d) || exit 1
+    cd "$(mktemp -d)" || exit 1
     wget "https://go.dev/dl/go$GOVERSION.linux-amd64.tar.gz"
     sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go$GOVERSION.linux-amd64.tar.gz
 fi
