@@ -6,6 +6,7 @@
 
 (global-set-key (kbd "C-c e n") 'flymake-goto-next-error)
 (global-set-key (kbd "C-c e p") 'flymake-goto-prev-error)
+(global-set-key (kbd "C-;") 'comment-dwim)
 
 ;; automatically save buffers when focus is lost
 (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
