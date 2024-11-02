@@ -9,4 +9,4 @@ function f;
 end
 
 set script_dir (dirname (status --current-filename))
-. $script_dir/base16-solarized-dark.fish
+. $script_dir/base16-ashes.fish
