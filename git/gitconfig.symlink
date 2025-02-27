@@ -15,6 +15,7 @@
 	pager = true
 [rerere]
 	enabled = true
+	autoupdate = true
 [core]
 	sharedRepository = group
 	compression = 9
@@ -30,7 +31,9 @@
 [status]
 	submodulesummary = true
 [push]
-	default = current
+	default = simple
+	autoSetupRemote = true
+	followTags = true
 [init]
 	defaultBranch = main
 [mergetool "p4merge"]
@@ -39,8 +42,26 @@
 	tool = p4merge
 [commit]
 	gpgsign = true
+	verbose = true
 [pull]
 	rebase = false
 [credential "https://github.com"]
-	helper = 
+	helper =
 	helper = !/usr/bin/gh auth git-credential
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[help]
+	autocorrect = prompt
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
