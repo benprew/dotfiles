@@ -1,5 +1,3 @@
-;; (prelude-require-packages '(sqlformat))
-
 (use-package sqlformat
   :defer 3
   :ensure t)

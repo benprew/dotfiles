@@ -1,6 +1,3 @@
-;; (require 'prelude-ruby)
-;; (require 'prelude-web)
-
 (use-package rubocop
   :ensure t
   :defer 3

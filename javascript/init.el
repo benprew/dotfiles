@@ -3,12 +3,6 @@
 (setq js-indent-level 2)
 (local-set-key (kbd "RET") 'newline-and-indent)
 
-(use-package prelude-web
-  :defer 3)
-
-(use-package prelude-js
-  :defer 3)
-
 (use-package web-mode
   :defer 3
   :ensure t

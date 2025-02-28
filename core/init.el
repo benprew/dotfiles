@@ -1,9 +1,3 @@
-(straight-use-package
- '(nano-emacs :type git :host github :repo "rougier/nano-emacs"))
-(require 'nano-defaults)
-(require 'nano-session)
-(require 'nano-bindings)
-
 (global-set-key (kbd "C-c e n") 'flymake-goto-next-error)
 (global-set-key (kbd "C-c e p") 'flymake-goto-prev-error)
 (global-set-key (kbd "C-;") 'comment-dwim)
@@ -27,19 +21,12 @@
 (setq global-flycheck-mode 't)
 (global-auto-revert-mode t)
 
-;;;; Emacs Startup Performance
-(setq gc-cons-threshold 100000000)
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
-
 ;; save backup files into a single directory
 (make-directory "~/.emacs_backups/" t)
 (make-directory "~/.emacs_autosave/" t)
 (setq auto-save-file-name-transforms '((".*" "~/.emacs_autosave/" t)))
 (setq backup-directory-alist '(("." . "~/.emacs_backups/")))
 (setq create-lockfiles nil)
-
-;; emacs 28.2 bug on mac https://emacs.stackexchange.com/questions/74289/emacs-28-2-error-in-macos-ventura-image-type-invalid-image-type-svg
-(setq image-types (cons 'svg image-types))
 
 (use-package magit
   :defer 3
@@ -118,12 +105,6 @@
   :ensure t
   :defer 2
   :hook (python-mode . eglot-ensure)(go-mode . eglot-ensure))
-
-;; optional if you want which-key integration
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode))
 
 (use-package zeal-at-point
   :ensure t)

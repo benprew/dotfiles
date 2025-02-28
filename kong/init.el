@@ -4,8 +4,6 @@
 
 ;;; Code:
 
-(prelude-require-package 'minitest)
-(prelude-require-package 'yasnippet)
 (require 'yasnippet)
 (yas-global-mode 1)
 (setq yas-snippet-dirs (append yas-snippet-dirs
@@ -63,7 +61,6 @@ file)))
 
 
 (global-unset-key "\C-ck")
-(define-key prelude-mode-map "\C-ck" nil)
 (global-set-key "\C-ck." 'kong-run-test-at-point)
 (global-set-key "\C-ckt" 'kong-run-current-test-file)
 
@@ -81,9 +78,6 @@ file)))
                                   :test "docker-compose run rails rails test")
 
 ;;; javascript
-(require 'prelude-js)
-(prelude-require-package 'add-node-modules-path)
-(prelude-require-package 'mocha)
 (require 'add-node-modules-path)
 (add-hook 'js2-mode-hook 'add-node-modules-path)
 (projectile-register-project-type 'npm '("package.json")

@@ -66,9 +66,6 @@
   :ensure t
   :defer 1)
 
-(use-package prelude-org
-  :defer 1)
-
 (require 'org-crypt)
 (org-crypt-use-before-save-magic)
 (setq org-tags-exclude-from-inheritance '("crypt"))
