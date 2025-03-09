@@ -5,7 +5,13 @@
 ;; automatically save buffers when focus is lost
 (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 
+;; Emacs defauls behave more like VS-Code defaults
+;; Kill current buffer (instead of asking first buffer name)
+(global-set-key (kbd "C-x k") 'kill-current-buffer)
+(delete-selection-mode 1)
 
+;; Open recent files
+(global-set-key (kbd "C-c r") 'recentf-open-files)
 
 (setq initial-scratch-message ";Don't ignore your dreams\n;Don't work too much\n;Say what you think\n;Cultivate friendships\n;Be happy.\n\n")
 
@@ -46,7 +52,6 @@
   :ensure t
   :config (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
-
 ;; https://github.com/lewang/ws-butler
 (use-package ws-butler
   :defer 2
@@ -67,30 +72,22 @@
   :defer t
   :mode "\\.cron\\'")
 
-;; https://github.com/k1LoW/emacs-ansible
-(use-package ansible
-  :ensure t
-  :defer 3
-  :hook
-  (ansible . ansible-auto-decrypt-encrypt)
-  (yaml-mode . ansible)
+(add-to-list 'auto-mode-alist '("gitconfig\\.symlink\\'" . gitconfig-mode))
+(add-to-list 'auto-mode-alist '("\\.el\\.symlink\\'" . emacs-lisp-mode))
+
+(use-package aidermacs
+  :straight (:host github :repo "MatthewZMD/aidermacs" :files ("*.el"))
   :config
-  ;;(global-set-key (kbd "C-c b") 'ansible-decrypt-buffer)
-  ;;(global-set-key (kbd "C-c g") 'ansible-encrypt-buffer)
-  ;;(add-hook 'ansible-hook 'ansible-auto-decrypt-encrypt)
-  (setq ansible-vault-password-file "~/.ansible-vault-password"))
+  (setq aidermacs-args '("--model" "anthropic/claude-3-5-sonnet-20241022"))
+  (setenv "ANTHROPIC_API_KEY"
+          (with-temp-buffer
+            (insert-file-contents (expand-file-name "~/secrets/claude.ai.key"))
+            (string-trim (buffer-string))))
 
-;; https://github.com/emacsorphanage/ansible-doc
-(use-package ansible-doc
-  :ensure t
-  :defer 3
-  :hook (yaml-mode . ansible-doc-mode))
+  (global-set-key (kbd "C-c a") 'aidermacs-transient-menu))
 
-(use-package gitconfig-mode
-  :mode "gitconfig\\.symlink\\'")
-
-(use-package emacs-lisp-mode
-  :mode "\\.el\\.symlink\\'")
+;; Change multiline input key (default is S-<return>)
+(setq aidermacs-comint-multiline-newline-key "C-<return>")
 
 (use-package helpful
   :ensure t
@@ -106,8 +103,10 @@
   :defer 2
   :hook (python-mode . eglot-ensure)(go-mode . eglot-ensure))
 
+;; zeal is like dash
 (use-package zeal-at-point
   :ensure t)
+(global-set-key "\C-cd" 'zeal-at-point)
 
 ;; Add magit to project.el selection
 (with-eval-after-load 'project
@@ -116,9 +115,7 @@
 
 ;; Improved search function (use f2) in isearch to show
 ;; From http://yummymelon.com/devnull/improving-emacs-isearch-usability-with-transient.html
-
 (require 'transient)
-
 (transient-define-prefix cc/isearch-menu ()
   "isearch Menu"
   [["Edit Search String"
