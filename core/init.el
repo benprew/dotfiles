@@ -34,10 +34,6 @@
 (setq backup-directory-alist '(("." . "~/.emacs_backups/")))
 (setq create-lockfiles nil)
 
-(use-package magit
-  :defer 3
-  :ensure t)
-
 (use-package graphviz-dot-mode
   :defer 3
   :ensure t)
