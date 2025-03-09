@@ -5,6 +5,10 @@
 ;;; Code:
 (require 'use-package)
 
+(use-package org
+  :bind (:map org-mode-map
+         ("C-c t e" . org-table-export)))
+
 ;; (setq org-agenda-files '("~/notes/"))
 ;; Too many org files can cause slowdown in agenda building
 ;; see https://d12frosted.io/posts/2021-01-16-task-management-with-roam-vol5.html for a way to limit files
