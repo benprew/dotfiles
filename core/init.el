@@ -87,11 +87,6 @@
 
 ;; Change multiline input key (default is S-<return>)
 (setq aidermacs-comint-multiline-newline-key "C-<return>")
-;; (use-package gitconfig-mode
-;;   :mode "gitconfig\\.symlink\\'")
-
-;; (use-package emacs-lisp-mode
-;;   :mode "\\.el\\.symlink\\'")
 
 (use-package helpful
   :ensure t
