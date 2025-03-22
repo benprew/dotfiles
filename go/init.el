@@ -8,15 +8,18 @@
   :ensure t
   :hook ('go-mode . 'eglot-ensure))
 
-; todo: is this needed?
-; (add-hook 'go-mode-hook 'go-eldoc-setup)
-; (add-hook 'go-mode-hook (lambda () (whitespace-mode -1)))
-
-(add-hook 'before-save-hook 'gofmt-before-save)
 (add-to-list 'interpreter-mode-alist
              '("gorun" . go-mode))
 
 ;; elgot config - from https://go.googlesource.com/tools/+/refs/heads/master/gopls/doc/emacs.md
+;;
+;; Configuring project for Go modules in .emacs
+;;
+;; Eglot uses the built-in project package to identify the LSP workspace for a
+;; newly-opened buffer. The project package does not natively know about GOPATH or
+;; Go modules. Fortunately, you can give it a custom hook to tell it to look for
+;; the nearest parent go.mod file (that is, the root of the Go module) as the
+;; project root.
 (require 'project)
 
 (defun project-find-go-module (dir)
@@ -28,18 +31,13 @@
 
 (add-hook 'project-find-functions #'project-find-go-module)
 
-;; I'm not sure what this is for?
-(setq-default eglot-workspace-configuration
-              '((:gopls .
-                        ((staticcheck . t)
-                         (matcher . "CaseSensitive")))))
-
 ;; organize go import statements
 (defun own/eglot-organize-imports ()
   (call-interactively 'eglot-code-action-organize-imports))
 (defun own/before-saving-go ()
-  ;; you might also like:
-  ;; (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
+  ;; install eglot-format-buffer as a save hook.
+  ;; The depth of -10 places this before eglot's willSave notification,
+  ;; so that that notification reports the actual contents that will be saved.
+  (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
   (add-hook 'before-save-hook #'own/eglot-organize-imports nil t))
 (add-hook 'go-mode-hook #'own/before-saving-go)
-;; end eglot config
