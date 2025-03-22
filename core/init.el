@@ -83,18 +83,15 @@
             (insert-file-contents (expand-file-name "~/secrets/claude.ai.key"))
             (string-trim (buffer-string))))
 
-<<<<<<< Updated upstream
   (global-set-key (kbd "C-c a") 'aidermacs-transient-menu))
 
 ;; Change multiline input key (default is S-<return>)
 (setq aidermacs-comint-multiline-newline-key "C-<return>")
-=======
 ;; (use-package gitconfig-mode
 ;;   :mode "gitconfig\\.symlink\\'")
 
 ;; (use-package emacs-lisp-mode
 ;;   :mode "\\.el\\.symlink\\'")
->>>>>>> Stashed changes
 
 (use-package helpful
   :ensure t
