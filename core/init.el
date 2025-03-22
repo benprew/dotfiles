@@ -13,6 +13,9 @@
 ;; Open recent files
 (global-set-key (kbd "C-c r") 'recentf-open-files)
 
+;; Enable auto-pair globally
+(electric-pair-mode 1)
+
 (setq initial-scratch-message ";Don't ignore your dreams\n;Don't work too much\n;Say what you think\n;Cultivate friendships\n;Be happy.\n\n")
 
 (setq mac-option-modifier 'super)
@@ -80,10 +83,18 @@
             (insert-file-contents (expand-file-name "~/secrets/claude.ai.key"))
             (string-trim (buffer-string))))
 
+<<<<<<< Updated upstream
   (global-set-key (kbd "C-c a") 'aidermacs-transient-menu))
 
 ;; Change multiline input key (default is S-<return>)
 (setq aidermacs-comint-multiline-newline-key "C-<return>")
+=======
+;; (use-package gitconfig-mode
+;;   :mode "gitconfig\\.symlink\\'")
+
+;; (use-package emacs-lisp-mode
+;;   :mode "\\.el\\.symlink\\'")
+>>>>>>> Stashed changes
 
 (use-package helpful
   :ensure t
