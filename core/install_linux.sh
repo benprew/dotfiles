@@ -18,3 +18,7 @@ if [[ ! -e "$YT_DLP" ]]; then
     curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$YT_DLP"
     chmod +x "$YT_DLP"
 fi
+
+# aidermacs
+python -m pip install aider-install
+aider-install
