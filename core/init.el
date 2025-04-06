@@ -77,10 +77,14 @@
 (use-package aidermacs
   :straight (:host github :repo "MatthewZMD/aidermacs" :files ("*.el"))
   :config
-  (setq aidermacs-args '("--model" "anthropic/claude-3-5-sonnet-20241022"))
+  (setq aidermacs-args '("--model" "gemini-2.5-pro"))
   (setenv "ANTHROPIC_API_KEY"
           (with-temp-buffer
             (insert-file-contents (expand-file-name "~/secrets/claude.ai.key"))
+            (string-trim (buffer-string))))
+  (setenv "GEMINI_API_KEY"
+          (with-temp-buffer
+            (insert-file-contents (expand-file-name "~/secrets/gemini.key"))
             (string-trim (buffer-string))))
 
   (global-set-key (kbd "C-c a") 'aidermacs-transient-menu))
