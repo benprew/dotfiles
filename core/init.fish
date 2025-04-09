@@ -10,3 +10,5 @@ end
 
 set script_dir (dirname (status --current-filename))
 . $script_dir/base16-ashes.fish
+
+set -U fish_greeting
