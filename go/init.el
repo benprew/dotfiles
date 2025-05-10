@@ -11,7 +11,8 @@
 (add-to-list 'interpreter-mode-alist
              '("gorun" . go-mode))
 
-;; elgot config - from https://go.googlesource.com/tools/+/refs/heads/master/gopls/doc/emacs.md
+;; elgot config -
+;; from https://go.googlesource.com/tools/+/refs/heads/master/gopls/doc/emacs.md
 ;;
 ;; Configuring project for Go modules in .emacs
 ;;

@@ -17,7 +17,8 @@
 (electric-pair-mode 1)
 
 (setq initial-scratch-message ";Don't ignore your dreams\n;Don't work too much\n;Say what you think\n;Cultivate friendships\n;Be happy.\n\n")
-
+(setq speedbar-show-unknown-files t)
+(setq speedbar-use-images t) ;; optional, shows nice icons
 (setq mac-option-modifier 'super)
 (setq mac-command-modifier 'meta)
 (setq confirm-kill-emacs 'y-or-n-p)
