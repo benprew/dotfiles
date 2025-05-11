@@ -6,7 +6,12 @@
 
 (use-package go-mode
   :ensure t
-  :hook ('go-mode . 'eglot-ensure))
+  :hook ('go-mode . 'eglot-ensure)
+  :bind (:map go-mode-map
+              ("C-c t t" . go-test-current-test)
+              ("C-c t f" . go-test-current-file)
+              ("C-c t p" . go-test-current-project))
+  )
 
 (add-to-list 'interpreter-mode-alist
              '("gorun" . go-mode))
