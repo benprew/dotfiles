@@ -78,11 +78,11 @@
 (use-package aidermacs
   :straight (:host github :repo "MatthewZMD/aidermacs" :files ("*.el"))
   :config
-  (setq aidermacs-args '("--model" "gemini-2.5-pro"))
-  (setenv "ANTHROPIC_API_KEY"
-          (with-temp-buffer
-            (insert-file-contents (expand-file-name "~/secrets/claude.ai.key"))
-            (string-trim (buffer-string))))
+  (setq aidermacs-args '("--model" "gemini/gemini-2.5-flash-preview-04-17"))
+  ;; (setenv "ANTHROPIC_API_KEY"
+  ;;         (with-temp-buffer
+  ;;           (insert-file-contents (expand-file-name "~/secrets/claude.ai.key"))
+  ;;           (string-trim (buffer-string))))
   (setenv "GEMINI_API_KEY"
           (with-temp-buffer
             (insert-file-contents (expand-file-name "~/secrets/gemini.key"))
@@ -121,7 +121,7 @@
 ;; From http://yummymelon.com/devnull/improving-emacs-isearch-usability-with-transient.html
 (require 'transient)
 (transient-define-prefix cc/isearch-menu ()
-  "isearch Menu"
+  "Isearch Menu."
   [["Edit Search String"
     ("e"
      "Edit the search string (recursive)"
