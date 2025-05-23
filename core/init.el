@@ -47,10 +47,67 @@
   :ensure t
   :mode "\\.jq\\'")
 
+(defun flymake-jq-backend (report-fn &rest _args)
+  "Flymake backend using jq for JSON validation."
+  (when (executable-find "jq")
+    (let ((temp-file (make-temp-file "flymake-jq" nil ".json"))
+          (source-buffer (current-buffer)))
+      (write-region (point-min) (point-max) temp-file nil 'silent)
+      (let ((proc (make-process
+                   :name "flymake-jq"
+                   :buffer (generate-new-buffer " *flymake-jq*")
+                   :command (list "jq" "." temp-file)
+                   :connection-type 'pipe
+                   :sentinel
+                   (lambda (proc _event)
+                     (when (eq 'exit (process-status proc))
+                       (let ((temp-file (process-get proc 'temp-file))
+                             (report-fn (process-get proc 'report-fn))
+                             (source-buffer (process-get proc 'source-buffer)))
+                         (unwind-protect
+                             (if (zerop (process-exit-status proc))
+                                 (funcall report-fn nil)
+                               (with-current-buffer (process-buffer proc)
+                                 (goto-char (point-min))
+                                 (let ((diags))
+                                   (while (re-search-forward "parse error: \\(.+\\) at line \\([0-9]+\\)" nil t)
+                                     (let ((msg (match-string 1))
+                                           (line (string-to-number (match-string 2))))
+                                       (push (flymake-make-diagnostic
+                                              source-buffer
+                                              (with-current-buffer source-buffer
+                                                (save-excursion
+                                                  (goto-char (point-min))
+                                                  (forward-line (1- line))
+                                                  (point)))
+                                              (with-current-buffer source-buffer
+                                                (save-excursion
+                                                  (goto-char (point-min))
+                                                  (forward-line (1- line))
+                                                  (line-end-position)))
+                                              :error
+                                              msg)
+                                             diags)))
+                                   (funcall report-fn diags))))
+                           (kill-buffer (process-buffer proc))
+                           (when (file-exists-p temp-file)
+                             (delete-file temp-file)))))))))
+        (process-put proc 'temp-file temp-file)
+        (process-put proc 'report-fn report-fn)
+        (process-put proc 'source-buffer source-buffer)
+        (process-put proc 'flymake-backend t)))))
+;; Add the backend to JSON modes
+(defun setup-json-flymake ()
+  "Setup flymake with jq for JSON files."
+  (add-hook 'flymake-diagnostic-functions #'flymake-jq-backend nil t)
+  (flymake-mode 1))
+
+
 (treesit-add-and-install 'json "https://github.com/tree-sitter/tree-sitter-json")
-(use-package json-ts-mode
-  :ensure f
-  :mode "\\.json\\'")
+(add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
+
+(add-hook 'js-json-mode-hook #'setup-json-flymake)
+(add-hook 'json-ts-mode-hook #'setup-json-flymake)
 
 (use-package dumb-jump
   :defer 1
@@ -84,10 +141,10 @@
   :straight (:host github :repo "MatthewZMD/aidermacs" :files ("*.el"))
   :config
   (setq aidermacs-args '("--model" "gemini/gemini-2.5-flash-preview-04-17"))
-  ;; (setenv "ANTHROPIC_API_KEY"
-  ;;         (with-temp-buffer
-  ;;           (insert-file-contents (expand-file-name "~/secrets/claude.ai.key"))
-  ;;           (string-trim (buffer-string))))
+  (setenv "ANTHROPIC_API_KEY"
+          (with-temp-buffer
+            (insert-file-contents (expand-file-name "~/secrets/claude.ai.key"))
+            (string-trim (buffer-string))))
   (setenv "GEMINI_API_KEY"
           (with-temp-buffer
             (insert-file-contents (expand-file-name "~/secrets/gemini.key"))
@@ -112,7 +169,7 @@
   :defer 2
   :hook (python-mode . eglot-ensure)(go-mode . eglot-ensure))
 
-;; zeal is like dash
+;; zeal is like dash documentation, but for linux
 (use-package zeal-at-point
   :ensure t)
 (global-set-key "\C-cd" 'zeal-at-point)

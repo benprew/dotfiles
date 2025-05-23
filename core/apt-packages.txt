@@ -5,3 +5,4 @@ texlive-fonts-extra
 ripgrep
 tmux
 zeal
+jq
