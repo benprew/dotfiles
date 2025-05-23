@@ -47,6 +47,11 @@
   :ensure t
   :mode "\\.jq\\'")
 
+(treesit-add-and-install 'json "https://github.com/tree-sitter/tree-sitter-json")
+(use-package json-ts-mode
+  :ensure f
+  :mode "\\.json\\'")
+
 (use-package dumb-jump
   :defer 1
   :ensure t

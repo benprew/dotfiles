@@ -9,3 +9,8 @@
   :defer 3
   :ensure t
   :mode ("\\.fish\\'" "\\.fish\\.symlink\\'"))
+
+(treesit-add-and-install 'bash "https://github.com/tree-sitter/tree-sitter-bash")
+(use-package bash-ts-mode
+  :ensure f
+  :mode "\\.sh\\'")

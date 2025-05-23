@@ -15,3 +15,6 @@
   (setq web-mode-disable-autocompletion t)
   (setq web-mode-engines-alist
         '(("go"    . "\\.tmpl\\'"))))
+
+(treesit-add-and-install 'html "https://github.com/tree-sitter/tree-sitter-html")
+(treesit-add-and-install 'javascript "https://github.com/tree-sitter/tree-sitter-javascript")

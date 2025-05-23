@@ -56,15 +56,13 @@
 (use-package markdown-mode
   :ensure t
   :defer 1
+  :mode "\\.md\\'"
   :hook
   (markdown-mode . visual-line-mode)
   (markdown-mode . (lambda () (whitespace-mode -1)))
   :config
   ;; Markdown formatting
-  (setq markdown-gfm-use-electric-backquote nil)
-  ;; unset because it gets into a loop on linliveanalytics1
-  (if (and (> emacs-major-version 25) (display-graphic-p))
-      (add-hook 'markdown-mode-hook #'visual-fill-column-mode)))
+  (setq markdown-gfm-use-electric-backquote nil))
 
 (use-package org-preview-html
   :ensure t
