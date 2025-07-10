@@ -28,7 +28,6 @@
 (setq load-prefer-newer 't)
 (setq whitespace-mode 1)
 (setq column-number-mode t)
-(setq global-flycheck-mode 't)
 (global-auto-revert-mode t)
 
 ;; save backup files into a single directory

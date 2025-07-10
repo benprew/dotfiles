@@ -107,14 +107,6 @@ In a file:
 
 #### Automatic Syntax Check
 
-I use [flycheck](https://github.com/lunaryorn/flycheck) to check my
-code on the fly, When you see a red exclamation point at the beginning
-of a line, it means flycheck found an error.  You can
-either hover over the error to see the error message, or you can
-navigate to error messages with:
-    `<alt>-g-n` - function: `next-error`
-    `<alt>-g-p` - function: `previous-error`
-
 You'll probably want to install a newer version of ruby locally
 (assuming you're using a newer version in a vagrant instance or
 similar)
@@ -150,4 +142,3 @@ the same area.
 * The core `emacs` config looks for `init.el` in every module
 * Emacs uses [el-get](https://github.com/dimitri/el-get) to manage 3rd
   party dependencies.
-

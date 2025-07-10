@@ -1,6 +1,3 @@
-(setq flycheck-python-pycompile-executable "python3")
-(setq flycheck-python-flake8-executable "python3")
-
 (require 'use-package)
 
 (use-package python-mode
