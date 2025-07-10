@@ -10,21 +10,6 @@
   (package-install 'use-package))
 (require 'use-package)
 
-;; install straight.el
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-
 ;; Example usage:
 ;; (treesit-add-and-install 'python "https://github.com/tree-sitter/tree-sitter-python")
 ;; (treesit-add-and-install 'markdown "https://github.com/ikatyang/tree-sitter-markdown" "master" "tree-sitter-markdown/src")
