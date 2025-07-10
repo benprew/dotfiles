@@ -1,7 +1,7 @@
-
 # Make right-click scroll trackpoint
 # see https://wiki.archlinux.org/title/TrackPoint#Two-button_trackpoints
 #
 # troubleshooting
 #   xinput --list
 xinput set-prop 11 "libinput Button Scrolling Button" 3
+xinput set-prop 10 "libinput Button Scrolling Button" 3
