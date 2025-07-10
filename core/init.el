@@ -113,12 +113,6 @@
   :ensure t
   :config (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
-;; https://github.com/lewang/ws-butler
-(use-package ws-butler
-  :defer 2
-  :ensure t
-  :config (ws-butler-global-mode 1))
-
 (use-package ssh-config-mode
   :defer t
   :ensure t
