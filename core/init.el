@@ -101,12 +101,14 @@
   (add-hook 'flymake-diagnostic-functions #'flymake-jq-backend nil t)
   (flymake-mode 1))
 
-
 (treesit-add-and-install 'json "https://github.com/tree-sitter/tree-sitter-json")
 (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
-
 (add-hook 'js-json-mode-hook #'setup-json-flymake)
 (add-hook 'json-ts-mode-hook #'setup-json-flymake)
+
+
+(treesit-add-and-install 'yaml "https://github.com/tree-sitter-grammars/tree-sitter-yaml")
+;; (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
 
 (use-package dumb-jump
   :defer 1
@@ -190,6 +192,7 @@
           (with-temp-buffer
             (insert-file-contents (expand-file-name "~/secrets/gemini.key"))
             (string-trim (buffer-string))))
+  (setenv "AIDER_YES_ALWAYS" "YES")
   (global-set-key (kbd "C-c a") 'aidermacs-transient-menu))
 ;; Change multiline input key (default is S-<return>)
 (setq aidermacs-comint-multiline-newline-key "C-<return>")
