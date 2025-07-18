@@ -43,8 +43,7 @@
 
 (use-package aidermacs
   :ensure t
-  :vc (:url "ht
-tps://github.com/MatthewZMD/aidermacs" :branch "master")
+  :vc (:url "https://github.com/MatthewZMD/aidermacs" :branch "master")
   :config
   (setq aidermacs-default-chat-mode 'architect)
   (setq aidermacs-use-architect-mode t) ;; this is deprecated but still needed for now
