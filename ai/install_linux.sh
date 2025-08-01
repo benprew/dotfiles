@@ -1,5 +1,5 @@
 #!/bin/bash
 
 # aidermacs
-python -m pip install aider-install
+python3 -m pip install aider-install --break-system-packages
 aider-install

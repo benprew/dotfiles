@@ -62,3 +62,8 @@
   (global-set-key (kbd "C-c a") 'aidermacs-transient-menu))
 ;; Change multiline input key (default is S-<return>)
 (setq aidermacs-comint-multiline-newline-key "C-<return>")
+
+
+(with-eval-after-load 'project
+  (define-key project-prefix-map "a" #'aidermacs-run)
+  (add-to-list 'project-switch-commands '(aidermacs-run "Aider") t))

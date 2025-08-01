@@ -154,9 +154,7 @@
 ;; Add magit to project.el selection
 (with-eval-after-load 'project
   (define-key project-prefix-map "m" #'magit-project-status)
-  (add-to-list 'project-switch-commands '(magit-project-status "Magit") t)
-  (define-key project-prefix-map "a" #'aidermacs-run)
-  (add-to-list 'project-switch-commands '(aidermacs-run "Aider") t))
+  (add-to-list 'project-switch-commands '(magit-project-status "Magit") t))
 
 ;; Improved search function (use f2) in isearch to show
 ;; From http://yummymelon.com/devnull/improving-emacs-isearch-usability-with-transient.html
