@@ -6,3 +6,4 @@ ripgrep
 tmux
 zeal
 jq
+lm-sensors
