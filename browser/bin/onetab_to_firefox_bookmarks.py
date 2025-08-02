@@ -4,6 +4,9 @@ from html.parser import HTMLParser
 from datetime import datetime
 import sys
 
+# To Export Onetab URLs with groups
+# Use Onetab's "share as webpage" then save the page as html
+
 
 class OneTabParser(HTMLParser):
     def __init__(self):
