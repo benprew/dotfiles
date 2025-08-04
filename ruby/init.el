@@ -20,10 +20,12 @@
   (ruby-mode . inf-ruby-minor-mode))
 
 (add-hook 'ruby-mode-hook (lambda ()
-			                (setq eglot-stay-out-of '(flymake))
+                            (setq eglot-stay-out-of '(flymake))
                             (flymake-mode t)
-			                (eglot-ensure)))
+                            (eglot-ensure)))
 
+
+(treesit-add-and-install 'ruby "https://github.com/tree-sitter/tree-sitter-ruby")
 
 ;; https://emacs-lsp.github.io/lsp-mode/page/lsp-solargraph/
 ; (setq lsp-solargraph-use-bundler 't)
@@ -40,3 +42,15 @@
 
 ;; solargraph and eglot don't report errors, so turn off eglot-flymake and use default
 ;; rubymode flymake
+
+;;; -------------------- TREESITTER AREA
+;;; RUBY-TS-MODE
+(use-package ruby-ts-mode
+  :ensure nil
+  :mode "\\.rb\\'"
+  :mode "Rakefile\\'"
+  :mode "Gemfile\\'"
+  :custom
+  (add-to-list 'treesit-language-source-alist '(ruby "https://github.com/tree-sitter/tree-sitter-ruby" "master" "src"))
+  (ruby-indent-level 2)
+  (ruby-indent-tabs-mode nil))
