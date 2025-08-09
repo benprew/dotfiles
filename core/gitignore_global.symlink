@@ -1,1 +1,3 @@
-.aider*
+.aider.chat*
+.aider.tags*
+.aider.input*
