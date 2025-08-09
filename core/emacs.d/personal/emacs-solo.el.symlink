@@ -34,13 +34,9 @@
    ("C-x C-k RET" . nil))
   :custom
   (ad-redefinition-action 'accept)
-  (column-number-mode nil)
-  (line-number-mode nil)
   (completion-ignore-case t)
   (completions-detailed t)
   (delete-by-moving-to-trash t)
-  ;; (display-line-numbers-width 3)
-  ;; (display-line-numbers-widen t)
   (delete-selection-mode 1)
   (enable-recursive minibuffers t)
   (find-ls-option '("-exec ls -ldh {} +" . "-ldh"))  ; find-dired results with human readable sizes
