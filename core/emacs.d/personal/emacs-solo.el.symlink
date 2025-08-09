@@ -1143,18 +1143,18 @@ and restart Flymake to apply the changes."
 ;;; ------------------- EMACS-SOLO CUSTOMS
 ;;; EMACS-SOLO-HOOKS
 ;;
-(use-package emacs-solo-hooks
-  :ensure nil
-  :no-require t
-  :defer t
-  :init
-
-  (defun emacs-solo/prefer-tabs ()
-    "Disables indent-tabs-mode, and prefer spaces over tabs."
-    (interactive)
-    (indent-tabs-mode -1))
-
-  (add-hook 'prog-mode-hook #'emacs-solo/prefer-tabs))
+;; (use-package emacs-solo-hooks
+;;   :ensure nil
+;;   :no-require t
+;;   :defer t
+;;   :init
+;;
+;;   (defun emacs-solo/prefer-tabs ()
+;;     "Disables indent-tabs-mode, and prefer spaces over tabs."
+;;     (interactive)
+;;     (indent-tabs-mode -1))
+;;
+;;   (add-hook 'prog-mode-hook #'emacs-solo/prefer-tabs))
 
 
 ;;; EMACS-SOLO-MOVEMENTS
