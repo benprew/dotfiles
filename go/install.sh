@@ -2,7 +2,7 @@
 
 set -e
 
-GOVERSION="1.24.5"
+GOVERSION="1.25.1"
 
 if ! (command -v go &>/dev/null && go version |grep $GOVERSION); then
     echo "Installing go$GOVERSION"
