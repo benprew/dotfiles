@@ -1,3 +1,2 @@
-vim-enhanced
 fish
 util-linux-user
