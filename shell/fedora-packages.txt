@@ -1,1 +1,2 @@
 ShellCheck
+nodejs-bash-language-server.noarch
