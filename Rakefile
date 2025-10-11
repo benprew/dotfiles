@@ -148,15 +148,15 @@ def install_module(m, symlinks_only = false)
         install_cmd: 'sudo apt install -y',
         packages_file: 'apt-packages.txt'
       },
-      pkcon: {
-        install_cmd: 'pkcon install -y',
+      dnf: {
+        install_cmd: 'sudo dnf install -y',
         packages_file: 'fedora-packages.txt'
-      }
+      },
     }
 
     pkg_provider = nil
     pkg_provider = :apt if system('command -v apt >/dev/null 2>&1')
-    pkg_provider = :pkcon if system('command -v pkcon >/dev/null 2>&1')
+    pkg_provider = :dnf if system('command -v dnf >/dev/null 2>&1')
 
     pkg_info = package_providers[pkg_provider]
     pkg_file = "#{m}/#{pkg_info[:packages_file]}"
