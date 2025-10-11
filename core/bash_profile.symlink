@@ -1,4 +1,6 @@
-## -*- mode: shell-script; sh-shell: bash; sh-basic-offset: 2; sh-indentation: 2; coding: utf-8 -*-
+#!/bin/bash
+
+# -*- mode: shell-script; sh-shell: bash; sh-basic-offset: 2; sh-indentation: 2; coding: utf-8 -*-
 # .bash_profile
 
 # Get the aliases and functions
@@ -16,4 +18,31 @@ if command -v brew &>/dev/null; then
    export PATH=$PATH:$(brew --prefix ruby)/bin;
 fi
 
-test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+export TERM=xterm-256color
+
+umask 0002
+mesg n
+
+function f () {
+  find . -wholename \*"${*}"\* -print
+}
+
+function add_path () {
+  if [ -d "$1" ]; then
+    export PATH=$PATH:$1
+  fi
+}
+
+shopt -s cdspell
+set -o emacs
+set completion-ignore-case On
+set bell-style none
+
+# Run this after everything else (so add_path is defined)
+for module in $(cat ~/.modules); do
+  module_init_path=$HOME/dotfiles/$module/init.sh
+  if [[ -e $module_init_path ]]; then
+    . $module_init_path
+  fi
+  PATH=$PATH:$HOME/dotfiles/$module/bin
+done

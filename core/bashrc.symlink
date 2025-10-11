@@ -1,41 +1,28 @@
 #!/bin/bash
+
 ## -*- mode: shell-script; sh-shell: bash; sh-basic-offset: 2; sh-indentation: 2; coding: utf-8 -*-
 
-# export PROMPT_COMMAND="$HOME/dotfiles/check_for_update"
+# All the default Omadora aliases and functions
+# (don't mess with these directly, just overwrite them here!)
+source ~/.local/share/omadora/default/bash/rc
 
-if [[ -f /etc/bashrc ]]; then
-  . /etc/bashrc
+# Source from .bashrc.d files
+if [ -d ~/.bashrc.d ]; then
+    for rc in ~/.bashrc.d/*; do
+        if [ -f "$rc" ]; then
+            . "$rc"
+        fi
+    done
 fi
+unset rc
 
-if [[ -L $HOME/.bashrc.local ]] && [[ -f $(readlink $HOME/.bashrc.local) ]]; then
-  . $HOME/.bashrc.local
-fi
 
-export TERM=xterm-256color
-
-umask 0002
-mesg n
-
-function f () {
-  find . -wholename \*"${*}"\* -print
-}
-
-function add_path () {
-  if [ -d "$1" ]; then
-    export PATH=$PATH:$1
-  fi
-}
-
-shopt -s cdspell
-set -o emacs
-set completion-ignore-case On
-set bell-style none
-
-# Run this after everything else (so add_path is defined)
-for module in $(cat ~/.modules); do
-  module_init_path=$HOME/dotfiles/$module/init.sh
-  if [[ -e $module_init_path ]]; then
-    . $module_init_path
-  fi
-  PATH=$PATH:$HOME/dotfiles/$module/bin
-done
+# if [[ -f /etc/bashrc ]]; then
+#   . /etc/bashrc
+# fi
+#
+# if [[ -L $HOME/.bashrc.local ]] && [[ -f $(readlink $HOME/.bashrc.local) ]]; then
+#   . $HOME/.bashrc.local
+# fi
+#
+alias claude="/home/ben/.claude/local/claude"
