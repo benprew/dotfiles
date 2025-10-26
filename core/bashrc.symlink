@@ -4,7 +4,9 @@
 
 # All the default Omadora aliases and functions
 # (don't mess with these directly, just overwrite them here!)
-source ~/.local/share/omadora/default/bash/rc
+if [[ -f ~/.local/share/omadora/default/bash/rc ]]; then
+    source ~/.local/share/omadora/default/bash/rc
+fi
 
 # Source from .bashrc.d files
 if [ -d ~/.bashrc.d ]; then
@@ -25,4 +27,3 @@ unset rc
 #   . $HOME/.bashrc.local
 # fi
 #
-alias claude="/home/ben/.claude/local/claude"
