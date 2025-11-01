@@ -23,6 +23,9 @@
 ;; (plist-put org-format-latex-options :scale 1.5)
 
 (setq org-export-backends '(ascii html icalendar latex md odt))
+(setq org-export-with-sub-superscripts nil)
+(setq org-use-sub-superscripts nil)
+
 
 (setq org-log-done t)  ; add timestamp when completing a todo item
 
@@ -32,6 +35,8 @@
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
+(add-to-list 'org-structure-template-alist '("rb" . "src ruby"))
+(add-to-list 'org-structure-template-alist '("lisp" . "src lisp"))
 (add-to-list 'org-structure-template-alist '("as-sql" . "src sql :engine postgres :dbhost as-linear.db.csas.csa.comscore.com :dbport 5439 :dbuser bprew :database live"))
 
 (setq org-todo-keywords
