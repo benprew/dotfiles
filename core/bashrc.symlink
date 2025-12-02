@@ -1,8 +1,6 @@
 #!/bin/bash
 ## -*- mode: shell-script; sh-shell: bash; sh-basic-offset: 2; sh-indentation: 2; coding: utf-8 -*-
 
-# export PROMPT_COMMAND="$HOME/dotfiles/check_for_update"
-
 if [[ -f /etc/bashrc ]]; then
   . /etc/bashrc
 fi
@@ -12,9 +10,7 @@ if [[ -L $HOME/.bashrc.local ]] && [[ -f $(readlink $HOME/.bashrc.local) ]]; the
 fi
 
 export TERM=xterm-256color
-
 umask 0002
-mesg n
 
 function f () {
   find . -wholename \*"${*}"\* -print
@@ -26,10 +22,24 @@ function add_path () {
   fi
 }
 
-shopt -s cdspell
-set -o emacs
-set completion-ignore-case On
-set bell-style none
+# only run if stdin is a terminal (needed for sddm login)
+if [ -t 0 ] && tty -s 2>/dev/null; then
+  if [[ -L $HOME/.bashrc.local ]] && [[ -f $(readlink "$HOME/.bashrc.local") ]]; then
+    . "$HOME/.bashrc.local"
+  fi
+
+  if [[ -f /etc/bashrc ]]; then
+    . /etc/bashrc
+  fi
+
+  mesg n
+  shopt -s cdspell
+  set -o emacs
+  set completion-ignore-case On
+  set bell-style none
+
+
+fi
 
 # Run this after everything else (so add_path is defined)
 for module in $(cat ~/.modules); do

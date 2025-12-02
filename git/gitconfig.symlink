@@ -1,63 +1,62 @@
 [user]
-	name = Ben Prew
-	email = ben@throwingbones.com
-	signingkey = FEEB1B3FD867173D8BCCD26C7E66F5759AFC82E0
+    name = Ben Prew
+    email = ben@throwingbones.com
 
 [alias]
-	lg = "log --pretty=format:'%C(yellow)%h%Creset %s %Cblue%d%Creset' --graph"
+    lg = "log --pretty=format:'%C(yellow)%h%Creset %s %Cblue%d%Creset' --graph"
 
 [color]
-	diff = auto
-	status = auto
-	branch = auto
-	interactive = auto
-	ui = auto
-	pager = true
+    diff = auto
+    status = auto
+    branch = auto
+    interactive = auto
+    ui = auto
+    pager = true
 [rerere]
-	enabled = true
-	autoupdate = true
+    enabled = true
+    autoupdate = true
 [core]
-	sharedRepository = group
-	compression = 9
-	preloadindex = true
-	excludesfile = ~/.gitignore_global
+    sharedRepository = group
+    compression = 9
+    preloadindex = true
+    excludesfile = ~/.gitignore_global
 [gc]
-	pruneExpire = 6 months ago
-	aggressiveWindow = 20
+    pruneExpire = 6 months ago
+    aggressiveWindow = 20
 [pack]
-	window = 20
-	compression = 9
-	threads = 0
+    window = 20
+    compression = 9
+    threads = 0
 [status]
-	submodulesummary = true
+    submodulesummary = true
 [push]
-	default = simple
-	autoSetupRemote = true
-	followTags = true
+    default = simple
+    autoSetupRemote = true
+    followTags = true
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [commit]
-	gpgsign = true
-	verbose = true
+    gpgsign = false
+    verbose = true
 [pull]
-	rebase = false
+    rebase = false
 [credential "https://github.com"]
-	helper =
-	helper = !/usr/bin/gh auth git-credential
+    helper =
+    helper = !/usr/bin/gh auth git-credential
 [column]
-	ui = auto
+    ui = auto
 [branch]
-	sort = -committerdate
+    sort = -committerdate
 [tag]
-	sort = version:refname
+    sort = version:refname
 [diff]
-	algorithm = histogram
-	colorMoved = plain
-	mnemonicPrefix = true
-	renames = true
+    algorithm = histogram
+    colorMoved = plain
+    mnemonicPrefix = true
+    renames = true
 [help]
-	autocorrect = prompt
+    autocorrect = prompt
 [rebase]
-	autoSquash = true
-	autoStash = true
-	updateRefs = true
+    autoSquash = true
+    autoStash = true
+    updateRefs = true

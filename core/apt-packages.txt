@@ -7,3 +7,4 @@ tmux
 zeal
 jq
 lm-sensors
+zstd

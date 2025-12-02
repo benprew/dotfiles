@@ -9,16 +9,6 @@ function add_path
     end
 end
 
-function git_branch
-    set -g git_branch (git rev-parse --abbrev-ref HEAD 2>/dev/null)
-    if [ $status -ne 0 ]
-        set -ge git_branch
-        set -g git_dirty_count 0
-    else
-        set -g git_dirty_count (git status --porcelain  | wc -l | sed "s/ //g")
-    end
-end
-
 function fish_prompt
     # c0 to c4 progress from dark to bright
     # ce is the error colour
@@ -33,17 +23,16 @@ function fish_prompt
     printf "$c3"
     echo -n (prompt_pwd)
 
-    git_branch
-    if set -q git_branch
-        printf " $c4($c2$git_branch$c4)"
+    # Use fish's built-in optimized git prompt
+    set -l git_info (fish_git_prompt)
+    if test -n "$git_info"
+        printf " $c4($c2%s$c4)" (string trim -c '() ' $git_info)
     end
 
     printf "\n$c4><> "
 end
 
 set -x EDITOR emacsclient
-
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
 for module in (cat ~/.modules)
     set module_init_path $HOME/dotfiles/$module/init.fish
