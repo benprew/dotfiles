@@ -1,3 +1,11 @@
+# Timing utilities for profiling startup
+set -g __config_start (date +%s%N)
+function __time_marker
+    set -l now (date +%s%N)
+    set -l elapsed (math "($now - $__config_start) / 1000000")
+    echo "[+$elapsed ms] $argv" >&2
+end
+
 function add_path
     set -l new_path $argv[1]
     if test -d $new_path
@@ -6,16 +14,6 @@ function add_path
         #
         # push path to front if it already exists
         fish_add_path --move $new_path
-    end
-end
-
-function git_branch
-    set -g git_branch (git rev-parse --abbrev-ref HEAD 2>/dev/null)
-    if [ $status -ne 0 ]
-        set -ge git_branch
-        set -g git_dirty_count 0
-    else
-        set -g git_dirty_count (git status --porcelain  | wc -l | sed "s/ //g")
     end
 end
 
@@ -33,9 +31,10 @@ function fish_prompt
     printf "$c3"
     echo -n (prompt_pwd)
 
-    git_branch
-    if set -q git_branch
-        printf " $c4($c2$git_branch$c4)"
+    # Use fish's built-in optimized git prompt
+    set -l git_info (fish_git_prompt)
+    if test -n "$git_info"
+        printf " $c4($c2%s$c4)" (string trim -c '() ' $git_info)
     end
 
     printf "\n$c4><> "
@@ -43,9 +42,10 @@ end
 
 set -x EDITOR emacsclient
 
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+__time_marker "Starting module loading"
 
 for module in (cat ~/.modules)
+    __time_marker "Loading module: $module"
     set module_init_path $HOME/dotfiles/$module/init.fish
     if test -e $module_init_path
         . $module_init_path
@@ -56,5 +56,9 @@ for module in (cat ~/.modules)
     end
 end
 
+__time_marker "Finished module loading"
+
 fish_add_path "/usr/local/bin"
 fish_add_path --append "/usr/local/sbin" "$HOME/bin"
+
+__time_marker "Config complete"
