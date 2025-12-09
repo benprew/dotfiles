@@ -2,16 +2,18 @@
 
 (use-package python-mode
   :ensure t
+  :defer t
   :bind ("C-c C-a" . btp/py-auto-eglot))
 
 (use-package pyvenv
   :ensure t
+  :defer t
   :init
   (setenv "WORKON_HOME" "~/.pyenv/versions"))
 
 (use-package blacken
-  :defer t
   :ensure t
+  :defer t
   :hook (python-mode . blacken-mode))
 
 (use-package jinja2-mode

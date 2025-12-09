@@ -38,11 +38,11 @@
 (setq create-lockfiles nil)
 
 (use-package graphviz-dot-mode
-  :defer 3
+  :defer t
   :ensure t)
 
 (use-package jq-mode
-  :defer 3
+  :defer t
   :ensure t
   :mode "\\.jq\\'")
 
@@ -101,17 +101,19 @@
   (add-hook 'flymake-diagnostic-functions #'flymake-jq-backend nil t)
   (flymake-mode 1))
 
-(treesit-add-and-install 'json "https://github.com/tree-sitter/tree-sitter-json")
+;; Only install tree-sitter grammars if not already available
+(unless (treesit-language-available-p 'json)
+  (treesit-add-and-install 'json "https://github.com/tree-sitter/tree-sitter-json"))
 (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
 (add-hook 'js-json-mode-hook #'setup-json-flymake)
 (add-hook 'json-ts-mode-hook #'setup-json-flymake)
 
-
-(treesit-add-and-install 'yaml "https://github.com/tree-sitter-grammars/tree-sitter-yaml")
+(unless (treesit-language-available-p 'yaml)
+  (treesit-add-and-install 'yaml "https://github.com/tree-sitter-grammars/tree-sitter-yaml"))
 ;; (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
 
 (use-package dumb-jump
-  :defer 1
+  :defer t
   :ensure t
   :config (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
@@ -134,6 +136,7 @@
 
 (use-package helpful
   :ensure t
+  :defer t
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -148,7 +151,8 @@
 
 ;; zeal is like dash documentation, but for linux
 (use-package zeal-at-point
-  :ensure t)
+  :ensure t
+  :defer t)
 (global-set-key "\C-cd" 'zeal-at-point)
 
 ;; Add magit to project.el selection
@@ -158,75 +162,75 @@
 
 ;; Improved search function (use f2) in isearch to show
 ;; From http://yummymelon.com/devnull/improving-emacs-isearch-usability-with-transient.html
-(require 'transient)
-(transient-define-prefix cc/isearch-menu ()
-  "Isearch Menu."
-  [["Edit Search String"
-    ("e"
-     "Edit the search string (recursive)"
-     isearch-edit-string
-     :transient nil)
-    ("w"
-     "Pull next word or character word from buffer"
-     isearch-yank-word-or-char
-     :transient nil)
-    ("s"
-     "Pull next symbol or character from buffer"
-     isearch-yank-symbol-or-char
-     :transient nil)
-    ("l"
-     "Pull rest of line from buffer"
-     isearch-yank-line
-     :transient nil)
-    ("y"
-     "Pull string from kill ring"
-     isearch-yank-kill
-     :transient nil)
-    ("t"
-     "Pull thing from buffer"
-     isearch-forward-thing-at-point
-     :transient nil)]
-
-   ["Replace"
-    ("q"
-     "Start ‘query-replace’"
-     isearch-query-replace
-     :if-nil buffer-read-only
-     :transient nil)
-    ("x"
-     "Start ‘query-replace-regexp’"
-     isearch-query-replace-regexp
-     :if-nil buffer-read-only
-     :transient nil)]]
-
-  [["Toggle"
-    ("X"
-     "Toggle regexp searching"
-     isearch-toggle-regexp
-     :transient nil)
-    ("S"
-     "Toggle symbol searching"
-     isearch-toggle-symbol
-     :transient nil)
-    ("W"
-     "Toggle word searching"
-     isearch-toggle-word
-     :transient nil)
-    ("F"
-     "Toggle case fold"
-     isearch-toggle-case-fold
-     :transient nil)
-    ("L"
-     "Toggle lax whitespace"
-     isearch-toggle-lax-whitespace
-     :transient nil)]
-
-   ["Misc"
-    ("o"
-     "occur"
-     isearch-occur
-     :transient nil)]])
-
-(define-key isearch-mode-map (kbd "<f2>") 'cc/isearch-menu)
+;; (require 'transient)
+;; (transient-define-prefix cc/isearch-menu ()
+;;   "Isearch Menu."
+;;   [["Edit Search String"
+;;     ("e"
+;;      "Edit the search string (recursive)"
+;;      isearch-edit-string
+;;      :transient nil)
+;;     ("w"
+;;      "Pull next word or character word from buffer"
+;;      isearch-yank-word-or-char
+;;      :transient nil)
+;;     ("s"
+;;      "Pull next symbol or character from buffer"
+;;      isearch-yank-symbol-or-char
+;;      :transient nil)
+;;     ("l"
+;;      "Pull rest of line from buffer"
+;;      isearch-yank-line
+;;      :transient nil)
+;;     ("y"
+;;      "Pull string from kill ring"
+;;      isearch-yank-kill
+;;      :transient nil)
+;;     ("t"
+;;      "Pull thing from buffer"
+;;      isearch-forward-thing-at-point
+;;      :transient nil)]
+;;
+;;    ["Replace"
+;;     ("q"
+;;      "Start ‘query-replace’"
+;;      isearch-query-replace
+;;      :if-nil buffer-read-only
+;;      :transient nil)
+;;     ("x"
+;;      "Start ‘query-replace-regexp’"
+;;      isearch-query-replace-regexp
+;;      :if-nil buffer-read-only
+;;      :transient nil)]]
+;;
+;;   [["Toggle"
+;;     ("X"
+;;      "Toggle regexp searching"
+;;      isearch-toggle-regexp
+;;      :transient nil)
+;;     ("S"
+;;      "Toggle symbol searching"
+;;      isearch-toggle-symbol
+;;      :transient nil)
+;;     ("W"
+;;      "Toggle word searching"
+;;      isearch-toggle-word
+;;      :transient nil)
+;;     ("F"
+;;      "Toggle case fold"
+;;      isearch-toggle-case-fold
+;;      :transient nil)
+;;     ("L"
+;;      "Toggle lax whitespace"
+;;      isearch-toggle-lax-whitespace
+;;      :transient nil)]
+;;
+;;    ["Misc"
+;;     ("o"
+;;      "occur"
+;;      isearch-occur
+;;      :transient nil)]])
+;;
+;; (define-key isearch-mode-map (kbd "<f2>") 'cc/isearch-menu)
 
 ;; End improved search

@@ -1,6 +1,7 @@
 (use-package gptel
   :vc (:url "https://github.com/karthink/gptel" :branch "master")
   :ensure t
+  :defer t
   :config
   (setq
    gptel-model 'gemini-2.5-flash-preview-04-17
@@ -12,6 +13,7 @@
 
 (use-package aidermacs
   :ensure t
+  :defer t
   :vc (:url "https://github.com/MatthewZMD/aidermacs" :branch "master")
   :config
   (setenv "ANTHROPIC_API_KEY"
