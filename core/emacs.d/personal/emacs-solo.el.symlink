@@ -62,7 +62,6 @@
   (remote-file-name-inhibit-delete-by-moving-to-trash t)
   (remote-file-name-inhibit-auto-save t)
   (resize-mini-windows 'grow-only)
-  (ring-bell-function #'ignore)
   ;; (scroll-conservatively 8)
   (scroll-margin 5)
   (savehist-save-minibuffer-history t)    ; t is default
@@ -276,16 +275,20 @@
 
 ;;; ICOMPLETE
 (use-package icomplete
+  :defer t
   :bind (:map icomplete-minibuffer-map
               ("C-n" . icomplete-forward-completions)
               ("C-p" . icomplete-backward-completions)
               ("C-v" . icomplete-vertical-toggle)
               ("RET" . icomplete-force-complete-and-exit)
               ("C-j" . exit-minibuffer)) ;; So we can exit commands like `multi-file-replace-regexp-as-diff'
-  :hook
-  (after-init . (lambda ()
-                  (fido-mode -1)
-                  (icomplete-vertical-mode 1)))
+  :init
+  ;; Defer icomplete activation to idle time to speed up startup
+  (run-with-idle-timer 0.5 nil
+                       (lambda ()
+                         (require 'icomplete)
+                         (fido-mode -1)
+                         (icomplete-vertical-mode 1)))
   :config
   (setq icomplete-delay-completions-threshold 0)
   (setq icomplete-compute-delay 0)
@@ -995,8 +998,9 @@ and restart Flymake to apply the changes."
 (use-package which-key
   :defer t
   :ensure nil
-  :hook
-  (after-init . which-key-mode)
+  :init
+  ;; Defer which-key activation to idle time to speed up startup
+  (run-with-idle-timer 0.5 nil #'which-key-mode)
   :config
   (setq which-key-separator "  ")
   (setq which-key-prefix-prefix "... ")
@@ -1017,90 +1021,6 @@ and restart Flymake to apply the changes."
      ("Google" . [simple-query "www.google.com" "www.google.com/search?q=" ""])
      ("YouTube" . [simple-query "www.youtube.com/feed/subscriptions" "www.youtube.com/rnesults?search_query=" ""])
      ("ChatGPT" . [simple-query "https://chatgpt.com" "https://chatgpt.com/?q=" ""]))))
-
- ;;; THEMES
-(use-package modus-themes
-  :ensure nil
-  :defer t
-  :custom
-  (modus-themes-italic-constructs t)
-  (modus-themes-bold-constructs t)
-  (modus-themes-mixed-fonts nil)
-  (modus-themes-prompts '(bold intense))
-  (modus-themes-common-palette-overrides
-   `((bg-main "#292D3E")
-     (bg-active bg-main)
-     (fg-main "#EEFFFF")
-     (fg-active fg-main)
-     (fg-mode-line-active "#A6Accd")
-     (bg-mode-line-active "#232635")
-     (fg-mode-line-inactive "#676E95")
-     (bg-mode-line-inactive "#282c3d")
-     ;; (border-mode-line-active "#676E95")
-     ;; (border-mode-line-inactive bg-dim)
-     (border-mode-line-active nil)
-     (border-mode-line-inactive nil)
-     (bg-tab-bar      "#242837")
-     (bg-tab-current  bg-main)
-     (bg-tab-other    "#242837")
-     (fg-prompt "#c792ea")
-     (bg-prompt unspecified)
-     (bg-hover-secondary "#676E95")
-     (bg-completion "#2f447f")
-     (fg-completion white)
-     (bg-region "#3C435E")
-     (fg-region white)
-
-     (fg-line-number-active fg-main)
-     (fg-line-number-inactive "gray50")
-     (bg-line-number-active unspecified)
-     (bg-line-number-inactive "#292D3E")
-     (fringe "#292D3E")
-
-     (fg-heading-0 "#82aaff")
-     (fg-heading-1 "#82aaff")
-     (fg-heading-2 "#c792ea")
-     (fg-heading-3 "#bb80b3")
-     (fg-heading-4 "#a1bfff")
-
-     (fg-prose-verbatim "#c3e88d")
-     (bg-prose-block-contents "#232635")
-     (fg-prose-block-delimiter "#676E95")
-     (bg-prose-block-delimiter bg-prose-block-contents)
-
-     (accent-1 "#79a8ff")
-
-     (keyword "#89DDFF")
-     (builtin "#82aaff")
-     (comment "#676E95")
-     (string "#c3e88d")
-     (fnname "#82aaff")
-     (type "#c792ea")
-     (variable "#c792ea")
-     (docstring "#8d92af")
-     (constant "#f78c6c")))
-    :config
-    (modus-themes-with-colors
-      (custom-set-faces
-       `(tab-bar
-         ((,c
-           :background "#232635"
-           :foreground "#A6Accd"
-           ;; :box (:line-width 1 :color "#676E95")
-           )))
-       `(tab-bar-tab
-         ((,c
-           ;; :background "#232635"
-           ;; :underline t
-           ;; :box (:line-width 1 :color "#676E95")
-         )))
-       `(tab-bar-tab-inactive
-         ((,c
-           ;; :background "#232635"
-           ;; :box (:line-width 1 :color "#676E95")
-           )))))
-  :init
-  (load-theme 'modus-vivendi-tinted t))
 
 
 ;;; -------------------- NON TREESITTER AREA
@@ -1195,54 +1115,6 @@ and restart Flymake to apply the changes."
 
   (global-set-key (kbd "C-v") #'emacs-solo-movements/scroll-down-centralize)
   (global-set-key (kbd "M-v") #'emacs-solo-movements/scroll-up-centralize)
-
-
-  (defun emacs-solo-movements/format-current-file ()
-    "Format the current file using biome if biome.json is present; otherwise, use prettier.
-Also first tries the local node_modules/.bin and later the global bin."
-    (interactive)
-    (let* ((file (buffer-file-name))
-           (project-root (locate-dominating-file file "node_modules"))
-           (biome-config (and project-root (file-exists-p (expand-file-name "biome.json" project-root))))
-           (local-biome (and project-root (expand-file-name "node_modules/.bin/biome" project-root)))
-           (global-biome (executable-find "biome"))
-           (local-prettier (and project-root (expand-file-name "node_modules/.bin/prettier" project-root)))
-           (global-prettier (executable-find "prettier"))
-           (formatter nil)
-           (source nil)
-           (command nil)
-           (start-time (float-time))) ;; Capture the start time
-      (cond
-       ;; Use Biome if biome.json exists
-       ((and biome-config local-biome (file-executable-p local-biome))
-        (setq formatter local-biome)
-        (setq source "biome (local)")
-        (setq command (format "%s format --write %s" formatter (shell-quote-argument file))))
-       ((and biome-config global-biome)
-        (setq formatter global-biome)
-        (setq source "biome (global)")
-        (setq command (format "%s format --write %s" formatter (shell-quote-argument file))))
-
-       ;; Fall back to Prettier if no biome.json
-       ((and local-prettier (file-executable-p local-prettier))
-
-        (setq formatter local-prettier)
-        (setq source "prettier (local)")
-        (setq command (format "%s --write %s" formatter (shell-quote-argument file))))
-       ((and global-prettier)
-        (setq formatter global-prettier)
-        (setq source "prettier (global)")
-        (setq command (format "%s --write %s" formatter (shell-quote-argument file)))))
-      (if command
-          (progn
-            (save-buffer)
-            (shell-command command)
-            (revert-buffer t t t)
-            (let ((elapsed-time (* 1000 (- (float-time) start-time)))) ;; Calculate elapsed time in ms
-              (message "Formatted with %s - %.2f ms" source elapsed-time)))
-        (message "No formatter found (biome or prettier)"))))
-
-  (global-set-key (kbd "C-c p") #'emacs-solo-movements/format-current-file)
 
 
   (defun emacs-solo/transpose-split ()
@@ -1628,38 +1500,6 @@ Windows are labeled starting from the top-left window and proceeding top to bott
   ;; (add-hook 'newsticker-treeview-list-mode-hook 'emacs-solo/timed-center-visual-fill-on)
   ;; (add-hook 'newsticker-treeview-item-mode-hook 'emacs-solo/timed-center-visual-fill-on)
   )
-
-
-;;; EMACS-SOLO-0x0
-;;
-;; Inspired by: https://codeberg.org/daviwil/dotfiles/src/branch/master/Emacs.org#headline-28
-(use-package emacs-solo-0x0
-  :ensure nil
-  :no-require t
-  :defer t
-  :init
-  (defun emacs-solo/0x0-upload-text ()
-    (interactive)
-    (let* ((contents (if (use-region-p)
-                         (buffer-substring-no-properties (region-beginning) (region-end))
-                       (buffer-string)))
-           (temp-file (make-temp-file "0x0" nil ".txt" contents)))
-      (message "Sending %s to 0x0.st..." temp-file)
-      (let ((url (string-trim-right
-                  (shell-command-to-string
-                   (format "curl -s -F'file=@%s' https://0x0.st" temp-file)))))
-        (message "The URL is %s" url)
-        (kill-new url)
-        (delete-file temp-file))))
-
-  (defun emacs-solo/0x0-upload-file (file-path)
-    (interactive "fSelect a file to upload: ")
-    (message "Sending %s to 0x0.st..." file-path)
-    (let ((url (string-trim-right
-                (shell-command-to-string
-                 (format "curl -s -F'file=@%s' https://0x0.st" (expand-file-name file-path))))))
-      (message "The URL is %s" url)
-      (kill-new url))))
 
 
 ;;; EMACS-SOLO-SUDO-EDIT
