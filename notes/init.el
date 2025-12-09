@@ -5,103 +5,119 @@
 ;;; Code:
 (require 'use-package)
 
+;; Agenda files setup - deferred until org-agenda is used
+(defvar notes-dir-scanned nil
+  "Whether we've scanned the notes directory for org-agenda-files.")
+
+(defun notes-ensure-agenda-files ()
+  "Scan notes directory for org files if not already done."
+  (unless notes-dir-scanned
+    (setq org-agenda-files (directory-files-recursively "~/notes/" "\\`[^.].*\\.org\\'"))
+    (setq notes-dir-scanned t)))
+
+(with-eval-after-load 'org-agenda
+  (notes-ensure-agenda-files))
+
+;; Main org-mode configuration
 (use-package org
+  :defer t
   :bind (:map org-mode-map
-         ("C-c t e" . org-table-export)))
+         ("C-c t e" . org-table-export))
+  :hook
+  ((org-mode . visual-line-mode)
+   (org-mode . (lambda () (whitespace-mode -1))))
+  :custom
+  (org-reverse-note-order t)
+  (org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
+  (org-startup-indented t)
+  (org-export-with-sub-superscripts '{})
+  (org-export-backends '(ascii html icalendar latex md odt))
+  (org-use-sub-superscripts nil)
+  (org-log-done t)  ; add timestamp when completing a todo item
+  (org-todo-keywords
+   '((sequence "TODO(t)" "IN PROGRESS(i)" "|" "DONE(d)")
+     (sequence "LATER(l)" "|" "NEVER")))
+  (org-agenda-custom-commands
+   '(("t" todo "TODO" nil)
+     ("i" todo "IN PROGRESS" nil)
+     ("l" todo "LATER" nil)
+     ("d" todo "DONE" nil)
+     ("n" todo "NEVER" nil))))
 
-;; (setq org-agenda-files '("~/notes/"))
-;; Too many org files can cause slowdown in agenda building
-;; see https://d12frosted.io/posts/2021-01-16-task-management-with-roam-vol5.html for a way to limit files
-(setq org-agenda-files (directory-files-recursively "~/notes/" "\\`[^.].*\\.org\\'"))
-(setq org-reverse-note-order t)
-(setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
-(setq org-startup-indented t)
-(setq org-export-with-sub-superscripts '{})
-(add-hook 'org-mode-hook (lambda () (whitespace-mode -1)))
-(add-hook 'org-mode-hook #'visual-line-mode)
-;; bigger latex fragment -- needs to be run once org is loaded?
-;; (plist-put org-format-latex-options :scale 1.5)
+;; org-tempo for quick code block templates (<s, <e, etc.)
+(use-package org-tempo
+  :ensure nil
+  :after org
+  :config
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
+  (add-to-list 'org-structure-template-alist '("rb" . "src ruby"))
+  (add-to-list 'org-structure-template-alist '("lisp" . "src lisp"))
+  (add-to-list 'org-structure-template-alist '("as-sql" . "src sql :engine postgres :dbhost as-linear.db.csas.csa.comscore.com :dbport 5439 :dbuser bprew :database live")))
 
-(setq org-export-backends '(ascii html icalendar latex md odt))
-(setq org-export-with-sub-superscripts nil)
-(setq org-use-sub-superscripts nil)
+;; org-crypt for encrypting org subtrees
+(use-package org-crypt
+  :ensure nil
+  :after org
+  :config
+  (org-crypt-use-before-save-magic)
+  (setq org-tags-exclude-from-inheritance '("crypt"))
+  (setq org-crypt-key "FEEB1B3FD867173D8BCCD26C7E66F5759AFC82E0"))
 
+;; epa-file for handling encrypted files
+(use-package epa-file
+  :ensure nil
+  :after org
+  :config
+  (epa-file-enable)
+  (setq epa-file-select-keys "ben@throwingbones.com"))
 
-(setq org-log-done t)  ; add timestamp when completing a todo item
+;; ox-md for markdown export
+(use-package ox-md
+  :ensure nil
+  :after ox)
 
-(require 'ox-md) ; markdown exports
+;; ob (org-babel) for executing code blocks
+(use-package ob
+  :ensure nil
+  :after org
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((sql . t)
+     (dot . t)
+     (python . t)
+     (shell . t)))
 
-(require 'org-tempo)
-(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-(add-to-list 'org-structure-template-alist '("py" . "src python"))
-(add-to-list 'org-structure-template-alist '("sql" . "src sql"))
-(add-to-list 'org-structure-template-alist '("rb" . "src ruby"))
-(add-to-list 'org-structure-template-alist '("lisp" . "src lisp"))
-(add-to-list 'org-structure-template-alist '("as-sql" . "src sql :engine postgres :dbhost as-linear.db.csas.csa.comscore.com :dbport 5439 :dbuser bprew :database live"))
+  (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
+  (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "IN PROGRESS(i)" "|" "DONE(d)")
-        (sequence "LATER(l)" "|" "NEVER")))
+  (defun my-org-confirm-babel-evaluate (lang body)
+    "Don't ask for confirmation when evaluating dot code blocks."
+    (not (string= lang "dot")))
+  (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate))
 
-
-(setq org-agenda-custom-commands
-      '(("t" todo "TODO" nil)
-        ("i" todo "IN PROGRESS" nil)
-        ("l" todo "LATER" nil)
-        ("d" todo "DONE" nil)
-        ("n" todo "NEVER" nil)))
-
+;; visual-fill-column for better reading experience
 (use-package visual-fill-column
   :ensure t
-  :config
-  ;; unset because it gets into a loop on linliveanalytics1
-  (if (and (> emacs-major-version 25) (display-graphic-p))
-      (add-hook 'org-mode-hook #'visual-fill-column-mode)))
+  :defer t
+  :hook (org-mode . visual-fill-column-mode))
 
-(use-package markdown-mode
-  :ensure t
-  :defer 1
-  :mode "\\.md\\'"
-  :hook
-  (markdown-mode . visual-line-mode)
-  (markdown-mode . (lambda () (whitespace-mode -1)))
-  :config
-  ;; Markdown formatting
-  (setq markdown-gfm-use-electric-backquote nil))
-
+;; org-preview-html for previewing org exports in browser
 (use-package org-preview-html
   :ensure t
-  :defer 1)
+  :defer t
+  :after org)
 
-(require 'org-crypt)
-(org-crypt-use-before-save-magic)
-(setq org-tags-exclude-from-inheritance '("crypt"))
-
-;; GPG key to use for encryption
-;; Either the Key ID or set to nil to use symmetric encryption.
-(setq org-crypt-key "FEEB1B3FD867173D8BCCD26C7E66F5759AFC82E0")
-
-;; Auto-saving does not cooperate with org-crypt.el: so you need to
-;; turn it off if you plan to use org-crypt.el quite often.  Otherwise,
-;; you'll get an (annoying) message each time you start Org.
-;; (setq auto-save-default nil)
-
-(require 'epa-file)
-(epa-file-enable)
-(setq epa-file-select-keys "ben@throwingbones.com")
-
-;; active Babel languages
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((sql . t)
-   (dot . t)
-   (python . t)
-   (shell . t)))
-
-(add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
-(add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
-
-(defun my-org-confirm-babel-evaluate (lang body)
-  (not (string= lang "dot")))  ; don't ask for dot
-(setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+;; markdown-mode for editing markdown files
+(use-package markdown-mode
+  :ensure t
+  :defer t
+  :mode "\\.md\\'"
+  :hook
+  ((markdown-mode . visual-line-mode)
+   (markdown-mode . (lambda () (whitespace-mode -1))))
+  :custom
+  (markdown-gfm-use-electric-backquote nil))
