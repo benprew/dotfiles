@@ -29,8 +29,9 @@
 
 (setq org-log-done t)  ; add timestamp when completing a todo item
 
-(require 'org-tempo)
+(require 'ox-md) ; markdown exports
 
+(require 'org-tempo)
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
