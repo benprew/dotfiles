@@ -547,6 +547,7 @@
 (minimal-emacs-load-user-init "post-init.el")
 
 (set-face-font 'default "JetBrains Mono 10")
+(put 'downcase-region 'disabled nil)
 
 (provide 'init)
 ;;; init.el ends here
