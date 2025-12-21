@@ -25,7 +25,18 @@
          ("C-c t e" . org-table-export))
   :hook
   ((org-mode . visual-line-mode)
-   (org-mode . (lambda () (whitespace-mode -1))))
+   (org-mode . (lambda () (whitespace-mode -1)))
+   (org-mode . (lambda ()
+                 ;; Enable truncation when inside tables to prevent wrapping
+                 (add-hook 'post-command-hook
+                           (lambda ()
+                             (if (org-at-table-p)
+                                 (progn
+                                   (setq-local truncate-lines t)
+                                   (setq-local fill-column 200))
+                               (setq-local truncate-lines nil)
+                               (kill-local-variable 'fill-column)))
+                           nil t))))
   :custom
   (org-reverse-note-order t)
   (org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
@@ -103,7 +114,10 @@
 (use-package visual-fill-column
   :ensure t
   :defer t
-  :hook (org-mode . visual-fill-column-mode))
+  :hook (org-mode . visual-fill-column-mode)
+  :custom
+  (visual-fill-column-width 82)  ;match fill-column length
+  (visual-fill-column-center-text t))
 
 ;; org-preview-html for previewing org exports in browser
 (use-package org-preview-html

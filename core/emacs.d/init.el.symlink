@@ -358,10 +358,6 @@
 ;; longer comments or docstrings that span multiple lines.
 (setq comment-multi-line t)
 
-;; We often split terminals and editor windows or place them side-by-side,
-;; making use of the additional horizontal space.
-(setq-default fill-column 80)
-
 ;; Disable the obsolete practice of end-of-line spacing from the
 ;; typewriter era.
 (setq sentence-end-double-space nil)
