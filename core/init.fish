@@ -9,8 +9,9 @@ end
 
 set script_dir (dirname (status --current-filename))
 
-if status --is-interactive
-    . $script_dir/base16-ashes.fish
-end
+# this causes extreme slowdown starting a new shell with cosmic terminal
+# if status --is-interactive
+#     . $script_dir/base16-ashes.fish
+# end
 
 set -U fish_greeting
