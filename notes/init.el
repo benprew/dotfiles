@@ -26,6 +26,7 @@
   :hook
   ((org-mode . visual-line-mode)
    (org-mode . (lambda () (whitespace-mode -1)))
+   (org-mode . flyspell-mode)
    (org-mode . (lambda ()
                  ;; Enable truncation when inside tables to prevent wrapping
                  (add-hook 'post-command-hook
@@ -132,6 +133,7 @@
   :mode "\\.md\\'"
   :hook
   ((markdown-mode . visual-line-mode)
+   (markdown-mode . flyspell-mode)
    (markdown-mode . (lambda () (whitespace-mode -1))))
   :custom
   (markdown-gfm-use-electric-backquote nil))
