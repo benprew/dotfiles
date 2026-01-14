@@ -17,3 +17,5 @@ fi
 python3 -m pip install aider-install $BREAK_SYSTEM_PACKAGES_FLAG
 
 aider-install
+
+ai/install_gemini.sh
