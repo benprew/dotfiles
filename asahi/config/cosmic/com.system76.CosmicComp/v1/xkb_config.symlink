@@ -1,0 +1,7 @@
+(
+    rules: "",
+    model: "",
+    layout: "us",
+    variant: "",
+    options: Some("altwin:swap_alt_win,caps:ctrl_modifier"),
+)
