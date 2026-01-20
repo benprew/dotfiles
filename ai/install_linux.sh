@@ -7,6 +7,13 @@ else
   OS=""
 fi
 
+NODE_VERSION=$(nodejs --version |cut -f1 -d. |grep -oP '\d+')
+# install nodejs 20 (needed for gemini)
+if [[ "$OS" == "Ubuntu" ]] && [ "$(echo "$NODE_VERSION >= 20" | bc -l)" -eq 0 ]; then
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    sudo apt install nodejs -y
+fi
+
 # Determine if the --break-system-packages flag should be used
 BREAK_SYSTEM_PACKAGES_FLAG=""
 if [[ "$OS" == "Ubuntu" ]] && [ "$(echo "$VERSION_ID >= 24.04" | bc -l)" -eq 1 ]; then
