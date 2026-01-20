@@ -30,14 +30,6 @@ npm install @google/gemini-cli
 # Note: npm installs the binary into node_modules/.bin/
 ln -sf "$INSTALL_DIR/node_modules/.bin/gemini" "$BIN_DIR/gemini"
 
-# 7. Check if ~/.local/bin is in the PATH
-if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
-    echo ""
-    echo "Adding $BIN_DIR to your .bashrc..."
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
-    echo "Please run 'source ~/.bashrc' after this script finishes."
-fi
-
 echo "------------------------------------------------"
 echo "Installation Successful!"
 echo "------------------------------------------------"
