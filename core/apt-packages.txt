@@ -8,3 +8,4 @@ zeal
 jq
 lm-sensors
 zstd
+restic
