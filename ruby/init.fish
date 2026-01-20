@@ -1,5 +1,5 @@
 set gem_bin_dir (ruby -r rubygems -e 'puts Gem.user_dir')/bin
-add_path gem_bin_dir
+add_path $gem_bin_dir
 
 if test -d ~/.rbenv
     add_path $HOME/.rbenv/bin
