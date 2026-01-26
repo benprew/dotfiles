@@ -6,6 +6,6 @@ HOSTNAME=$(hostname)
 export PATH=$PATH:/usr/bin # restic lives in /usr/bin on fedora
 
 export RESTIC_REPOSITORY="sftp:ben@nas.local:/mnt/nas/backup/$HOSTNAME"
-export RESTIC_PASSWORD_FILE="$HOME/.restic_pass"
+export RESTIC_PASSWORD_FILE="$HOME/secrets/.restic_pass"
 
 restic check --read-data
