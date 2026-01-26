@@ -23,10 +23,20 @@ To get started:
 ```
 $ git clone https://github.com/benprew/dotfiles.git
 $ cd dotfiles
-$ rake setup_modules
+$ ./install.py setup_modules
 $ <edit ~/.modules as appropriate>
-$ rake install
+$ ./install.py
 ```
+
+The first run creates `~/.modules` from a template. Edit it to select which
+modules to install, then run again to install them.
+
+Available commands:
+- `./install.py` or `./install.py install` - Install all modules
+- `./install.py install_module <name>` - Install a specific module
+- `./install.py uninstall` - Remove all symlinks (restores backups if present)
+- `./install.py update` - Fetch updates from git origin
+- `--symlinks-only` - Skip package installation and scripts, only create symlinks
 
 Adding a new module is simple. Just make a directory, drop `init.sh`
 and/or `init.el` and/or `<something>.symlink` into it, and list it in
