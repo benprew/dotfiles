@@ -1,0 +1,58 @@
+# IMAP Account Settings
+IMAPAccount gmail
+Host imap.gmail.com
+User ben.prew@gmail.com
+PassCmd "gpg --quiet --decrypt ~/.mbsync-password.gpg"
+AuthMechs LOGIN
+TLSType IMAPS
+
+# Remote Store (The Server)
+IMAPStore gmail-remote
+Account gmail
+
+# Local Store (Your Computer)
+MaildirStore gmail-local
+Subfolders Verbatim
+# This is where your mail will live. Create this folder first!
+Path ~/Mail/gmail/
+Inbox ~/Mail/gmail/INBOX
+Flatten .
+
+# --- CHANNELS ---
+
+Channel gmail-inbox
+Far :gmail-remote:
+Near :gmail-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel gmail-sent
+Far :gmail-remote:"[Gmail]/Sent Mail"
+Near :gmail-local:sent
+Create Both
+Expunge Both
+SyncState *
+
+Channel gmail-trash
+Far :gmail-remote:"[Gmail]/Trash"
+Near :gmail-local:trash
+Create Both
+Expunge Both
+SyncState *
+
+# Optional: Sync all mail (Careful! This can be many GBs)
+Channel gmail-all
+Far :gmail-remote:"[Gmail]/All Mail"
+Near :gmail-local:all
+Create Both
+Expunge Both
+SyncState *
+
+# --- GROUPS ---
+Group gmail
+Channel gmail-inbox
+Channel gmail-sent
+Channel gmail-trash
+Channel gmail-all

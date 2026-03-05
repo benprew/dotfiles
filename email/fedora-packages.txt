@@ -1,0 +1,6 @@
+notmuch
+isync
+sasl-xoauth2
+cyrus-sasl
+maildir-utils
+msmtp
