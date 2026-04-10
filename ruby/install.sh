@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gem install --user rubocop pry
+gem install --user rubocop pry ruby-lsp
