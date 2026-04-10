@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# export NODE_PATH=$HOME/node_modules
-
 # Check if we're in a git worktree and need to bind the main .git directory
 EXTRA_BINDS=""
 if [ -f .git ]; then
@@ -32,6 +30,8 @@ exec bwrap \
   --share-net \
   --die-with-parent \
   --new-session \
+  --bind "$HOME/.gitconfig" "$HOME/.gitconfig" \
+  --bind "$HOME/dotfiles" "$HOME/dotfiles" \
   --bind "$HOME/.local/bin" "$HOME/.local/bin" \
   --bind "$HOME/.local/share/claude" "$HOME/.local/share/claude" \
   --bind "$HOME/.claude.json" "$HOME/.claude.json" \
