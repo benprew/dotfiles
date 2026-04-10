@@ -1,22 +1,23 @@
 [user]
     name = Ben Prew
     email = ben@throwingbones.com
-
+    signingkey = FEEB1B3FD867173D8BCCD26C7E66F5759AFC82E0
 [alias]
     lg = "log --pretty=format:'%C(yellow)%h%Creset %s %Cblue%d%Creset' --graph"
+    hotfiles = "!git log --format=format: --name-only --since='1 year ago' | sort | uniq -c | sort -nr | head -20"
+    contributors = "shortlog -sn --no-merges"
+    recent-contributors = "shortlog -sn --no-merges --since='6 months ago'"
+    bugfiles = "!git log -i -E --grep='fix|bug|broken' --name-only --format='' | sort | uniq -c | sort -nr | head -20"
+    velocity = "!git log --format='%ad' --date=format:'%Y-%m' | sort | uniq -c"
+    hotfixes = "!git log --oneline --since='1 year ago' | grep -iE 'revert|hotfix|emergency|rollback'"
 
 [color]
-    diff = auto
-    status = auto
-    branch = auto
-    interactive = auto
     ui = auto
     pager = true
 [rerere]
     enabled = true
     autoupdate = true
 [core]
-    sharedRepository = group
     compression = 9
     preloadindex = true
     excludesfile = ~/.gitignore_global
@@ -30,16 +31,15 @@
 [status]
     submodulesummary = true
 [push]
-    default = simple
     autoSetupRemote = true
     followTags = true
 [init]
     defaultBranch = main
 [commit]
-    gpgsign = false
+    gpgsign = true
     verbose = true
 [pull]
-    rebase = false
+    rebase = true
 [credential "https://github.com"]
     helper =
     helper = !/usr/bin/gh auth git-credential
@@ -49,11 +49,22 @@
     sort = -committerdate
 [tag]
     sort = version:refname
+[fetch]
+    prune = true
+    prunetags = true
+    fsckobjects = true
+[transfer]
+    fsckobjects = true
+[receive]
+    fsckobjects = true
+[merge]
+    conflictstyle = zdiff3
 [diff]
     algorithm = histogram
     colorMoved = plain
     mnemonicPrefix = true
     renames = true
+    wsErrorHighlight = all
 [help]
     autocorrect = prompt
 [rebase]
