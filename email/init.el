@@ -44,6 +44,51 @@
   ;; 4. Useful Keybindings
   (define-key mu4e-main-mode-map (kbd "j") 'mu4e-jump-to-maildir)
 
-  ;; 4. Integration with Org-Mode (The Killer Feature)
+  ;; 4. Integration with Org-Mode
   (require 'mu4e-org)
-  (setq mu4e-org-contacts-file  "~/org/contacts.org"))
+  (setq mu4e-org-contacts-file "~/org/contacts.org")
+
+  ;; 5. Auto-add contacts from messages
+  (add-to-list 'mu4e-headers-actions
+               '("org-contact-add" . mu4e-action-add-org-contact) t)
+  (add-to-list 'mu4e-view-actions
+               '("org-contact-add" . mu4e-action-add-org-contact) t))
+
+;; Compose to a contact group by :GROUP: property
+(defun my/mu4e-compose-to-group (group)
+  "Compose an email to all org-contacts in GROUP."
+  (interactive
+   (list (completing-read "Group: "
+                          (seq-uniq
+                           (org-map-entries
+                            (lambda () (org-entry-get nil "GROUP"))
+                            "GROUP={.+}" org-contacts-files)))))
+  (let ((emails (org-map-entries
+                 (lambda () (org-entry-get nil "EMAIL"))
+                 (format "GROUP={%s}" group) org-contacts-files)))
+    (compose-mail (string-join emails ", "))))
+
+(define-key mu4e-main-mode-map (kbd "G") 'my/mu4e-compose-to-group)
+
+;; org-contacts: manage contacts in org-mode, integrates with mu4e
+(use-package org-contacts
+  :ensure t
+  :after org
+  :config
+  (setq org-contacts-files '("~/org/contacts.org"))
+
+  ;; Add org-contacts to capture templates for quick contact creation
+  (add-to-list 'org-capture-templates
+               '("c" "Contact" entry (file "~/org/contacts.org")
+                 "* %^{Name}
+:PROPERTIES:
+:EMAIL: %^{Email}
+:GROUP: %^{Group|friends|family|work|other}
+:END:"
+                 :empty-lines 1)
+               t)
+
+  ;; Enable org-contacts completion in mu4e compose
+  (add-to-list 'message-completion-alist
+               '("^\\(To\\|Cc\\|Bcc\\):" . org-contacts-message-complete-function)
+               t))
