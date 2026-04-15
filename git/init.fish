@@ -7,3 +7,6 @@ function wtd;
 end
 
 alias wtl 'git worktree list'
+alias gs 'git status'
+alias gd 'git diff'
+alias gco 'git checkout'
