@@ -1,11 +1,8 @@
-tap 'homebrew/cask'
-tap 'homebrew/cask-fonts'
-tap 'd12frosted/emacs-plus'
-
 # brew 'm-cli' # https://github.com/rgcr/m-cli/blob/master/Readme.md
-brew 'ag'
+brew 'ripgrep'
 # brew 'diffuse' # for diffing 3+ files
-brew 'emacs-plus', args: ["with-modern-nuvola-icon"]
+cask 'emacs-app'  # installs emacsforosx.com emacs
+brew 'coreutils'
 brew 'fish'
 brew 'git'
 brew 'graphviz'
@@ -13,10 +10,9 @@ brew 'htop'
 brew 'mtr'
 brew 'nmap'
 brew 'tmux'
+cask 'nikitabobko/tap/aerospace'
 cask 'firefox'
 cask 'font-source-code-pro'
 cask 'font-jetbrains-mono'
-cask 'iterm2'
 # cask 'libreoffice'
 cask 'google-chrome'
-cask 'amethyst'

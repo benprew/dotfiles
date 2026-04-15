@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FISH=/usr/local/bin/fish
+FISH=/opt/homebrew/bin/fish
 
 # install fish
 if ! grep -q $FISH /etc/shells; then

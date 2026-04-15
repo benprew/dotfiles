@@ -165,7 +165,7 @@ class DotfilesInstaller:
             brewfile = module_path / 'Brewfile'
             if brewfile.exists():
                 print(f"\tRunning {brewfile}")
-                subprocess.run(['brew', 'bundle', f'--file={brewfile}', '--no-lock'],
+                subprocess.run(['brew', 'bundle', f'--file={brewfile}'],
                              check=False)
         elif sys.platform.startswith('linux'):
             # Linux - detect package manager

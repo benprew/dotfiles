@@ -144,6 +144,12 @@
   (global-set-key (kbd "C-c C-d") #'helpful-at-point)
   (global-set-key (kbd "C-h F") #'helpful-function))
 
+(use-package dired
+  :ensure nil
+  :config
+  (when (eq system-type 'darwin)
+    (setq insert-directory-program "gls")))
+
 (use-package eglot
   :ensure t
   :defer 2
