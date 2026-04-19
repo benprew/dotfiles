@@ -47,3 +47,4 @@ end
 
 fish_add_path "/usr/local/bin"
 fish_add_path --append "/usr/local/sbin" "$HOME/bin"
+set -x GPG_TTY (tty)
