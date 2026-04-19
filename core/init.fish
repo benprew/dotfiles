@@ -12,3 +12,5 @@ set script_dir (dirname (status --current-filename))
 # end
 
 set -U fish_greeting
+
+fish_add_path /opt/homebrew/bin /opt/homebrew/sbin
