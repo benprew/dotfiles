@@ -74,7 +74,6 @@ alt-shift-equal = 'resize smart +50'
 alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
 alt-f = 'layout floating tiling'
-alt-shift-f = 'fullscreen'
 
 # Balance sizes
 alt-shift-b = 'balance-sizes'
@@ -92,6 +91,14 @@ alt-shift-2 = 'move-node-to-workspace 2'
 alt-shift-3 = 'move-node-to-workspace 3'
 alt-shift-4 = 'move-node-to-workspace 4'
 alt-shift-5 = 'move-node-to-workspace 5'
+
+# Launch apps
+alt-t = 'exec-and-forget open -a Ghostty'
+alt-b = 'exec-and-forget open -a Firefox'
+
+# Maximize window
+alt-m = 'fullscreen'
+alt-shift-f = 'fullscreen'
 
 # Reload config
 alt-shift-c = 'reload-config'
