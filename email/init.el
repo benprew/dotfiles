@@ -1,12 +1,11 @@
 ;; configs for reading email in emacs
 
-(require 'mu4e)
-
 (use-package mu4e
   :ensure nil
-  ;; Point to where your system installed mu4e.
-  ;; Common paths: "/usr/share/emacs/site-lisp/mu4e" or "/usr/local/share/emacs/site-lisp/mu/mu4e"
-  :load-path "/usr/share/emacs/site-lisp/mu4e"
+  :load-path (lambda ()
+               (if (eq system-type 'darwin)
+                   "/opt/homebrew/share/emacs/site-lisp/mu/mu4e"
+                 "/usr/share/emacs/site-lisp/mu4e"))
   :defer t
   :config
   ;; 1. General Settings
@@ -41,10 +40,11 @@
                                       (auto-fill-mode -1)
                                       (visual-line-mode 1)))
 
-  ;; 4. Useful Keybindings
+  ;; 4. Keybindings
   (define-key mu4e-main-mode-map (kbd "j") 'mu4e-jump-to-maildir)
+  (define-key mu4e-main-mode-map (kbd "G") 'my/mu4e-compose-to-group)
 
-  ;; 4. Integration with Org-Mode
+  ;; 5. Integration with Org-Mode
   (require 'mu4e-org)
   (setq mu4e-org-contacts-file "~/org/contacts.org")
 
@@ -91,4 +91,4 @@
                    (format "GROUP={%s}" group) org-contacts-files)))
       (compose-mail (string-join emails ", "))))
 
-  (define-key mu4e-main-mode-map (kbd "G") 'my/mu4e-compose-to-group))
+)
