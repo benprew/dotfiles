@@ -1,1 +1,26 @@
-macos-window-tabbing = automatic
+# Font
+font-family = JetBrains Mono
+font-size = 14
+
+# Window
+window-padding-x = 4
+window-padding-y = 4
+window-decoration = true
+macos-titlebar-style = hidden
+
+# Theme
+theme = Gruvbox Dark
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+
+# Shell integration
+shell-integration = fish
+
+# Clipboard
+copy-on-select = clipboard
+clipboard-paste-protection = false
+
+# Mouse
+mouse-hide-while-typing = true
