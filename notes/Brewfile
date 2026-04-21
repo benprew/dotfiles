@@ -2,3 +2,4 @@ cask 'macdown'
 brew 'discount' # markdown
 brew 'pandoc'
 brew 'poppler'
+brew 'hunspell'
