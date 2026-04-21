@@ -5,6 +5,12 @@
 ;;; Code:
 (require 'use-package)
 
+(when (eq system-type 'darwin)
+  (setq ispell-program-name "hunspell")
+  (setq ispell-local-dictionary "en_US")
+  (setq ispell-local-dictionary-alist
+        '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8))))
+
 ;; Agenda files setup - deferred until org-agenda is used
 (defvar notes-dir-scanned nil
   "Whether we've scanned the notes directory for org-agenda-files.")
