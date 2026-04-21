@@ -14,3 +14,6 @@ if [[ "$OS" == "Ubuntu" ]] && [ "$(echo "$VERSION_ID >= 24.04" | bc -l)" -eq 1 ]
 fi
 
 pip3 install --user black flake8 python-language-server $BREAK_SYSTEM_PACKAGES_FLAG
+
+# Install uv package manager
+curl -LsSf https://astral.sh/uv/install.sh | sh
