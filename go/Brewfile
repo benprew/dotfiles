@@ -1,2 +1,3 @@
 brew 'golang'
 brew 'golangci-lint'
+brew 'gopls'
