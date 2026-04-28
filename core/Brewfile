@@ -10,6 +10,7 @@ brew 'htop'
 brew 'mtr'
 brew 'nmap'
 brew 'tmux'
+brew 'fswatch' # for git-sync
 cask 'nikitabobko/tap/aerospace'
 cask 'firefox'
 cask 'font-source-code-pro'
