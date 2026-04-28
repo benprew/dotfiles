@@ -25,16 +25,24 @@ PROFILE="(version 1)
 
 ;; Allow writes to specific paths
 (allow file-write*
-  (subpath \"$HOME/src/mage-go\")
+  (subpath \"$HOME/src/\")
   (subpath \"$HOME/.local/bin\")
   (subpath \"$HOME/.local/share/claude\")
   (literal \"$HOME/.claude.json\")
+  (literal \"$HOME/.claude.lock\")  ;; needed for OAuth token refresh
   (subpath \"$HOME/.claude\")
   (subpath \"$HOME/Library/Keychains\")
   (subpath \"$HOME/Library/Caches\")
   (subpath \"$(pwd -P)\")
   (subpath \"/private/tmp\")
   (subpath \"/tmp\"))
+
+;; Allow Keychain/security IPC for token refresh
+(allow mach-lookup
+  (global-name \"com.apple.SecurityServer\")
+  (global-name \"com.apple.security.agent\")
+  (global-name \"com.apple.secd\")
+  (global-name \"com.apple.securityd\"))
 
 $EXTRA_ALLOW
 "
