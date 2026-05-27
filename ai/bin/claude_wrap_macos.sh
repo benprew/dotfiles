@@ -33,6 +33,8 @@ PROFILE="(version 1)
   (subpath \"$HOME/.claude\")
   (subpath \"$HOME/Library/Keychains\")
   (subpath \"$HOME/Library/Caches\")
+  (subpath \"$HOME/go/pkg/\")
+  (subpath \"$HOME/.cache\")
   (subpath \"$(pwd -P)\")
   (subpath \"/private/tmp\")
   (subpath \"/tmp\"))
@@ -49,4 +51,4 @@ $EXTRA_ALLOW
 
 unset ANTHROPIC_API_KEY
 exec sandbox-exec -p "$PROFILE" \
-  "$(which claude)" --permission-mode bypassPermissions
+  "$(which claude)" --permission-mode bypassPermissions "$@"
