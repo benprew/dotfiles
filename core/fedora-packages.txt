@@ -2,3 +2,6 @@ fish
 util-linux-user
 zstd
 restic
+emacs
+powertop
+
