@@ -1,1 +1,1 @@
-test -f "$HOME/.cargo/env" && source "$HOME/.cargo/env"
+. "$HOME/.cargo/env"            # For sh/bash/zsh/ash/dash/pdksh
