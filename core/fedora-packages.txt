@@ -4,4 +4,4 @@ zstd
 restic
 emacs
 powertop
-
+ripgrep
