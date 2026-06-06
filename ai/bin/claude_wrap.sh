@@ -15,6 +15,16 @@ if [ -f .git ]; then
   fi
 fi
 
+# Make the Go toolchain available inside the sandbox so tools like
+# golangci-lint can run. $HOME/go holds the binaries ($HOME/go/bin) and the
+# module cache ($HOME/go/pkg/mod); the build/lint caches live under
+# $HOME/.cache. These need to be writable because the tools update them.
+for TOOL_DIR in "$HOME/go" "$HOME/.cache/go-build" "$HOME/.cache/golangci-lint"; do
+  if [ -d "$TOOL_DIR" ]; then
+    EXTRA_BINDS="$EXTRA_BINDS --bind $TOOL_DIR $TOOL_DIR"
+  fi
+done
+
   # --ro-bind "$NODE_PATH" "$NODE_PATH" \
   # --setenv NODE_PATH "$NODE_PATH" \
 exec bwrap \
