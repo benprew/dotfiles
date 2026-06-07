@@ -1,9 +1,13 @@
 {
-  "skipDangerousModePermissionPrompt": true,
   "attribution": {
     "commit": "",
     "pr": ""
   },
+  "includeCoAuthoredBy": false,
+  "effortLevel": "medium",
+  "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
-  "effortLevel": "medium"
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true
+  }
 }
