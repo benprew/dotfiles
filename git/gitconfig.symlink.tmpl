@@ -63,8 +63,15 @@
 [mergetool]
     keepBackup = false
     keepTemporaries = false
+# Templated by install.py based on OS/ARCH: the p4merge path is the
+# /Applications binary on macOS or /opt/p4v on Linux, and the command is
+# wrapped in "muvm --emu=fex" on aarch64 Linux (to run the x86 build).
 [mergetool "p4merge"]
-    path = /Applications/p4merge.app/Contents/MacOS/p4merge
+    path = ${p4merge_path}
+    cmd = ${x86_exec_prefix}\"$merge_tool_path\" \"$(realpath -- \"$BASE\")\" \"$(realpath -- \"$LOCAL\")\" \"$(realpath -- \"$REMOTE\")\" \"$(realpath -- \"$MERGED\")\"
+[difftool "p4merge"]
+    path = ${p4merge_path}
+    cmd = ${x86_exec_prefix}\"$merge_tool_path\" \"$(realpath -- \"$LOCAL\")\" \"$(realpath -- \"$REMOTE\")\"
 [diff]
     algorithm = histogram
     colorMoved = plain

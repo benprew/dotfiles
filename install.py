@@ -13,7 +13,9 @@ Usage:
 
 import argparse
 import os
+import platform
 import shutil
+import string
 import subprocess
 import sys
 from pathlib import Path
@@ -51,27 +53,18 @@ class DotfilesInstaller:
         except (OSError, RuntimeError):
             return None
 
-    def mk_link(self, linkable, target):
-        """Create a symlink, handling existing files with user prompts."""
+    def _handle_existing(self, target_path):
+        """Resolve an existing target via prompts and prepare its parent dir.
+
+        Returns False if the caller should skip this target, True to proceed
+        with creating the link/file.
+        """
         overwrite = False
         backup = False
 
-        print(f"\tinstalling {linkable} to {target}")
-
-        target_path = Path(target)
-        linkable_path = Path(linkable)
-
-        tgt_realpath = self.realpath(target)
-        lnk_realpath = self.realpath(linkable)
-
-        # Skip if already correctly linked
-        if target_path.is_symlink() and tgt_realpath == lnk_realpath:
-            return
-
-        # Handle existing files
         if target_path.exists() or target_path.is_symlink():
             if not (self.skip_all or self.overwrite_all or self.backup_all):
-                print(f"File already exists: {target}, what do you want to do?")
+                print(f"File already exists: {target_path}, what do you want to do?")
                 print("[s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all")
 
                 choice = input().strip().lower()
@@ -87,11 +80,11 @@ class DotfilesInstaller:
                 elif choice == 'S':
                     self.skip_all = True
                 elif choice == 's':
-                    return
+                    return False
 
             if self.skip_all:
                 print('Skipping...')
-                return
+                return False
 
             if overwrite or self.overwrite_all:
                 if target_path.is_dir() and not target_path.is_symlink():
@@ -105,9 +98,67 @@ class DotfilesInstaller:
 
         # Create parent directories if needed
         target_path.parent.mkdir(parents=True, exist_ok=True)
+        return True
 
-        # Create symlink
+    def mk_link(self, linkable, target):
+        """Create a symlink, handling existing files with user prompts."""
+        print(f"\tinstalling {linkable} to {target}")
+
+        target_path = Path(target)
+        linkable_path = Path(linkable)
+
+        # Skip if already correctly linked
+        if target_path.is_symlink() and self.realpath(target) == self.realpath(linkable):
+            return
+
+        if not self._handle_existing(target_path):
+            return
+
         target_path.symlink_to(linkable_path)
+
+    def template_context(self):
+        """Variables exposed to *.symlink.tmpl templates, derived from OS/ARCH."""
+        machine = platform.machine()
+        is_mac = sys.platform == 'darwin'
+        is_arm = machine in ('aarch64', 'arm64', 'armv7l', 'arm')
+
+        # Prefix for launching x86_64 binaries: aarch64 Linux (e.g. Asahi) runs
+        # them under muvm+fex; native x86 and macOS run them directly.
+        x86_exec_prefix = 'muvm --emu=fex ' if (not is_mac and is_arm) else ''
+
+        return {
+            'os': 'darwin' if is_mac else ('linux' if sys.platform.startswith('linux') else sys.platform),
+            'arch': machine,
+            'x86_exec_prefix': x86_exec_prefix,
+            # App paths that differ per OS live here so the conditional stays in
+            # one place; templates just reference @@p4merge_path.
+            'p4merge_path': ('/Applications/p4merge.app/Contents/MacOS/p4merge'
+                             if is_mac else '/opt/p4v/bin/p4merge'),
+        }
+
+    def install_template(self, linkable, target):
+        """Render a *.symlink.tmpl file and write it as a real file at target.
+
+        Placeholders use string.Template's ``$name`` / ``${name}`` syntax.
+        safe_substitute only replaces names present in template_context(), so
+        unrelated shell tokens like ``$merge_tool_path`` or ``$(realpath ...)``
+        in the source pass through untouched. (Note: ``$$`` collapses to ``$``,
+        so keep context keys distinctively named to avoid shadowing literals.)
+        """
+        target_path = Path(target)
+        rendered = string.Template(Path(linkable).read_text()).safe_substitute(
+            self.template_context())
+
+        # Already rendered and up to date: nothing to do (avoids re-prompting).
+        if (target_path.is_file() and not target_path.is_symlink()
+                and target_path.read_text() == rendered):
+            return
+
+        print(f"\tinstalling template {linkable} to {target}")
+        if not self._handle_existing(target_path):
+            return
+
+        target_path.write_text(rendered)
 
     def install_script(self, install_script):
         """Run an install script if it matches the current platform."""
@@ -137,8 +188,9 @@ class DotfilesInstaller:
         if not module_path.is_dir():
             raise ValueError(f"Unknown module: {module_name}")
 
-        # Install symlinks
-        linkables = list(module_path.rglob('*.symlink'))
+        # Install symlinks (skip *.symlink.tmpl, handled as templates below)
+        linkables = [p for p in module_path.rglob('*.symlink')
+                     if not p.name.endswith('.symlink.tmpl')]
         for linkable in linkables:
             # Get relative path from module directory
             rel_path = linkable.relative_to(module_path)
@@ -147,6 +199,14 @@ class DotfilesInstaller:
             target = self.home / f'.{file_path}'
 
             self.mk_link(linkable, target)
+
+        # Render templates (*.symlink.tmpl) into real files based on OS/ARCH
+        for tmpl in module_path.rglob('*.symlink.tmpl'):
+            rel_path = tmpl.relative_to(module_path)
+            file_path = str(rel_path).replace('.symlink.tmpl', '')
+            target = self.home / f'.{file_path}'
+
+            self.install_template(tmpl, target)
 
         # Handle emacs init files
         emacs_init = module_path / 'init.el'
@@ -219,10 +279,13 @@ class DotfilesInstaller:
         """Remove all symlinks created by the installer."""
         modules = self.get_modules()
         linkables = []
+        templates = []
 
         for module in modules:
             module_path = self.dotfiles_dir / module
-            linkables.extend(module_path.rglob('*.symlink'))
+            linkables.extend(p for p in module_path.rglob('*.symlink')
+                             if not p.name.endswith('.symlink.tmpl'))
+            templates.extend(module_path.rglob('*.symlink.tmpl'))
 
         for linkable in linkables:
             module_name = linkable.parts[len(self.dotfiles_dir.parts)]
@@ -234,6 +297,23 @@ class DotfilesInstaller:
             if target.is_symlink():
                 target.unlink()
                 print(f"Removed symlink: {target}")
+
+            # Restore backup if it exists
+            backup = Path(str(target) + '.backup')
+            if backup.exists():
+                backup.rename(target)
+                print(f"Restored backup: {target}")
+
+        for tmpl in templates:
+            module_name = tmpl.parts[len(self.dotfiles_dir.parts)]
+            rel_path = tmpl.relative_to(self.dotfiles_dir / module_name)
+            file_path = str(rel_path).replace('.symlink.tmpl', '')
+            target = self.home / f'.{file_path}'
+
+            # Remove the rendered file (a real file, not a symlink)
+            if target.is_file() and not target.is_symlink():
+                target.unlink()
+                print(f"Removed rendered file: {target}")
 
             # Restore backup if it exists
             backup = Path(str(target) + '.backup')
