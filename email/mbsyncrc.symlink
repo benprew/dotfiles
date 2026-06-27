@@ -2,7 +2,7 @@
 IMAPAccount gmail
 Host imap.gmail.com
 User ben.prew@gmail.com
-PassCmd "gpg --quiet --decrypt ~/.mbsync-password.gpg"
+PassCmd "gpg --quiet --decrypt ~/.mbsync_password.gpg"
 AuthMechs LOGIN
 TLSType IMAPS
 

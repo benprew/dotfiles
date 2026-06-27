@@ -1,12 +1,15 @@
 ;; configs for reading email in emacs
 
+(dolist (dir (if (eq system-type 'darwin)
+                 '("/opt/homebrew/share/emacs/site-lisp/mu/mu4e")
+               '("/usr/share/emacs/site-lisp/mu4e"
+                 "/usr/share/emacs/site-lisp/mu/mu4e")))
+  (when (file-directory-p dir)
+    (add-to-list 'load-path dir)))
+
 (use-package mu4e
   :ensure nil
-  :load-path (lambda ()
-               (if (eq system-type 'darwin)
-                   "/opt/homebrew/share/emacs/site-lisp/mu/mu4e"
-                 "/usr/share/emacs/site-lisp/mu4e"))
-  :defer t
+  :demand t
   :config
   ;; 1. General Settings
   (setq mu4e-change-filenames-when-moving t   ; Recommended for mbsync
@@ -23,8 +26,12 @@
           :match-func (lambda (msg)
                         (when msg
                           (string-prefix-p "/gmail" (mu4e-message-field msg :maildir))))
-          :vars '((user-mail-address  . "ben.prew@gmail.com")
+          :vars '((user-mail-address  . "ben@throwingbones.com")
                   (user-full-name     . "Ben Prew")
+                  ;; Recognize both addresses as "me" so replies don't loop back
+                  ;; to myself and so the "from me" detection works on either.
+                  (mu4e-personal-addresses . ("ben@throwingbones.com"
+                                              "ben.prew@gmail.com"))
                   (mu4e-sent-folder   . "/sent")
                   (mu4e-trash-folder  . "/trash")
                   (mu4e-drafts-folder . "/drafts")
@@ -43,6 +50,26 @@
   ;; 4. Keybindings
   (define-key mu4e-main-mode-map (kbd "j") 'mu4e-jump-to-maildir)
   (define-key mu4e-main-mode-map (kbd "G") 'my/mu4e-compose-to-group)
+
+  ;; Gmail-friendly trash: 'd' moves to the Trash folder WITHOUT setting the
+  ;; \Deleted (+T) flag. Setting +T makes Gmail misbehave (trashed mail
+  ;; reappears in the inbox); moving to the folder is enough for Gmail.
+  (setf (alist-get 'trash mu4e-marks)
+        '(:char ("d" . "▼")
+          :prompt "dtrash"
+          :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
+          :action (lambda (docid msg target)
+                    (mu4e--server-move
+                     docid (mu4e--mark-check-target target) "+S-N"))))
+
+  ;; Bookmarks: exclude trashed mail. Since 'd' no longer sets the \Trashed
+  ;; flag, the usual "NOT flag:trashed" filter won't catch it, so exclude the
+  ;; Trash maildir by name instead.
+  (setq mu4e-bookmarks
+        '((:name "Unread messages"     :query "flag:unread AND NOT maildir:/trash" :key ?u)
+          (:name "Today's messages"    :query "date:today..now AND NOT maildir:/trash" :key ?t)
+          (:name "Last 7 days"         :query "date:7d..now AND NOT maildir:/trash" :key ?w)
+          (:name "Messages with images" :query "mime:image/* AND NOT maildir:/trash" :key ?p)))
 
   ;; 5. Integration with Org-Mode
   (require 'mu4e-org)
