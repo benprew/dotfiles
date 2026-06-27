@@ -2,7 +2,7 @@
 
 set -e
 
-GOVERSION="1.25.1"
+GOVERSION="1.26.4"
 
 # Detect architecture
 ARCH=$(uname -m)
