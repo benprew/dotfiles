@@ -1,3 +1,8 @@
 .aider.chat*
 .aider.tags*
 .aider.input*
+
+**/.claude/settings.local.json
+
+__pycache__/
+.DS_Store
