@@ -153,7 +153,7 @@
 (use-package eglot
   :ensure t
   :defer 2
-  :hook (python-mode . eglot-ensure)(go-mode . eglot-ensure))
+  :hook (go-mode . eglot-ensure))
 
 ;; zeal is like dash documentation, but for linux
 (use-package zeal-at-point

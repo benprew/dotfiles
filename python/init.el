@@ -39,7 +39,7 @@ Try to automatically determine which pyenv virtual environment to
 activate based on the project name, using
 `dd/py-workon-project-venv'. If successful, call `lsp'. If we
 cannot determine the virtualenv automatically, first call the
-interactive `pyvenv-workon' function before `lsp'"
+interactive `pyvenv-workon' function before reconnecting Eglot."
   (interactive)
   (let ((pvenv (dd/py-workon-project-venv)))
     (if pvenv
@@ -47,3 +47,12 @@ interactive `pyvenv-workon' function before `lsp'"
       (progn
         (call-interactively #'pyvenv-workon)
         (call-interactively #'eglot-reconnect)))))
+
+(use-package eglot
+  :ensure t
+  :config
+  ;; Register ty as the LSP server for python-mode and python-ts-mode
+  (add-to-list 'eglot-server-programs
+               '((python-mode python-ts-mode) . ("ty" "server")))
+  :hook ((python-mode . eglot-ensure)
+         (python-ts-mode . eglot-ensure)))
