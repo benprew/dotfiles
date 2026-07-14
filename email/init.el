@@ -16,7 +16,11 @@
         mu4e-update-interval (* 5 60)         ; Sync every 5 minutes
         mu4e-get-mail-command "mbsync gmail"  ; Command to fetch mail
         mu4e-maildir "~/Mail/gmail"           ; Top-level mail directory
-        mu4e-attachment-dir "~/Downloads")
+        mu4e-attachment-dir "~/Downloads"
+        ;; Moving to Gmail's Trash is sufficient.  Do not also set the
+        ;; Maildir \Trashed flag; mbsync would translate that into a second,
+        ;; provider-dependent delete operation.
+        mu4e-trash-without-flag t)
 
   ;; 2. Account Contexts (Gmail specific)
   (setq mu4e-contexts
@@ -25,17 +29,19 @@
           :name "Gmail"
           :match-func (lambda (msg)
                         (when msg
-                          (string-prefix-p "/gmail" (mu4e-message-field msg :maildir))))
+                          ;; `mu4e-maildir' is already ~/Mail/gmail, so mu's
+                          ;; maildir names are /INBOX, /all, etc.
+                          (string-prefix-p "/" (mu4e-message-field msg :maildir))))
           :vars '((user-mail-address  . "ben@throwingbones.com")
                   (user-full-name     . "Ben Prew")
-                  ;; Recognize both addresses as "me" so replies don't loop back
-                  ;; to myself and so the "from me" detection works on either.
-                  (mu4e-personal-addresses . ("ben@throwingbones.com"
-                                              "ben.prew@gmail.com"))
                   (mu4e-sent-folder   . "/sent")
                   (mu4e-trash-folder  . "/trash")
                   (mu4e-drafts-folder . "/drafts")
+                  ;; Refiling (`r') archives by removing the Inbox label;
+                  ;; Gmail retains the message in All Mail.
                   (mu4e-refile-folder . "/all")
+                  ;; Gmail creates the Sent Mail copy after SMTP submission.
+                  (mu4e-sent-messages-behavior . delete)
                   ;; Sending configuration (using msmtp)
                   (sendmail-program   . "/usr/bin/msmtp")
                   (message-send-mail-function . message-send-mail-with-sendmail)
@@ -51,25 +57,21 @@
   (define-key mu4e-main-mode-map (kbd "j") 'mu4e-jump-to-maildir)
   (define-key mu4e-main-mode-map (kbd "G") 'my/mu4e-compose-to-group)
 
-  ;; Gmail-friendly trash: 'd' moves to the Trash folder WITHOUT setting the
-  ;; \Deleted (+T) flag. Setting +T makes Gmail misbehave (trashed mail
-  ;; reappears in the inbox); moving to the folder is enough for Gmail.
-  (setf (alist-get 'trash mu4e-marks)
-        '(:char ("d" . "▼")
-          :prompt "dtrash"
-          :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
-          :action (lambda (docid msg target)
-                    (mu4e--server-move
-                     docid (mu4e--mark-check-target target) "+S-N"))))
+  (setq mu4e-maildir-shortcuts
+        '((:maildir "/INBOX" :key ?i)
+          (:maildir "/all"   :key ?a)
+          (:maildir "/sent"  :key ?s)
+          (:maildir "/trash" :key ?t)))
 
-  ;; Bookmarks: exclude trashed mail. Since 'd' no longer sets the \Trashed
-  ;; flag, the usual "NOT flag:trashed" filter won't catch it, so exclude the
-  ;; Trash maildir by name instead.
+  ;; Bookmarks: exclude trashed and archived/All Mail copies. Since 'd' no
+  ;; longer sets the \Trashed flag, the usual "NOT flag:trashed" filter won't
+  ;; catch it, so exclude the Trash maildir by name instead.
   (setq mu4e-bookmarks
-        '((:name "Unread messages"     :query "flag:unread AND NOT maildir:/trash" :key ?u)
-          (:name "Today's messages"    :query "date:today..now AND NOT maildir:/trash" :key ?t)
-          (:name "Last 7 days"         :query "date:7d..now AND NOT maildir:/trash" :key ?w)
-          (:name "Messages with images" :query "mime:image/* AND NOT maildir:/trash" :key ?p)))
+        '((:name "Inbox"               :query "maildir:/INBOX" :key ?i :favorite t)
+          (:name "Unread messages"     :query "flag:unread AND NOT maildir:/trash AND NOT maildir:/all" :key ?u)
+          (:name "Today's messages"    :query "date:today..now AND NOT maildir:/trash AND NOT maildir:/all" :key ?t)
+          (:name "Last 7 days"         :query "date:7d..now AND NOT maildir:/trash AND NOT maildir:/all" :key ?w)
+          (:name "Messages with images" :query "mime:image/* AND NOT maildir:/trash AND NOT maildir:/all" :key ?p)))
 
   ;; 5. Integration with Org-Mode
   (require 'mu4e-org)
