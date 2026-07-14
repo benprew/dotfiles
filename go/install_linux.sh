@@ -33,3 +33,4 @@ export PATH=$PATH:/usr/local/go/bin
 
 echo "Installing gopls"
 go install golang.org/x/tools/gopls@latest
+go install golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize@latest
