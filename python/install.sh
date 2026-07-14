@@ -17,3 +17,7 @@ pip3 install --user black flake8 python-language-server $BREAK_SYSTEM_PACKAGES_F
 
 # Install uv package manager
 curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install Python development tools managed by uv
+"$HOME/.local/bin/uv" tool install ty
+"$HOME/.local/bin/uv" tool install ruff
