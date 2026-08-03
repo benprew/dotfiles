@@ -9,7 +9,7 @@ window-decoration = true
 macos-titlebar-style = hidden
 
 # Theme
-theme = Gruvbox Dark
+theme = Ayu Mirage
 
 # Cursor
 cursor-style = block
