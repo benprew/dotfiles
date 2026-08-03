@@ -2,14 +2,12 @@
   :ensure t
   :commands flymake-shellcheck-load
   :hook
-  ('sh-mode . 'flymake-shellcheck-load)
-  ('sh-mode . 'flymake-mode))
+  ((sh-mode bash-ts-mode) . flymake-shellcheck-load))
 
 (use-package fish-mode
-  :defer 3
   :ensure t
   :mode ("\\.fish\\'" "\\.fish\\.symlink\\'"))
 
-(use-package bash-ts-mode
-  :ensure f
-  :mode "\\.sh\\'")
+(use-package sh-script
+  :ensure nil
+  :mode ("\\.sh\\'" . bash-ts-mode))

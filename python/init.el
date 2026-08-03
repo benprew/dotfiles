@@ -1,7 +1,5 @@
-(require 'use-package)
-
-(use-package python-mode
-  :ensure t
+(use-package python
+  :ensure nil
   :defer t
   :bind ("C-c C-a" . btp/py-auto-eglot))
 
@@ -9,50 +7,44 @@
   :ensure t
   :defer t
   :init
-  (setenv "WORKON_HOME" "~/.pyenv/versions"))
+  (setenv "WORKON_HOME" (expand-file-name "~/.pyenv/versions")))
 
 (use-package blacken
   :ensure t
   :defer t
-  :hook (python-mode . blacken-mode))
+  :hook (python-base-mode . blacken-mode))
 
 (use-package jinja2-mode
-  :defer 2
   :ensure t
-  :mode "\\.jt'")
+  :mode "\\.jt\\'")
 
 
 (defun dd/py-workon-project-venv ()
-  "Call pyenv-workon with the current projectile project name.
-This will return the full path of the associated virtual
-environment found in $WORKON_HOME, or nil if the environment does
-not exist."
-  (let ((pname (projectile-project-name)))
-    (pyvenv-workon pname)
-    (if (file-directory-p pyvenv-virtual-env)
-        pyvenv-virtual-env
-      (pyvenv-deactivate))))
+  "Activate the virtual environment named after the current project.
+Return its full path, or nil when it does not exist."
+  (let* ((project (project-current t))
+         (project-name
+          (file-name-nondirectory
+           (directory-file-name (project-root project))))
+         (venv (expand-file-name project-name (getenv "WORKON_HOME"))))
+    (when (file-directory-p venv)
+      (pyvenv-activate venv)
+      venv)))
 
 (defun btp/py-auto-eglot ()
-  "Turn on lsp mode in a Python project with some automated logic.
-Try to automatically determine which pyenv virtual environment to
-activate based on the project name, using
-`dd/py-workon-project-venv'. If successful, call `lsp'. If we
-cannot determine the virtualenv automatically, first call the
-interactive `pyvenv-workon' function before reconnecting Eglot."
+  "Activate the project virtual environment and restart Eglot.
+Prompt for an environment when none matches the project name."
   (interactive)
-  (let ((pvenv (dd/py-workon-project-venv)))
-    (if pvenv
-        (call-interactively #'eglot-reconnect)
-      (progn
-        (call-interactively #'pyvenv-workon)
-        (call-interactively #'eglot-reconnect)))))
+  (unless (dd/py-workon-project-venv)
+    (call-interactively #'pyvenv-workon))
+  (if-let ((server (eglot-current-server)))
+      (eglot-reconnect server t)
+    (eglot-ensure)))
 
 (use-package eglot
-  :ensure t
+  :ensure nil
   :config
-  ;; Register ty as the LSP server for python-mode and python-ts-mode
+  ;; Register ty for all built-in Python modes.
   (add-to-list 'eglot-server-programs
-               '((python-mode python-ts-mode) . ("ty" "server")))
-  :hook ((python-mode . eglot-ensure)
-         (python-ts-mode . eglot-ensure)))
+               '((python-base-mode :language-id "python") . ("ty" "server")))
+  :hook (python-base-mode . eglot-ensure))

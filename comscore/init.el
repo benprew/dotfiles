@@ -2,6 +2,4 @@
 (if (<= emacs-major-version 25)
     (setq undo-tree-auto-save-history nil))
 
-(require 'use-package)
-
 (setq ansible-vault-password-file "/home/ben/.ansible-vault-password-as")

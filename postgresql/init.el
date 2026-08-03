@@ -1,8 +1,6 @@
 (use-package sqlformat
-  :defer 3
-  :ensure t)
-
-
-(require 'sqlformat)
-(setq sqlformat-command 'pgformatter)
-(setq sqlformat-args '("-g"))
+  :ensure t
+  :commands (sqlformat sqlformat-buffer sqlformat-region)
+  :custom
+  (sqlformat-command 'pgformatter)
+  (sqlformat-args '("-g")))

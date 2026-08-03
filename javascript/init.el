@@ -1,10 +1,6 @@
-(require 'use-package)
-
 (setq js-indent-level 2)
-(local-set-key (kbd "RET") 'newline-and-indent)
 
 (use-package web-mode
-  :defer 3
   :ensure t
   :mode ("\\.phtml\\'" "\\.tpl\\.php\\'" "\\.blade\\.php\\'"
          "\\.jsp\\'"  "\\.as[cp]x\\'"  "\\.erb\\'"  "\\.html?\\'"
@@ -16,5 +12,5 @@
   (setq web-mode-engines-alist
         '(("go"    . "\\.tmpl\\'"))))
 
-(treesit-add-and-install 'html "https://github.com/tree-sitter/tree-sitter-html")
-(treesit-add-and-install 'javascript "https://github.com/tree-sitter/tree-sitter-javascript")
+(treesit-add-language-source 'html "https://github.com/tree-sitter/tree-sitter-html")
+(treesit-add-language-source 'javascript "https://github.com/tree-sitter/tree-sitter-javascript")

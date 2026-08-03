@@ -1,3 +1,3 @@
 (use-package magit
-  :defer 3
-  :ensure t)
+  :ensure t
+  :commands (magit-status magit-project-status))

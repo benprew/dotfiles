@@ -1,10 +1,8 @@
-(require 'use-package)
-
 ;; for nand2tetris
 ;; (add-to-list 'auto-mode-alist '("\\.hdl$" . vhdl-mode))
 ;; (add-hook 'asm-mode-hook (lambda () (whitespace-mode -1)))
 
-(use-package 'load-relative
+(use-package load-relative
   :ensure t)
 (require 'load-relative)
 (load-relative "./init-nand2tetris.el")

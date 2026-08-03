@@ -9,7 +9,7 @@
 
 (use-package mu4e
   :ensure nil
-  :demand t
+  :commands mu4e
   :config
   ;; 1. General Settings
   (setq mu4e-change-filenames-when-moving t   ; Recommended for mbsync

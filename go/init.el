@@ -1,12 +1,10 @@
-(require 'use-package)
-
 (use-package go-playground
   :ensure t
-  :defer 3)
+  :commands go-playground)
 
 (use-package go-mode
   :ensure t
-  :hook ('go-mode . 'eglot-ensure)
+  :hook (go-mode . eglot-ensure)
   :bind (:map go-mode-map
               ("C-c t t" . go-test-current-test)
               ("C-c t f" . go-test-current-file)
@@ -37,13 +35,19 @@
 
 (add-hook 'project-find-functions #'project-find-go-module)
 
-;; organize go import statements
-(defun own/eglot-organize-imports ()
-  (call-interactively 'eglot-code-action-organize-imports))
 (defun own/before-saving-go ()
-  ;; install eglot-format-buffer as a save hook.
-  ;; The depth of -10 places this before eglot's willSave notification,
-  ;; so that that notification reports the actual contents that will be saved.
-  (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
-  (add-hook 'before-save-hook #'own/eglot-organize-imports nil t))
-(add-hook 'go-mode-hook #'own/before-saving-go)
+  "Organize imports and format a Go buffer managed by Eglot."
+  ;; gopls reports an error when there are no import edits to apply.
+  (ignore-errors
+    (call-interactively #'eglot-code-action-organize-imports))
+  (eglot-format-buffer))
+
+(defun own/setup-go-save-hook-after-eglot ()
+  "Update the save hook after Eglot starts or stops managing Go."
+  (when (derived-mode-p 'go-mode 'go-ts-mode)
+    (if (eglot-managed-p)
+        (add-hook 'before-save-hook #'own/before-saving-go nil t)
+      (remove-hook 'before-save-hook #'own/before-saving-go t))))
+
+(add-hook 'go-ts-mode-hook #'eglot-ensure)
+(add-hook 'eglot-managed-mode-hook #'own/setup-go-save-hook-after-eglot)

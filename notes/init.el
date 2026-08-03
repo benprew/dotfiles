@@ -3,8 +3,6 @@
 ;;;   This contains all my org-mode settings
 
 ;;; Code:
-(require 'use-package)
-
 (when (eq system-type 'darwin)
   (setq ispell-program-name "hunspell")
   (setq ispell-local-dictionary "en_US")
