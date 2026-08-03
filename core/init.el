@@ -24,18 +24,7 @@
 (setq confirm-kill-emacs 'y-or-n-p)
 (setq-default fill-column 82)
 (setq-default whitespace-line-column 82)
-(setq custom-file "~/.emacs.d/custom.el")
-(setq load-prefer-newer 't)
-(setq whitespace-mode 1)
-(setq column-number-mode t)
 (global-auto-revert-mode t)
-
-;; save backup files into a single directory
-(make-directory "~/.emacs_backups/" t)
-(make-directory "~/.emacs_autosave/" t)
-(setq auto-save-file-name-transforms '((".*" "~/.emacs_autosave/" t)))
-(setq backup-directory-alist '(("." . "~/.emacs_backups/")))
-(setq create-lockfiles nil)
 
 (use-package graphviz-dot-mode
   :defer t
@@ -101,15 +90,12 @@
   (add-hook 'flymake-diagnostic-functions #'flymake-jq-backend nil t)
   (flymake-mode 1))
 
-;; Only install tree-sitter grammars if not already available
-(unless (treesit-language-available-p 'json)
-  (treesit-add-and-install 'json "https://github.com/tree-sitter/tree-sitter-json"))
+(treesit-add-language-source 'json "https://github.com/tree-sitter/tree-sitter-json")
 (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
 (add-hook 'js-json-mode-hook #'setup-json-flymake)
 (add-hook 'json-ts-mode-hook #'setup-json-flymake)
 
-(unless (treesit-language-available-p 'yaml)
-  (treesit-add-and-install 'yaml "https://github.com/tree-sitter-grammars/tree-sitter-yaml"))
+(treesit-add-language-source 'yaml "https://github.com/tree-sitter-grammars/tree-sitter-yaml")
 ;; (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
 
 (use-package dumb-jump
@@ -149,11 +135,6 @@
   :config
   (when (eq system-type 'darwin)
     (setq insert-directory-program "gls")))
-
-(use-package eglot
-  :ensure t
-  :defer 2
-  :hook (go-mode . eglot-ensure))
 
 ;; zeal is like dash documentation, but for linux
 (use-package zeal-at-point
