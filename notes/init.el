@@ -88,7 +88,8 @@
   :after org
   :config
   (epa-file-enable)
-  (setq epa-file-select-keys "ben@throwingbones.com"))
+  (setq epa-file-select-keys "ben@throwingbones.com")
+  (setq epg-pinentry-mode 'loopback))
 
 ;; ox-md for markdown export
 (use-package ox-md
