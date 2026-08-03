@@ -36,6 +36,9 @@ npm install @openai/codex
 # Note: npm installs the binary into node_modules/.bin/
 ln -sf "$INSTALL_DIR/node_modules/.bin/codex" "$BIN_DIR/codex"
 
+npm install @agentclientprotocol/codex-acp
+ln -sf "$INSTALL_DIR/node_modules/.bin/codex-acp" "$BIN_DIR/codex-acp"
+
 echo "------------------------------------------------"
 echo "Installation Successful!"
 echo "------------------------------------------------"
