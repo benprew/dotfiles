@@ -1,5 +1,5 @@
-brew 'macdown-3000'
 brew 'discount' # markdown
 brew 'pandoc'
 brew 'poppler'
 brew 'hunspell'
+cask 'macdown-3000'
