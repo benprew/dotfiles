@@ -1,23 +1,11 @@
 #!/bin/bash
 
-if grep -q -i "ubuntu" /etc/os-release; then
-  OS="Ubuntu"
-  VERSION_ID=$(grep -oP '(?<=VERSION_ID=")\d+(\.\d+)?(?=")' /etc/os-release)
-else
-  OS=""
-fi
-
-# Determine if the --break-system-packages flag should be used
-BREAK_SYSTEM_PACKAGES_FLAG=""
-if [[ "$OS" == "Ubuntu" ]] && [ "$(echo "$VERSION_ID >= 24.04" | bc -l)" -eq 1 ]; then
-  BREAK_SYSTEM_PACKAGES_FLAG="--break-system-packages"
-fi
-
-pip3 install --user black flake8 python-language-server $BREAK_SYSTEM_PACKAGES_FLAG
-
 # Install uv package manager
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Install Python development tools managed by uv
+"$HOME/.local/bin/uv" tool install black
+"$HOME/.local/bin/uv" tool install flake8
+"$HOME/.local/bin/uv" tool install python-language-server
 "$HOME/.local/bin/uv" tool install ty
 "$HOME/.local/bin/uv" tool install ruff
