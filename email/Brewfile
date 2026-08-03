@@ -1,1 +1,3 @@
 brew 'mu'
+brew 'isync'
+brew 'msmtp'

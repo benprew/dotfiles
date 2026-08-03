@@ -43,7 +43,8 @@
                   ;; Gmail creates the Sent Mail copy after SMTP submission.
                   (mu4e-sent-messages-behavior . delete)
                   ;; Sending configuration (using msmtp)
-                  (sendmail-program   . "/usr/bin/msmtp")
+                  ;; Resolve the Homebrew or system installation from PATH.
+                  (sendmail-program   . "msmtp")
                   (message-send-mail-function . message-send-mail-with-sendmail)
                   (message-sendmail-f-is-evil . t)
                   (message-sendmail-extra-arguments . ("--read-envelope-from"))))))

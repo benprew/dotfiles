@@ -1,13 +1,13 @@
 defaults
 auth           on
 tls            on
-tls_trust_file /etc/ssl/certs/ca-certificates.crt
+tls_trust_file ${tls_trust_file}
 logfile        ~/.msmtp.log
 
 account        gmail
 host           smtp.gmail.com
 port           587
-from           ben.prew@gmail.com
+from           ben@throwingbones.com
 user           ben.prew@gmail.com
 passwordeval   "gpg --quiet --decrypt ~/.mbsync_password.gpg"
 
