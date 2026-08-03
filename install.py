@@ -133,11 +133,7 @@ class DotfilesInstaller:
         x86_exec_prefix = "muvm --emu=fex " if (not is_mac and is_arm) else ""
 
         return {
-            "os": (
-                "darwin"
-                if is_mac
-                else ("linux" if sys.platform.startswith("linux") else sys.platform)
-            ),
+            "os": "linux" if sys.platform.startswith("linux") else sys.platform,
             "arch": machine,
             "x86_exec_prefix": x86_exec_prefix,
             # App paths that differ per OS live here so the conditional stays in
@@ -146,6 +142,9 @@ class DotfilesInstaller:
                 "/Applications/p4merge.app/Contents/MacOS/p4merge"
                 if is_mac
                 else "/opt/p4v/bin/p4merge"
+            ),
+            "tls_trust_file": (
+                "/etc/ssl/cert.pem" if is_mac else "/etc/ssl/certs/ca-certificates.crt"
             ),
         }
 
