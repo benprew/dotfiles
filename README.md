@@ -36,11 +36,27 @@ Available commands:
 - `./install.py install_module <name>` - Install a specific module
 - `./install.py uninstall` - Remove all symlinks (restores backups if present)
 - `./install.py update` - Fetch updates from git origin
-- `--symlinks-only` - Skip package installation and scripts, only create symlinks
+- `--symlinks-only` - Only create symlinks; skip packages, scripts, and grammars
+
+For a full install, files from every enabled module are linked first. Package
+manifests are then combined into one Homebrew, apt, or dnf transaction. Module
+install scripts run after the OS packages are available, followed by one Emacs
+process that installs any missing tree-sitter grammars.
 
 Adding a new module is simple. Just make a directory, drop `init.sh`
 and/or `init.el` and/or `<something>.symlink` into it, and list it in
 your modules file. (See Modules section below for more info).
+
+Modules can declare dependencies with `Brewfile`, `apt-packages.txt`,
+`fedora-packages.txt`, and `treesit-grammars.txt`. Tree-sitter declarations use
+the following whitespace-separated format:
+
+```
+language repository [branch [source-directory]]
+```
+
+Use `-` for the branch when a source directory is needed with the repository's
+default branch.
 
 ## Emacs
 

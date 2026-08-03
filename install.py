@@ -12,12 +12,14 @@ Usage:
 """
 
 import argparse
-import os
+import json
 import platform
+import re
 import shutil
 import string
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 
@@ -173,7 +175,6 @@ class DotfilesInstaller:
             should_run = True
         else:
             # Check for platform-specific scripts (e.g., install_linux.sh)
-            import platform
             plat = script_name.replace('install_', '').replace('.sh', '')
             should_run = sys.platform.startswith(plat.lower())
 
@@ -181,8 +182,8 @@ class DotfilesInstaller:
             print(f"\tRunning {install_script}")
             subprocess.run([str(script_path)], check=False)
 
-    def install_module(self, module_name, symlinks_only=False):
-        """Install a single module's dotfiles and packages."""
+    def install_module_files(self, module_name):
+        """Install a single module's symlinks and rendered templates."""
         module_path = self.dotfiles_dir / module_name
 
         if not module_path.is_dir():
@@ -216,26 +217,58 @@ class DotfilesInstaller:
             target = target_dir / f'{module_name}.el'
             self.mk_link(emacs_init, target)
 
-        if symlinks_only:
-            return
+    @staticmethod
+    def _read_package_file(package_file):
+        """Return package names, ignoring blank lines and comments."""
+        packages = []
+        for line in package_file.read_text().splitlines():
+            line = line.partition('#')[0].strip()
+            if line:
+                packages.extend(line.split())
+        return packages
 
-        # Install packages based on platform
+    def install_packages(self, modules):
+        """Install OS packages for MODULES in one package-manager run."""
+        module_paths = [self.dotfiles_dir / module for module in modules]
+
         if sys.platform == 'darwin':
-            # macOS - use Homebrew
-            brewfile = module_path / 'Brewfile'
-            if brewfile.exists():
-                print(f"\tRunning {brewfile}")
-                subprocess.run(['brew', 'bundle', f'--file={brewfile}'],
-                             check=False)
+            brewfiles = [path / 'Brewfile' for path in module_paths
+                         if (path / 'Brewfile').exists()]
+            if not brewfiles:
+                return
+
+            print("==> Installing Homebrew packages from:")
+            for brewfile in brewfiles:
+                print(f"\t{brewfile}")
+
+            combined = []
+            for brewfile in brewfiles:
+                combined.append(f"# {brewfile.relative_to(self.dotfiles_dir)}\n")
+                combined.append(brewfile.read_text())
+                combined.append("\n")
+
+            aggregate_path = None
+            try:
+                with tempfile.NamedTemporaryFile(
+                        mode='w', suffix='.Brewfile', delete=False) as aggregate:
+                    aggregate.writelines(combined)
+                    aggregate_path = Path(aggregate.name)
+                result = subprocess.run(
+                    ['brew', 'bundle', f'--file={aggregate_path}'], check=False)
+                if result.returncode != 0:
+                    print('Failed to install Homebrew packages')
+            finally:
+                if aggregate_path:
+                    aggregate_path.unlink(missing_ok=True)
+
         elif sys.platform.startswith('linux'):
-            # Linux - detect package manager
             package_providers = {
                 'apt': {
-                    'install_cmd': 'sudo apt install -y',
+                    'install_cmd': ['sudo', 'apt', 'install', '-y'],
                     'packages_file': 'apt-packages.txt'
                 },
                 'dnf': {
-                    'install_cmd': 'sudo dnf install -y',
+                    'install_cmd': ['sudo', 'dnf', 'install', '-y'],
                     'packages_file': 'fedora-packages.txt'
                 },
             }
@@ -248,23 +281,116 @@ class DotfilesInstaller:
 
             if pkg_provider:
                 pkg_info = package_providers[pkg_provider]
-                pkg_file = module_path / pkg_info['packages_file']
+                package_files = [path / pkg_info['packages_file']
+                                 for path in module_paths
+                                 if (path / pkg_info['packages_file']).exists()]
+                packages = []
+                for package_file in package_files:
+                    packages.extend(self._read_package_file(package_file))
+                packages = list(dict.fromkeys(packages))
 
-                if pkg_file.exists():
-                    print(f"\tInstalling packages in {pkg_file} with {pkg_provider}")
-                    with open(pkg_file, 'r') as f:
-                        packages = f.read().strip().split()
+                if packages:
+                    print(f"==> Installing {pkg_provider} packages from:")
+                    for package_file in package_files:
+                        print(f"\t{package_file}")
+                    result = subprocess.run(
+                        pkg_info['install_cmd'] + packages, check=False)
+                    if result.returncode != 0:
+                        print(f'Failed to install {pkg_provider} packages')
 
-                    if packages:
-                        cmd = pkg_info['install_cmd'].split() + packages
-                        result = subprocess.run(cmd, check=False)
-                        if result.returncode != 0:
-                            print('Failed to install packages')
-
-        # Run install scripts
+    def install_module_scripts(self, module_name):
+        """Run install scripts belonging to MODULE_NAME."""
+        module_path = self.dotfiles_dir / module_name
         install_scripts = list(module_path.glob('install*.sh'))
         for script in install_scripts:
             self.install_script(script)
+
+    def get_tree_sitter_grammars(self, modules):
+        """Collect tree-sitter grammar declarations from MODULES."""
+        grammars = {}
+        for module in modules:
+            grammar_file = self.dotfiles_dir / module / 'treesit-grammars.txt'
+            if not grammar_file.exists():
+                continue
+            for line_number, raw_line in enumerate(
+                    grammar_file.read_text().splitlines(), start=1):
+                line = raw_line.partition('#')[0].strip()
+                if not line:
+                    continue
+                fields = line.split()
+                if not 2 <= len(fields) <= 4:
+                    raise ValueError(
+                        f"Invalid grammar declaration in {grammar_file}:"
+                        f"{line_number}")
+                language, repository, *source_options = fields
+                if not re.fullmatch(r'[a-z][a-z0-9-]*', language):
+                    raise ValueError(
+                        f"Invalid tree-sitter language in {grammar_file}:"
+                        f"{line_number}")
+                source_options = [None if value == '-' else value
+                                  for value in source_options]
+                declaration = (repository, *source_options)
+                if language in grammars and grammars[language] != declaration:
+                    raise ValueError(
+                        f"Conflicting tree-sitter sources for {language}")
+                grammars[language] = declaration
+        return grammars
+
+    def install_tree_sitter_grammars(self, modules):
+        """Install missing tree-sitter grammars declared by MODULES."""
+        grammars = self.get_tree_sitter_grammars(modules)
+        if not grammars:
+            return
+
+        emacs = shutil.which('emacs')
+        if not emacs:
+            print('Skipping tree-sitter grammars: Emacs is not installed')
+            return
+
+        source_entries = []
+        for language, source in grammars.items():
+            fields = [language, json.dumps(source[0])]
+            fields.extend('nil' if value is None else json.dumps(value)
+                          for value in source[1:])
+            source_entries.append(f"({' '.join(fields)})")
+
+        languages = ' '.join(grammars)
+        sources = ' '.join(source_entries)
+        expression = f"""(progn
+          (require 'treesit)
+          (unless (treesit-available-p)
+            (error "Tree-sitter support is unavailable"))
+          (setq treesit-language-source-alist '({sources}))
+          (let (failed)
+            (dolist (language '({languages}))
+              (if (treesit-language-available-p language)
+                  (message "Tree-sitter grammar for %s is installed" language)
+                (condition-case err
+                    (progn
+                      (message "Installing tree-sitter grammar for %s" language)
+                      (treesit-install-language-grammar language))
+                  (error
+                   (push language failed)
+                   (message "Failed to install %s: %s"
+                            language (error-message-string err))))))
+            (when failed
+              (error "Failed tree-sitter grammars: %s"
+                     (mapconcat #'symbol-name failed ", ")))))"""
+
+        print('==> Installing tree-sitter grammars: '
+              + ', '.join(grammars))
+        result = subprocess.run(
+            [emacs, '--batch', '--quick', '--eval', expression], check=False)
+        if result.returncode != 0:
+            print('Failed to install some tree-sitter grammars')
+
+    def install_module(self, module_name, symlinks_only=False):
+        """Install a single module's dotfiles, packages, and scripts."""
+        self.install_module_files(module_name)
+        if not symlinks_only:
+            self.install_packages([module_name])
+            self.install_module_scripts(module_name)
+            self.install_tree_sitter_grammars([module_name])
 
     def install(self, symlinks_only=False):
         """Install all modules listed in .modules file."""
@@ -272,8 +398,14 @@ class DotfilesInstaller:
         modules = self.get_modules()
 
         for module in modules:
-            print(f"==> Installing module: {module}")
-            self.install_module(module, symlinks_only)
+            print(f"==> Installing module files: {module}")
+            self.install_module_files(module)
+
+        if not symlinks_only:
+            self.install_packages(modules)
+            for module in modules:
+                self.install_module_scripts(module)
+            self.install_tree_sitter_grammars(modules)
 
     def uninstall(self):
         """Remove all symlinks created by the installer."""

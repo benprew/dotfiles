@@ -1,0 +1,3 @@
+# language repository [branch [source-directory]]
+json https://github.com/tree-sitter/tree-sitter-json
+yaml https://github.com/tree-sitter-grammars/tree-sitter-yaml
