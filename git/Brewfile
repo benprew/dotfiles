@@ -1,3 +1,4 @@
 brew 'git'
 brew 'git-delta'
 brew 'pinentry-mac'
+cask 'p4v'
