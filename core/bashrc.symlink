@@ -24,21 +24,11 @@ function add_path () {
 
 # only run if stdin is a terminal (needed for sddm login)
 if [ -t 0 ] && tty -s 2>/dev/null; then
-  if [[ -L $HOME/.bashrc.local ]] && [[ -f $(readlink "$HOME/.bashrc.local") ]]; then
-    . "$HOME/.bashrc.local"
-  fi
-
-  if [[ -f /etc/bashrc ]]; then
-    . /etc/bashrc
-  fi
-
   mesg n
   shopt -s cdspell
   set -o emacs
   set completion-ignore-case On
   set bell-style none
-
-
 fi
 
 # Run this after everything else (so add_path is defined)
