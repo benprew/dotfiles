@@ -1,2 +1,4 @@
 cask 'codex'
 cask 'claude-code'
+cask 'antigravity-cli'
+cask 'antigravity'
