@@ -8,6 +8,9 @@
   :ensure t
   :mode ("\\.fish\\'" "\\.fish\\.symlink\\'"))
 
+(treesit-add-language-source 'bash "https://github.com/tree-sitter/tree-sitter-bash")
+
 (use-package sh-script
   :ensure nil
   :mode ("\\.sh\\'" . bash-ts-mode))
+
