@@ -1,0 +1,3 @@
+# language repository [branch [source-directory]]
+c https://github.com/tree-sitter/tree-sitter-c
+cpp https://github.com/tree-sitter/tree-sitter-cpp

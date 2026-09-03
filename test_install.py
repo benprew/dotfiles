@@ -87,6 +87,17 @@ class DotfilesInstallerTest(unittest.TestCase):
         self.assertIn('(ruby "https://github.com/tree-sitter/tree-sitter-ruby")',
                       expression)
 
+    def test_c_module_tree_sitter_grammar_and_packages(self):
+        grammars = self.installer.get_tree_sitter_grammars(['c'])
+        self.assertIn('c', grammars)
+        self.assertIn('cpp', grammars)
+        self.assertEqual(
+            ('https://github.com/tree-sitter/tree-sitter-c',), grammars['c']
+        )
+        self.assertEqual(
+            ('https://github.com/tree-sitter/tree-sitter-cpp',), grammars['cpp']
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
