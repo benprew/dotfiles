@@ -19,27 +19,51 @@
   :mode "\\.jt\\'")
 
 
-(defun dd/py-workon-project-venv ()
-  "Activate the virtual environment named after the current project.
+;; Ensure ~/.local/bin is in exec-path and PATH for user-installed tools (ruff, ty, uv)
+(let ((local-bin (expand-file-name "~/.local/bin")))
+  (when (file-directory-p local-bin)
+    (add-to-list 'exec-path local-bin)
+    (setenv "PATH" (concat local-bin ":" (getenv "PATH")))))
+
+(defun dd/py-workon-project-venv (&optional interactive)
+  "Activate the virtual environment for the current project (.venv, venv, or pyenv).
 Return its full path, or nil when it does not exist."
-  (let* ((project (project-current t))
-         (project-name
-          (file-name-nondirectory
-           (directory-file-name (project-root project))))
-         (venv (expand-file-name project-name (getenv "WORKON_HOME"))))
-    (when (file-directory-p venv)
-      (pyvenv-activate venv)
-      venv)))
+  (when-let* ((project (project-current interactive))
+              (root (project-root project))
+              (local-venv (expand-file-name ".venv" root))
+              (local-venv2 (expand-file-name "venv" root))
+              (project-name (file-name-nondirectory (directory-file-name root)))
+              (workon-home (getenv "WORKON_HOME"))
+              (pyenv-venv (and workon-home (expand-file-name project-name workon-home)))
+              (venv (cond
+                     ((file-directory-p local-venv) local-venv)
+                     ((file-directory-p local-venv2) local-venv2)
+                     ((and pyenv-venv (file-directory-p pyenv-venv)) pyenv-venv))))
+    (pyvenv-activate venv)
+    venv))
+
+(defun btp/py-setup-venv ()
+  "Activate the project virtual environment automatically if present."
+  (dd/py-workon-project-venv nil))
+
+(add-hook 'python-base-mode-hook #'btp/py-setup-venv)
 
 (defun btp/py-auto-eglot ()
   "Activate the project virtual environment and restart Eglot.
 Prompt for an environment when none matches the project name."
   (interactive)
-  (unless (dd/py-workon-project-venv)
+  (unless (dd/py-workon-project-venv t)
     (call-interactively #'pyvenv-workon))
   (if-let ((server (eglot-current-server)))
       (eglot-reconnect server t)
     (eglot-ensure)))
+
+(use-package flymake-ruff
+  :ensure t
+  :commands flymake-ruff-load
+  :hook
+  ((python-base-mode . flymake-ruff-load)
+   (eglot-managed-mode . flymake-ruff-load)))
 
 (use-package eglot
   :ensure nil
