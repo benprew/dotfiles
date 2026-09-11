@@ -4,10 +4,10 @@
     "pr": ""
   },
   "includeCoAuthoredBy": false,
-  "effortLevel": "medium",
-  "skipDangerousModePermissionPrompt": true,
-  "theme": "dark",
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true
-  }
+  },
+  "effortLevel": "medium",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark"
 }
