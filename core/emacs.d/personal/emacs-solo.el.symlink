@@ -736,11 +736,17 @@ away from the bottom.  Counts wrapped lines as real lines."
   :ensure nil
   :custom
   (eglot-autoshutdown t)
-  (eglot-events-buffer-config '(:size 200000 :format full))
+  (eglot-events-buffer-config '(:size 0 :format short))
   (eglot-extend-to-xref t)
   (eglot-prefer-plaintext nil)
-  (eglot-report-progress t)
+  (eglot-report-progress nil)
   (eglot-sync-connect nil)
+
+  :config
+  (dolist (capability
+           '(:documentOnTypeFormattingProvider
+             :documentHighlightProvider))
+    (add-to-list 'eglot-ignored-server-capabilities capability))
 
   :bind (:map
          eglot-mode-map
