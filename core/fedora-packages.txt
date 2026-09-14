@@ -5,3 +5,4 @@ restic
 emacs
 powertop
 ripgrep
+dnf-plugins-core
