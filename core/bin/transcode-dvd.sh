@@ -10,14 +10,19 @@ Transcode a DVD rip to high-quality H.265 video in an MKV container.
 The default output is INPUT.h265.mkv.
 
 Optional environment variables:
-  DVD_TRANSCODE_ENCODER  HandBrake video encoder (default: x265)
-  DVD_TRANSCODE_QUALITY  Constant-quality RF value (default: 18; lower is better)
-  DVD_TRANSCODE_PRESET   Encoder speed preset (default: slow)
+  DVD_TRANSCODE_ENCODER         HandBrake video encoder (default: x265)
+  DVD_TRANSCODE_QUALITY         Constant-quality RF value (default: 18; lower is better)
+  DVD_TRANSCODE_PRESET          Encoder speed preset (default: slow)
+  DVD_TRANSCODE_AUDIO_LANGS     Comma-separated list of audio languages (default: all)
+  DVD_TRANSCODE_SUBTITLE_LANGS  Comma-separated list of subtitle languages (default: all)
+  DVD_TRANSCODE_CHAPTERS        Chapter range to transcode (e.g. 1-4)
+  DVD_TRANSCODE_EXTRA_ARGS      Additional space-separated args for HandBrakeCLI
 
 Examples:
   transcode-dvd.sh movie.mkv
   transcode-dvd.sh movie.mkv movie-compressed.mkv
   DVD_TRANSCODE_QUALITY=20 transcode-dvd.sh movie.mkv
+  DVD_TRANSCODE_AUDIO_LANGS=eng,jpn DVD_TRANSCODE_SUBTITLE_LANGS=eng transcode-dvd.sh movie.mkv
 EOF
 }
 
@@ -40,6 +45,9 @@ input=$1
 encoder=${DVD_TRANSCODE_ENCODER:-x265}
 quality=${DVD_TRANSCODE_QUALITY:-18}
 encoder_preset=${DVD_TRANSCODE_PRESET:-slow}
+audio_langs=${DVD_TRANSCODE_AUDIO_LANGS:-}
+subtitle_langs=${DVD_TRANSCODE_SUBTITLE_LANGS:-}
+chapters=${DVD_TRANSCODE_CHAPTERS:-}
 
 if [[ ! -f $input ]]; then
     echo "Error: input is not a file: $input" >&2
@@ -82,25 +90,56 @@ fi
 echo "Input:   $input"
 echo "Output:  $output"
 echo "Video:   $encoder, RF $quality, preset $encoder_preset"
+[[ -n $audio_langs ]] && echo "Audio:   languages ($audio_langs)"
+[[ -n $subtitle_langs ]] && echo "Subs:    languages ($subtitle_langs)"
+[[ -n $chapters ]] && echo "Chapters: $chapters"
 
-HandBrakeCLI \
-    --input "$input" \
-    --output "$output" \
-    --format av_mkv \
-    --encoder "$encoder" \
-    --encoder-preset "$encoder_preset" \
-    --quality "$quality" \
-    --vfr \
-    --auto-anamorphic \
-    --crop-mode none \
-    --comb-detect \
-    --decomb \
-    --all-audio \
-    --aencoder copy \
-    --audio-copy-mask aac,ac3,eac3,truehd,dts,dtshd,mp2,mp3,opus,vorbis,flac,alac,pcm \
-    --audio-fallback flac16 \
-    --keep-aname \
-    --all-subtitles \
-    --keep-subname \
-    --markers \
+handbrake_args=(
+    --input "$input"
+    --output "$output"
+    --format av_mkv
+    --encoder "$encoder"
+    --encoder-preset "$encoder_preset"
+    --quality "$quality"
+    --vfr
+    --auto-anamorphic
+    --crop-mode none
+    --comb-detect
+    --decomb
+)
+
+if [[ -n $chapters ]]; then
+    handbrake_args+=(--chapters "$chapters")
+fi
+
+if [[ -n $audio_langs ]]; then
+    handbrake_args+=(--audio-lang-list "$audio_langs" --all-audio)
+else
+    handbrake_args+=(--all-audio)
+fi
+
+handbrake_args+=(
+    --aencoder copy
+    --audio-copy-mask aac,ac3,eac3,truehd,dts,dtshd,mp2,mp3,opus,vorbis,flac,alac,pcm
+    --audio-fallback flac16
+    --keep-aname
+)
+
+if [[ -n $subtitle_langs ]]; then
+    handbrake_args+=(--subtitle-lang-list "$subtitle_langs" --all-subtitles)
+else
+    handbrake_args+=(--all-subtitles)
+fi
+
+handbrake_args+=(
+    --keep-subname
+    --markers
     --keep-metadata
+)
+
+if [[ -n ${DVD_TRANSCODE_EXTRA_ARGS:-} ]]; then
+    read -r -a extra_args <<< "$DVD_TRANSCODE_EXTRA_ARGS"
+    handbrake_args+=("${extra_args[@]}")
+fi
+
+HandBrakeCLI "${handbrake_args[@]}"
