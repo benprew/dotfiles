@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ; C-c C-s - launch the inf-ruby process.
 ; highlight a chunk of code, C-c C-r - push that Ruby code into the IRB session.
 ;  For example, try defining a class in your Ruby buffer, select the whole buffer, run C-c C-r, then swap over to the inf-ruby buffer and instantiate an instance of your class. Pretty cool!

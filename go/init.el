@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (use-package go-playground
   :ensure t
   :commands go-playground)
@@ -27,7 +29,7 @@
 (require 'project)
 
 (defun project-find-go-module (dir)
-  (when-let ((root (locate-dominating-file dir "go.mod")))
+  (when-let* ((root (locate-dominating-file dir "go.mod")))
     (cons 'go-module root)))
 
 (cl-defmethod project-root ((project (head go-module)))

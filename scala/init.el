@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (use-package lsp-metals
   :ensure t
   :custom

@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 (defun ansi-color-apply-on-buffer ()

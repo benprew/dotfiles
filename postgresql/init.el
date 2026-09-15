@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (use-package sqlformat
   :ensure t
   :commands (sqlformat sqlformat-buffer sqlformat-region)

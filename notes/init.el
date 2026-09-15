@@ -1,4 +1,4 @@
-;;; org.el -- ORG MODE SETTINGS
+;;; org.el -- ORG MODE SETTINGS -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;;   This contains all my org-mode settings
 

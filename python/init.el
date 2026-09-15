@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (use-package python
   :ensure nil
   :defer t
@@ -54,7 +56,7 @@ Prompt for an environment when none matches the project name."
   (interactive)
   (unless (dd/py-workon-project-venv t)
     (call-interactively #'pyvenv-workon))
-  (if-let ((server (eglot-current-server)))
+  (if-let* ((server (eglot-current-server)))
       (eglot-reconnect server t)
     (eglot-ensure)))
 

@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;; https://github.com/k1LoW/emacs-ansible
 (use-package ansible
   :ensure t

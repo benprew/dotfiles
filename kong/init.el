@@ -1,4 +1,4 @@
-;;; kong.el --- Kongregate elisp functions
+;;; kong.el --- Kongregate elisp functions -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

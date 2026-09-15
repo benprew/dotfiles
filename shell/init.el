@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (use-package flymake-shellcheck
   :ensure t
   :commands flymake-shellcheck-load

@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;; this breaks when I'm editing files in other people's directories on linliveanalytics1
 (if (<= emacs-major-version 25)
     (setq undo-tree-auto-save-history nil))

@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (global-set-key (kbd "C-c e n") 'flymake-goto-next-error)
 (global-set-key (kbd "C-c e p") 'flymake-goto-prev-error)
 (global-set-key (kbd "C-;") 'comment-dwim)

@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;; configs for reading email in emacs
 
 (dolist (dir (if (eq system-type 'darwin)

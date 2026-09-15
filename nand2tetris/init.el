@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;; for nand2tetris
 ;; (add-to-list 'auto-mode-alist '("\\.hdl$" . vhdl-mode))
 ;; (add-hook 'asm-mode-hook (lambda () (whitespace-mode -1)))

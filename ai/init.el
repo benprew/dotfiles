@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;; used to start agcli async with a region
 (defun async-shell-command-on-region (start end command)
   "Execute COMMAND asynchronously with region as input.
