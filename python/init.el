@@ -9,7 +9,9 @@
   :ensure t
   :defer t
   :init
-  (setenv "WORKON_HOME" (expand-file-name "~/.pyenv/versions")))
+  (let ((pyenv-versions (expand-file-name "~/.pyenv/versions")))
+    (when (file-directory-p pyenv-versions)
+      (setenv "WORKON_HOME" pyenv-versions))))
 
 (use-package blacken
   :ensure t
@@ -45,8 +47,13 @@ Return its full path, or nil when it does not exist."
     venv))
 
 (defun btp/py-setup-venv ()
-  "Activate the project virtual environment automatically if present."
-  (dd/py-workon-project-venv nil))
+  "Activate the project virtual environment automatically if present.
+Errors are caught and reported rather than signaled, since an
+uncaught error here would abort the rest of `python-base-mode-hook'
+(e.g. leaving `font-lock-mode' off for the buffer)."
+  (condition-case err
+      (dd/py-workon-project-venv nil)
+    (error (message "btp/py-setup-venv: %s" (error-message-string err)))))
 
 (add-hook 'python-base-mode-hook #'btp/py-setup-venv)
 
