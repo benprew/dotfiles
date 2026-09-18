@@ -52,6 +52,8 @@
   (org-reverse-note-order t)
   (org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
   (org-startup-indented t)
+  (org-export-with-toc nil)
+  (org-export-with-section-numbers nil)
   (org-export-with-sub-superscripts '{})
   (org-export-backends '(ascii html icalendar latex md odt))
   (org-use-sub-superscripts nil)
@@ -101,6 +103,16 @@
 (use-package ox-md
   :ensure nil
   :after ox)
+
+;; ox-latex for LaTeX/PDF export
+(use-package ox-latex
+  :ensure nil
+  :after ox
+  :config
+  (add-to-list 'org-latex-packages-alist '("" "parskip" t))
+  (add-to-list 'org-latex-packages-alist '("" "enumitem" t) t)
+  (add-to-list 'org-latex-packages-alist "\\setlist{noitemsep}" t)
+  (add-to-list 'org-latex-packages-alist "\\linespread{0.9}" t))
 
 ;; ob (org-babel) for executing code blocks
 (use-package ob
