@@ -1,0 +1,10 @@
+rust
+cargo
+rust-analyzer
+rust-src
+rustfmt
+clippy
+gcc
+gcc-c++
+glibc-devel
+make

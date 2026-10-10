@@ -1,0 +1,3 @@
+brew 'curl'
+brew 'ca-certificates'
+# The native compiler and SDK come from Apple's command-line developer tools.
