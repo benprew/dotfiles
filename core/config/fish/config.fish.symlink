@@ -20,6 +20,7 @@ function fish_prompt
     set -g ce (set_color $fish_color_error)
 
     set -U fish_prompt_pwd_dir_length 0
+    printf '%s%s ' "$c2" (prompt_hostname)
     printf "$c3"
     echo -n (prompt_pwd)
 
