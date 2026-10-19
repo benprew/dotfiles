@@ -75,11 +75,10 @@
   :config
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python :python python3"))
   (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
   (add-to-list 'org-structure-template-alist '("rb" . "src ruby"))
-  (add-to-list 'org-structure-template-alist '("lisp" . "src lisp"))
-  (add-to-list 'org-structure-template-alist '("as-sql" . "src sql :engine postgres :dbhost as-linear.db.csas.csa.comscore.com :dbport 5439 :dbuser bprew :database live")))
+  (add-to-list 'org-structure-template-alist '("lisp" . "src lisp")))
 
 ;; org-crypt for encrypting org subtrees
 (use-package org-crypt
