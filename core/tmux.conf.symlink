@@ -13,8 +13,8 @@ set -sg escape-time 0
 set -g focus-events on
 
 # Terminal / colors
-set -g default-terminal "ghostty"
-set -ga terminal-features ",ghostty:RGB"
+set -g default-terminal "tmux-256color"
+set -ga terminal-features ",gnome*:RGB"
 
 # Vi mode
 setw -g mode-keys vi
