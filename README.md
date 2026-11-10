@@ -1,20 +1,19 @@
-# emacs all the dotfiles
+# My Dotfiles
 
-This is my dotfile repo, there are many like it, but this one is
-mine.  As with any dotfile repo, this one has opinions and will make
-choices for you.
+My approach to dotfiles as I've gotten older leans more minimalist. When I was
+younger I spent time configmaxxing at the cost of getting real work down. With
+advances in modern OSes and modern AI tooling this means that I can mostly use
+things out of the box and spend less time fiddling with switches and config
+settings.
+
+I'm a heavy emacs user and most of my config is there. Even so, I try to use
+features that are shipped in emacs and use external packages as a last resort.
+Modern emacs has so many built-in features that it's quite capable.
 
 1. Emacs - because it does just about everything
-2. Bash - because now that you're using emacs, you don't need anything
-else
-3. Git - I use git, on all my projects, personal and professional
-4. OSX/Mac - most of the instructions are for Mac, but can easily be
-adapted for Linux.
-5. Brew - because it sucks less than ports, but that doesn't make it
-good
-
-In addition, there are some configs for Ruby and Ruby on Rails,
-because I do most of my development in that language.
+2. Fish - because it's focused on improving UX but I use bash for scripting
+3. Git - I use git on all my projects but that may change in the future
+4. Fedora Linux - it's FOSS!
 
 ## Installation
 
@@ -31,21 +30,31 @@ $ ./install.py
 The first run creates `~/.modules` from a template. Edit it to select which
 modules to install, then run again to install them.
 
-Available commands:
-- `./install.py` or `./install.py install` - Install all modules
-- `./install.py install_module <name>` - Install a specific module
-- `./install.py uninstall` - Remove all symlinks (restores backups if present)
-- `./install.py update` - Fetch updates from git origin
-- `--symlinks-only` - Only create symlinks; skip packages, scripts, and grammars
-
 For a full install, files from every enabled module are linked first. Package
 manifests are then combined into one Homebrew, apt, or dnf transaction. Module
 install scripts run after the OS packages are available, followed by one Emacs
 process that installs any missing tree-sitter grammars.
 
-Adding a new module is simple. Just make a directory, drop `init.sh`
-and/or `init.el` and/or `<something>.symlink` into it, and list it in
-your modules file. (See Modules section below for more info).
+### Adding a New Module
+
+Just make a directory, drop `init.fish` and/or `init.el` and/or
+`<something>.symlink` into it, and list it in your modules file. (See Modules
+section below for more info).
+
+Normally, `module/config/app/settings.symlink` links to
+`~/.config/app/settings`. For an OS-dependent destination, use a template variable
+as the first directory below the module:
+
+```text
+unison/${unison_config_dir}/sync-hub.prf.symlink.tmpl
+```
+
+The directory name is literal in the repository. `template_context()` in
+`install.py` supplies its absolute destination on the current system. This works
+for both `.symlink` files and rendered `.symlink.tmpl` files. Files inside that
+directory keep their relative paths, without the usual leading dot. Unknown
+variables and relative destinations are rejected. Installation and removal use
+the same mapping; removal uses the current OS and environment values.
 
 Modules can declare dependencies with `Brewfile`, `apt-packages.txt`,
 `fedora-packages.txt`, and `treesit-grammars.txt`. Tree-sitter declarations use
@@ -55,10 +64,7 @@ the following whitespace-separated format:
 language repository [branch [source-directory]]
 ```
 
-Use `-` for the branch when a source directory is needed with the repository's
-default branch.
-
-## Emacs
+## Writing Code
 
 This is where most of the magic happens, so follow along.
 
@@ -68,43 +74,17 @@ I spend almost all my time in emacs browsing/writing/editing code.  If
 that's not your thing, there are other good packages built for that,
 go look there.
 
-#### Finding Files
+I use project.el for project management. It allows you to find files in a project,
+grep for strings and do whole project search/replace. A lot of the heavy lifting
+is handled by LSPs.
 
-I use helm for finding files, it can be accessed by:
-    `<ctrl>-c-h` - function: `helm-for-files`
+Handy project.el shortcuts
 
-I have helm setup to rember recently opened files, as well as setting
-up a small locate database for finding files in your home
-directory. See `core/init.el` for specific settings.
-
-#### Method/Function Navigation
-
-Tag expansion is built into emacs, but requires setting up ctags to
-use it.  I have a hook script to regenerate the TAGS
-file after doing a git operation (checkout, pull, etc)
-
-    `<alt>-.` - function: `find-tag`
-
-You'll need to install ctags (from brew) and add the file to your
-hooks repo
-
-    `brew install ctags`
-
-#### Grep-ing Files
-
-I use [Ag](https://github.com/ggreer/the_silver_searcher), which is like ack, but faster:
-    `<ctrl>-c-g` - function: `ag-project-at-point`
-
-This will use your current repos root as a starting point and search
-from there.  If defaults to the string under the cursor.
-
-If you want to do regexes over the project:
-
-    `<ctrl>-c-G` - function: `ag-project-regexp`
-
-To use Ag, you'll need to install it:
-
-    `brew install the_silver_searcher`
+```
+<ctrl>-x-p-f - find file
+<ctrl>-x-p-g - find string with grep
+<ctrl>-. - go to definition
+```
 
 ### Nagivating Windows
 
@@ -117,8 +97,8 @@ naviation:
 
 ### Git For Source Control
 
-Emacs has a lot of nice features for interacting with git currently,
-but I've also installed [magit](http://www.emacswiki.org/emacs/Magit)
+Emacs has a lot of nice features for interacting with git,
+but I also install [magit](http://www.emacswiki.org/emacs/Magit).
 
 Common functions:
 
@@ -129,42 +109,20 @@ In a file:
     `<ctrl>-c-s` function: `magit-status`
     `<ctrl>-x-v-g` function: `vc-annotate` - git blame...
 
-### Writing Code
+My dotfiles use eglot for managing LSPs and the module directories install the LSP
+for the language and enable it in eglot (in init.el).
 
-#### Automatic Syntax Check
-
-You'll probably want to install a newer version of ruby locally
-(assuming you're using a newer version in a vagrant instance or
-similar)
-
-`brew install ruby`
-
-### Testing
-
-I admit it, I write tests, and I use
-[rinari](http://rinari.rubyforge.org/).  It doesn't find tests very
-well in my current codebase, but I haven't taken the time to fix it.
-    `<ctrl>-c-;-f-t` - function: `rinari-find-test`
-
-We also use test through a vagrant instance, and use zeus to manage
-that, so, when you're in a test file, you can say:
-    `<ctrl>-c-t` - function: `kong-run-current-test-file`
-    `<ctrl>-c-.` - function: `kong-run-test-at-point`
-
-## Modules
+#### Modules
 
 This is a fork of [@peterkeen](http://github.com/peterkeen)'s
-[dotfiles](https://github.com/holman/dotfiles). The core idea is that
-these files are organized by *topic*, not *software*. That means, for
-example, that all of the ruby things, both bash and emacs, belong in
-the same area.
+[dotfiles](https://github.com/holman/dotfiles). The core idea is that these files
+are organized by *topic*, not *software*. That means, for example, that all of the
+ruby things, both bash and emacs, belong in the same area.
 
 * Modules are listed explicitly in `~/.modules`, one per line, and are
   loaded in the specified order. This lets me set up different configs
   for work and home while still sharing almost everything else.
 * Each module can have it's own `bin/`. These are added to the path
   module-file order.
-* The core `bash` config looks for `init.sh` in every module
+* The core `fish` config looks for `init.fish` in every module
 * The core `emacs` config looks for `init.el` in every module
-* Emacs uses [el-get](https://github.com/dimitri/el-get) to manage 3rd
-  party dependencies.
