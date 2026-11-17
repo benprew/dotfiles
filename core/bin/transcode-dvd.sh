@@ -4,10 +4,12 @@ set -Eeuo pipefail
 
 usage() {
     cat <<'EOF'
-Usage: transcode-dvd.sh INPUT.mkv [OUTPUT.mkv]
+Usage: transcode-dvd.sh INPUT.mkv [OUTPUT.mkv|OUTPUT.mp4]
 
 Transcode a DVD rip to high-quality H.265 video in an MKV container.
-The default output is INPUT.h265.mkv.
+The default output is INPUT.h265.mkv. An .mp4 output selects the MP4 container.
+MP4 uses compatible audio passthrough with AAC fallback; subtitle support is
+limited by the MP4 container and HandBrake.
 
 Optional environment variables:
   DVD_TRANSCODE_ENCODER         HandBrake video encoder (default: x265)
@@ -87,6 +89,17 @@ if [[ ! -d $output_dir ]]; then
     exit 1
 fi
 
+container=av_mkv
+audio_copy_mask=aac,ac3,eac3,truehd,dts,dtshd,mp2,mp3,opus,vorbis,flac,alac,pcm
+audio_fallback=flac16
+case ${output,,} in
+    *.mp4|*.m4v)
+        container=av_mp4
+        audio_copy_mask=aac,ac3,eac3,mp3,alac
+        audio_fallback=av_aac
+        ;;
+esac
+
 echo "Input:   $input"
 echo "Output:  $output"
 echo "Video:   $encoder, RF $quality, preset $encoder_preset"
@@ -97,7 +110,7 @@ echo "Video:   $encoder, RF $quality, preset $encoder_preset"
 handbrake_args=(
     --input "$input"
     --output "$output"
-    --format av_mkv
+    --format "$container"
     --encoder "$encoder"
     --encoder-preset "$encoder_preset"
     --quality "$quality"
@@ -120,8 +133,8 @@ fi
 
 handbrake_args+=(
     --aencoder copy
-    --audio-copy-mask aac,ac3,eac3,truehd,dts,dtshd,mp2,mp3,opus,vorbis,flac,alac,pcm
-    --audio-fallback flac16
+    --audio-copy-mask "$audio_copy_mask"
+    --audio-fallback "$audio_fallback"
     --keep-aname
 )
 
